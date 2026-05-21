@@ -747,11 +747,17 @@
 
 {% block js %}
 <script>
-    $(document).ready(function () {
-        $('#tablePrestasi').DataTable({
-            pageLength: 10,
-            lengthMenu: [10, 25, 50, 100]
-        });
+    $(window).on('load', function () {
+
+        if ($.fn.DataTable && $('#tablePrestasi').length) {
+
+            $('#tablePrestasi').DataTable({
+                pageLength: 10,
+                lengthMenu: [10, 25, 50, 100]
+            });
+
+        }
+
     });
 </script>
 {% endblock %}
