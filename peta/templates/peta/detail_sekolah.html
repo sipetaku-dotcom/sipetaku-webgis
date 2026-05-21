@@ -1,0 +1,682 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ sekolah.nama }}
+{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+
+<style>
+
+    #mapSekolah{
+        height: 350px;
+        width: 100%;
+        border-radius: 14px;
+    }
+
+    #chartGenderMurid,
+    #chartPrestasiTahun,
+    #chartKondisiAset{
+        max-height: 260px;
+    }
+
+</style>
+
+{% endblock %}
+
+{% block content %}
+<div class="card shadow-sm border-0 mb-4">
+    <div class="card-body">
+        <div class="row align-items-center">
+
+            <div class="col-12 col-md-3 text-center mb-3 mb-md-0">
+                {% if sekolah.foto %}
+                    <img
+                        src="{{ sekolah.foto.url }}"
+                        class="img-fluid rounded shadow-sm"
+                        style="width:100%; max-width:240px; height:220px; object-fit:cover;"
+                    >
+                {% else %}
+                    <div
+                        class="d-flex align-items-center justify-content-center bg-light rounded shadow-sm mx-auto"
+                        style="width:100%; max-width:240px; height:220px;"
+                    >
+                        <i class="bi bi-building text-primary" style="font-size:70px;"></i>
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="col-12 col-md-9">
+
+                <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-2">
+
+                    <div class="d-flex align-items-center gap-2 flex-wrap">
+
+                        <h3 class="mb-0 fw-bold">
+                            {{ sekolah.nama }}
+                        </h3>
+
+                        <span class="badge bg-primary">
+                            {{ sekolah.kategori.nama }}
+                        </span>
+
+                        {% if sekolah.status == 'Negeri' %}
+                            <span class="badge bg-success">
+                                {{ sekolah.status }}
+                            </span>
+                        {% else %}
+                            <span class="badge bg-secondary">
+                                {{ sekolah.status }}
+                            </span>
+                        {% endif %}
+
+                    </div>
+
+                    <a
+                        href="/sekolah/{{ sekolah.id }}/pdf/"
+                        class="btn btn-danger btn-sm"
+                    >
+                        <i class="bi bi-file-earmark-pdf"></i>
+                        Download PDF
+                    </a>
+
+                </div>
+
+                <div class="text-muted mb-3">
+                    <div class="mb-2">
+                        <i class="bi bi-geo-alt text-primary"></i>
+                        {{ sekolah.desa }}, {{ sekolah.kecamatan }}
+                    </div>
+
+                    <div>
+                        <i class="bi bi-map text-success"></i>
+                        {{ sekolah.alamat }}
+                    </div>
+                </div>
+
+                <div class="row g-3">
+
+                    <div class="col-6 col-md-3">
+                        <div class="border rounded p-3 text-center h-100">
+                            <i class="bi bi-people text-primary fs-3"></i>
+                            <div class="fw-bold mt-2">{{ total_murid }}</div>
+                            <small class="text-muted">Murid</small>
+                        </div>
+                    </div>
+
+                    <div class="col-6 col-md-3">
+                        <div class="border rounded p-3 text-center h-100">
+                            <i class="bi bi-person-badge text-success fs-3"></i>
+                            <div class="fw-bold mt-2">{{ total_guru }}</div>
+                            <small class="text-muted">Guru</small>
+                        </div>
+                    </div>
+
+                    <div class="col-6 col-md-3">
+                        <div class="border rounded p-3 text-center h-100">
+                            <i class="bi bi-trophy text-warning fs-3"></i>
+                            <div class="fw-bold mt-2">{{ total_prestasi }}</div>
+                            <small class="text-muted">Prestasi</small>
+                        </div>
+                    </div>
+
+                    <div class="col-6 col-md-3">
+                        <div class="border rounded p-3 text-center h-100">
+                            <i class="bi bi-box-seam text-danger fs-3"></i>
+                            <div class="fw-bold mt-2">{{ total_aset }}</div>
+                            <small class="text-muted">Aset</small>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="card shadow-sm border-0">
+
+    <div class="card-header">
+        <h5 class="mb-0">
+            <i class="bi bi-info-circle text-primary"></i>
+            Informasi Sekolah
+        </h5>
+    </div>
+
+    <div class="card-body">
+
+        <table class="table">
+
+            <tr>
+                <th>Kategori</th>
+                <td>{{ sekolah.kategori.nama }}</td>
+            </tr>
+
+            <tr>
+                <th>Status</th>
+                <td>{{ sekolah.status }}</td>
+            </tr>
+
+            <tr>
+                <th>Kecamatan</th>
+                <td>{{ sekolah.kecamatan }}</td>
+            </tr>
+
+            <tr>
+                <th>Desa</th>
+                <td>{{ sekolah.desa }}</td>
+            </tr>
+
+            <tr>
+                <th>Total Murid</th>
+                <td>{{ total_murid }}</td>
+            </tr>
+
+            <tr>
+                <th>Total Guru</th>
+                <td>{{ total_guru }}</td>
+            </tr>
+
+            <tr>
+                <th>Total Prestasi</th>
+                <td>{{ total_prestasi }}</td>
+            </tr>
+
+            <tr>
+                <th>Total Aset</th>
+                <td>{{ total_aset }}</td>
+            </tr>
+
+            <tr>
+                <th>Alamat</th>
+                <td>{{ sekolah.alamat }}</td>
+            </tr>
+
+        </table>
+
+    </div>
+
+</div>
+
+<div class="card mt-4 shadow-sm border-0">
+
+    <div class="card-header">
+
+        <h5 class="mb-0">
+            <i class="bi bi-map text-primary"></i>
+            Lokasi Sekolah
+        </h5>
+
+    </div>
+
+    <div class="card-body">
+
+        <div id="mapSekolah"></div>
+
+    </div>
+
+</div>
+
+<div class="card mt-4 shadow-sm border-0">
+
+    <div class="row mb-4 g-3">
+
+        <div class="col-12 col-lg-4">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-body">
+
+                    <h6 class="fw-bold mb-3">
+                        <i class="bi bi-people text-primary"></i>
+                        Statistik Murid
+                    </h6>
+
+                    <canvas id="chartGenderMurid"></canvas>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-12 col-lg-4">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-body">
+
+                    <h6 class="fw-bold mb-3">
+                        <i class="bi bi-bar-chart text-success"></i>
+                        Grafik Prestasi per Tahun
+                    </h6>
+
+                    <div style="height:260px;">
+                        <canvas id="chartPrestasiTahun"></canvas>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-12 col-lg-4">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-body">
+
+                    <h6 class="fw-bold mb-3">
+                        <i class="bi bi-box-seam text-danger"></i>
+                        Kondisi Aset
+                    </h6>
+
+                    <canvas id="chartKondisiAset"></canvas>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="card-header">
+        <h5 class="mb-0">
+            <i class="bi bi-person-badge text-success"></i>
+            Data Guru
+        </h5>
+    </div>
+
+    <div class="card-body">
+
+        <div class="table-responsive">
+            <table id="tableDetailGuru" class="table table-bordered table-striped">
+
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Nama</th>
+                        <th>Jabatan</th>
+                        <th>Status</th>
+                        <th>Mata Pelajaran</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for g in daftar_guru %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ g.nama }}</td>
+                        <td>{{ g.jabatan }}</td>
+                        <td>{{ g.status_pegawai }}</td>
+                        <td>{{ g.mata_pelajaran }}</td>
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+                        <td colspan="5" class="text-center">
+                            Belum ada data guru
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+        </div>
+
+    </div>
+
+</div>
+
+<div class="card mt-4 shadow-sm border-0">
+
+    <div class="card-header">
+        <h5 class="mb-0">
+            <i class="bi bi-people text-primary"></i>
+            Data Murid
+        </h5>
+    </div>
+
+    <div class="card-body">
+
+        <div class="table-responsive">
+            <table id="tableDetailMurid" class="table table-bordered table-striped">
+
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Nama</th>
+                        <th>Kelas</th>
+                        <th>Jenis Kelamin</th>
+                        <th>Prestasi</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for m in daftar_murid %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ m.nama }}</td>
+                        <td>{{ m.kelas }}</td>
+                        <td>{{ m.jenis_kelamin }}</td>
+                        <td>{{ m.prestasi }}</td>
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+                        <td colspan="5" class="text-center">
+                            Belum ada data murid
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+        </div>
+
+    </div>
+
+</div>
+
+<div class="card mt-4 shadow-sm border-0">
+
+    <div class="card-header">
+        <h5 class="mb-0">
+            <i class="bi bi-trophy text-warning"></i>
+            Data Prestasi Murid
+        </h5>
+    </div>
+
+    <div class="card-body">
+
+        <div class="table-responsive">
+            <table id="tableDetailPrestasi" class="table table-bordered table-striped">
+
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Murid</th>
+                        <th>Lomba</th>
+                        <th>Bidang</th>
+                        <th>Tingkat</th>
+                        <th>Juara</th>
+                        <th>Tahun</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for p in daftar_prestasi %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ p.murid.nama }}</td>
+                        <td>{{ p.nama_lomba }}</td>
+                        <td>{{ p.bidang_lomba }}</td>
+                        <td>{{ p.tingkat }}</td>
+                        <td>
+                            {% if p.juara == "Juara 1" %}
+                                <span class="badge bg-success">{{ p.juara }}</span>
+                            {% elif p.juara == "Juara 2" %}
+                                <span class="badge bg-primary">{{ p.juara }}</span>
+                            {% elif p.juara == "Juara 3" %}
+                                <span class="badge bg-warning">{{ p.juara }}</span>
+                            {% else %}
+                                <span class="badge bg-secondary">{{ p.juara }}</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ p.tahun }}</td>
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+                        <td colspan="7" class="text-center">
+                            Belum ada data prestasi
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+        </div>
+
+    </div>
+
+</div>
+
+<div class="card mt-4 shadow-sm border-0">
+
+    <div class="card-header">
+        <h5 class="mb-0">
+            <i class="bi bi-box-seam text-danger"></i>
+            Data Aset
+        </h5>
+    </div>
+
+    <div class="card-body">
+
+        <div class="table-responsive">
+            <table id="tableDetailAset" class="table table-bordered table-striped">
+
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Foto</th>
+                        <th>Nama Aset</th>
+                        <th>Kategori</th>
+                        <th>Jumlah</th>
+                        <th>Kondisi</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for a in daftar_aset %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+
+                        <td>
+                            {% if a.foto %}
+                                <img
+                                    src="{{ a.foto.url }}"
+                                    width="80"
+                                    class="rounded"
+                                >
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+
+                        <td>{{ a.nama }}</td>
+                        <td>{{ a.kategori }}</td>
+                        <td>{{ a.jumlah }}</td>
+                        <td>{{ a.kondisi }}</td>
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+                        <td colspan="6" class="text-center">
+                            Belum ada data aset
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script>
+
+    $(document).ready(function () {
+
+        $('#tableDetailGuru').DataTable({
+            pageLength: 10,
+            lengthMenu: [10, 25, 50, 100]
+        });
+
+        $('#tableDetailMurid').DataTable({
+            pageLength: 10,
+            lengthMenu: [10, 25, 50, 100]
+        });
+
+        $('#tableDetailPrestasi').DataTable({
+            pageLength: 10,
+            lengthMenu: [10, 25, 50, 100]
+        });
+
+        $('#tableDetailAset').DataTable({
+            pageLength: 10,
+            lengthMenu: [10, 25, 50, 100]
+        });
+
+    });
+
+</script>
+<script>
+
+    const ctxGender = document.getElementById('chartGenderMurid');
+
+    new Chart(ctxGender, {
+        type: 'doughnut',
+
+        data: {
+            labels: ['Laki-laki', 'Perempuan'],
+
+            datasets: [{
+                data: [
+                    {{ jumlah_laki }},
+                    {{ jumlah_perempuan }}
+                ],
+
+                backgroundColor: [
+                    '#0d6efd',
+                    '#ff4d6d'
+                ],
+
+                borderWidth: 0
+            }]
+        },
+
+        options: {
+            responsive: true,
+
+            plugins: {
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        }
+    });
+
+    const ctxPrestasiTahun = document.getElementById('chartPrestasiTahun');
+
+    new Chart(ctxPrestasiTahun, {
+        type: 'bar',
+        data: {
+            labels: {{ label_tahun_prestasi|safe }},
+            datasets: [{
+                label: 'Jumlah Prestasi',
+                data: {{ data_tahun_prestasi|safe }},
+                borderRadius: 10,
+                borderSkipped: false
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        precision: 0
+                    }
+                }
+            }
+        }
+    });
+
+    const ctxKondisiAset = document.getElementById('chartKondisiAset');
+
+    new Chart(ctxKondisiAset, {
+        type: 'doughnut',
+        data: {
+            labels: {{ label_kondisi_aset|safe }},
+            datasets: [{
+                data: {{ data_kondisi_aset|safe }},
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'bottom'
+                }
+            },
+            cutout: '60%'
+        }
+    });
+
+</script>
+<script>
+    const latSekolah = parseFloat("{{ sekolah.latitude }}".replace(",", "."));
+    const lngSekolah = parseFloat("{{ sekolah.longitude }}".replace(",", "."));
+
+    if (!isNaN(latSekolah) && !isNaN(lngSekolah)) {
+
+        const mapSekolah = L.map('mapSekolah').setView(
+            [latSekolah, lngSekolah],
+            15
+        );
+
+        L.tileLayer(
+            'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+            {
+                attribution: '&copy; OpenStreetMap'
+            }
+        ).addTo(mapSekolah);
+
+        L.marker([latSekolah, lngSekolah])
+            .addTo(mapSekolah)
+            .bindPopup(`<b>{{ sekolah.nama|escapejs }}</b>`)
+            .openPopup();
+
+    } else {
+        document.getElementById('mapSekolah').innerHTML =
+            '<div class="alert alert-warning mb-0">Koordinat sekolah belum tersedia.</div>';
+    }
+</script>
+{% endblock %}

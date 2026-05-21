@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Profil {{ sekolah.nama }}</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            color: #222;
+        }
+
+        .header {
+            text-align: center;
+            border-bottom: 3px solid #0d6efd;
+            padding-bottom: 12px;
+            margin-bottom: 20px;
+        }
+
+        .header h2 {
+            margin: 0;
+            color: #0d6efd;
+        }
+
+        .section-title {
+            background: #0d6efd;
+            color: white;
+            padding: 8px;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 8px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 7px;
+            text-align: left;
+        }
+
+        th {
+            background: #f1f5f9;
+            width: 30%;
+        }
+
+        .stat-wrapper {
+            display: table;
+            width: 100%;
+            margin-top: 15px;
+        }
+
+        .stat-box {
+            display: table-cell;
+            width: 25%;
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        .stat-number {
+            font-size: 22px;
+            font-weight: bold;
+            color: #0d6efd;
+        }
+
+        .footer {
+            margin-top: 30px;
+            text-align: right;
+            font-size: 11px;
+            color: #777;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <h2>PROFIL SEKOLAH</h2>
+        <p>SIPETAKU - Sistem Informasi Peta Sekolah Kutai Timur</p>
+    </div>
+
+    <h3>{{ sekolah.nama }}</h3>
+
+    <table>
+        <tr>
+            <th>Kategori</th>
+            <td>{{ sekolah.kategori.nama }}</td>
+        </tr>
+        <tr>
+            <th>Status</th>
+            <td>{{ sekolah.status }}</td>
+        </tr>
+        <tr>
+            <th>Kecamatan</th>
+            <td>{{ sekolah.kecamatan }}</td>
+        </tr>
+        <tr>
+            <th>Desa</th>
+            <td>{{ sekolah.desa }}</td>
+        </tr>
+        <tr>
+            <th>Alamat</th>
+            <td>{{ sekolah.alamat }}</td>
+        </tr>
+    </table>
+
+    <div class="section-title">
+        Ringkasan Data
+    </div>
+
+    <div style="margin-top:15px;">
+
+        <table style="width:100%; border:none; margin-top:15px;">
+            <tr>
+                <td style="width:25%; border:none; padding:4px;">
+                    <div style="border:1px solid #ddd; text-align:center; padding:14px;">
+                        <span style="font-size:24px; font-weight:bold; color:#0d6efd;">
+                            {{ total_guru }}
+                        </span>
+                        <span style="font-size:13px;">
+                            Guru
+                        </span>
+                    </div>
+                </td>
+
+                <td style="width:25%; border:none; padding:4px;">
+                    <div style="border:1px solid #ddd; text-align:center; padding:14px;">
+                        <span style="font-size:24px; font-weight:bold; color:#0d6efd;">
+                            {{ total_murid }}
+                        </span>
+                        <span style="font-size:13px;">
+                            Murid
+                        </span>
+                    </div>
+                </td>
+
+                <td style="width:25%; border:none; padding:4px;">
+                    <div style="border:1px solid #ddd; text-align:center; padding:14px;">
+                        <span style="font-size:24px; font-weight:bold; color:#0d6efd;">
+                            {{ total_prestasi }}
+                        </span>
+                        <span style="font-size:13px;">
+                            Prestasi
+                        </span>
+                    </div>
+                </td>
+
+                <td style="width:25%; border:none; padding:4px;">
+                    <div style="border:1px solid #ddd; text-align:center; padding:14px;">
+                        <span style="font-size:24px; font-weight:bold; color:#0d6efd;">
+                            {{ total_aset }}
+                        </span>
+                        <span style="font-size:13px;">
+                            Aset
+                        </span>
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+
+    <div class="section-title">
+        Prestasi Terbaru
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Murid</th>
+                <th>Lomba</th>
+                <th>Tingkat</th>
+                <th>Juara</th>
+                <th>Tahun</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for p in daftar_prestasi %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ p.murid.nama }}</td>
+                <td>{{ p.nama_lomba }}</td>
+                <td>{{ p.tingkat }}</td>
+                <td>{{ p.juara }}</td>
+                <td>{{ p.tahun }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6" style="text-align:center;">
+                    Belum ada data prestasi
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="footer">
+        Dicetak melalui SIPETAKU
+    </div>
+
+</body>
+</html>

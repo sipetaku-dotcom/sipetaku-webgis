@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Data Murid
+{% endblock %}
+
+{% block content %}
+
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Data Murid {{ sekolah.nama }}</h5>
+
+        <a href="/tambah-murid/" class="btn btn-primary btn-sm">
+            Tambah Murid
+        </a>
+    </div>
+
+    <div class="card-body">
+
+        <table id="tableMurid" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Nama</th>
+                    <th>NISN</th>
+                    <th>Kelas</th>
+                    <th>Jenis Kelamin</th>
+                    <th>Prestasi</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for m in murid %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ m.nama }}</td>
+                    <td>{{ m.nisn }}</td>
+                    <td>{{ m.kelas }}</td>
+                    <td>{{ m.jenis_kelamin }}</td>
+                    <td>{{ m.prestasi }}</td>
+
+                    <td>
+
+                        <a
+                            href="/edit-murid/{{ m.id }}/"
+                            class="btn btn-warning btn-sm"
+                        >
+                            Edit
+                        </a>
+
+                        <a
+                            href="/hapus-murid/{{ m.id }}/"
+                            class="btn btn-danger btn-sm tombol-hapus"
+                        >
+                            Hapus
+                        </a>
+
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center">
+                        Belum ada data murid
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script>
+    $(document).ready(function () {
+        $('#tableMurid').DataTable({
+            pageLength: 10,
+            lengthMenu: [10, 25, 50, 100]
+        });
+    });
+    $('.tombol-hapus').on('click', function(e) {
+        e.preventDefault();
+
+        var href = $(this).attr('href');
+
+        Swal.fire({
+            title: 'Yakin hapus data?',
+            text: 'Data yang sudah dihapus tidak bisa dikembalikan.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, hapus',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = href;
+            }
+        });
+    });
+</script>
+{% endblock %}

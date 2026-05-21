@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: sipetaku
+    env: python
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn config.wsgi:application"
+    envVars:
+      - key: DEBUG
+        value: False

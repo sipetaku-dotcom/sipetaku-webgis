@@ -1,0 +1,948 @@
+{% extends 'base.html' %}
+
+{% block title %}{% endblock %}
+
+{% block body_class %}
+halaman-peta
+{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
+<link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.bootstrap5.min.css" rel="stylesheet">
+<link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css"
+/>
+
+<link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css"
+/>
+
+<style>
+    body.halaman-peta .app-header,
+    body.halaman-peta .app-content-header {
+        display: none !important;
+    }
+
+    body.halaman-peta .app-sidebar {
+        display: none !important;
+    }
+
+    body.halaman-peta .app-main {
+        margin-left: 0 !important;
+        padding-top: 0 !important;
+    }
+
+    body.halaman-peta .app-content {
+        padding-top: 12px !important;
+    }
+
+    #map {
+        height: calc(100vh - 190px);
+        width: 100%;
+        border-radius: 12px;
+    }
+
+    @media (max-width: 576px) {
+        #map {
+            height: calc(100vh - 190px);
+            width: 100%;
+            border-radius: 12px;
+        }
+    }
+
+    .leaflet-bar a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .label-kecamatan {
+        background: transparent;
+        border: none;
+        box-shadow: none;
+        font-weight: bold;
+        color: #198754;
+        font-size: 12px;
+        text-align: center;
+        text-shadow: 1px 1px 2px white;
+        pointer-events: none;
+        white-space: nowrap;
+    }
+
+    .legend {
+        background: white;
+        padding: 12px 14px;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+        font-size: 13px;
+        line-height: 24px;
+    }
+
+    .legend h6 {
+        margin: 0 0 8px 0;
+        font-weight: bold;
+    }
+
+    .legend img {
+        width: 16px;
+        margin-right: 6px;
+    }
+
+    .legend-box {
+        display: inline-block;
+        width: 16px;
+        height: 12px;
+        margin-right: 6px;
+        border: 2px solid #198754;
+        background: rgba(25, 135, 84, 0.15);
+    }
+
+    .legend .polygon {
+        vertical-align: middle;
+    }
+
+    .marker-cluster-small {
+        background-color: rgba(13, 110, 253, 0.25);
+    }
+
+    .marker-cluster-small div {
+        background-color: #0d6efd;
+        color: white;
+    }
+
+    .marker-cluster-medium {
+        background-color: rgba(25, 135, 84, 0.25);
+    }
+
+    .marker-cluster-medium div {
+        background-color: #198754;
+        color: white;
+    }
+
+    .marker-cluster-large {
+        background-color: rgba(220, 53, 69, 0.25);
+    }
+
+    .marker-cluster-large div {
+        background-color: #dc3545;
+        color: white;
+    }
+
+    .menu-peta {
+        position: fixed;
+        top: 16px;
+        left: 16px;
+        width: 280px;
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 10px 35px rgba(0,0,0,0.25);
+        z-index: 9999;
+        padding: 14px;
+        transform: translateX(-320px);
+        transition: all 0.3s ease;
+    }
+
+    .menu-peta.aktif {
+        transform: translateX(0);
+    }
+
+    .menu-peta-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #e9ecef;
+        padding-bottom: 10px;
+        margin-bottom: 10px;
+    }
+
+    .menu-peta-link {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 12px;
+        color: #212529;
+        text-decoration: none;
+        border-radius: 10px;
+        font-size: 14px;
+    }
+
+    .menu-peta-link:hover {
+        background: #f1f5ff;
+        color: #0d6efd;
+    }
+
+    .map-statistik{
+        position: absolute;
+
+        bottom: 20px;
+        left: 20px;
+
+        z-index: 999;
+
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+
+        max-width: 70%;
+    }
+
+    .stat-item{
+        background: rgba(255,255,255,0.92);
+
+        backdrop-filter: blur(10px);
+
+        border-radius: 14px;
+
+        padding: 5px 12px;
+
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        box-shadow: 0 4px 15px rgba(0,0,0,0.12);
+
+        font-weight: 600;
+        font-size: 14px;
+
+        min-height: unset;
+    }
+
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div id="menuPeta" class="menu-peta">
+
+    <div class="menu-peta-header">
+        <strong>SIPETAKU</strong>
+
+        <button type="button" id="tutupMenuPeta" class="btn-close"></button>
+    </div>
+
+    <a href="/" class="menu-peta-link">
+        <i class="bi bi-geo-alt-fill"></i>
+        Peta Sekolah
+    </a>
+
+    {% if request.user.is_superuser or request.user.profil.role == 'admin_kecamatan' %}
+        <a href="/dashboard/" class="menu-peta-link">
+            <i class="bi bi-speedometer2"></i>
+            Dashboard
+        </a>
+    {% endif %}
+
+    {% if request.user.is_authenticated and request.user.profil.role == 'operator_sekolah' %}
+        <a href="/profil-sekolah/" class="menu-peta-link">
+            <i class="bi bi-pencil-square"></i>
+            Profil Sekolah
+        </a>
+
+        <a href="/data-guru/" class="menu-peta-link">
+            <i class="bi bi-person-badge"></i>
+            Data Guru
+        </a>
+
+        <a href="/data-murid/" class="menu-peta-link">
+            <i class="bi bi-people"></i>
+            Data Murid
+        </a>
+
+        <a href="/data-prestasi/" class="menu-peta-link">
+            <i class="bi bi-trophy"></i>
+            Data Prestasi
+        </a>
+
+        <a href="/data-aset/" class="menu-peta-link">
+            <i class="bi bi-box-seam"></i>
+            Data Aset
+        </a>
+    {% endif %}
+
+    {% if request.user.is_authenticated %}
+        <a href="/logout/" class="menu-peta-link text-danger">
+            <i class="bi bi-box-arrow-right"></i>
+            Logout
+        </a>
+    {% else %}
+        <a href="/login/" class="menu-peta-link">
+            <i class="bi bi-box-arrow-in-right"></i>
+            Login
+        </a>
+    {% endif %}
+
+</div>
+
+<div class="card">
+    <div class="card-header">
+
+        <div class="row align-items-center">
+
+            <div class="col-12 col-md-6">
+
+                <h5 class="card-title mb-0 d-flex align-items-center gap-3 fw-semibold">
+
+                    <a
+                        class="btn btn-light border me-2"
+                        href="#"
+                        id="toggleSidebarPeta"
+                    >
+                        <i class="bi bi-list"></i>
+                    </a>
+
+                    <span
+                        class="d-flex align-items-center justify-content-center rounded bg-primary-subtle"
+                        style="width:40px; height:40px;"
+                    >
+                        <i class="bi bi-map text-primary"></i>
+                    </span>
+
+                    <span style="font-size: 1.15rem;">
+                        PETA SEBARAN
+                    </span>
+
+                    <span
+                        class="badge bg-primary-subtle text-primary border fw-semibold"
+                        style="font-size: 0.95rem; padding: 8px 12px;"
+                    >
+                        {{ total_sekolah_tampil }} SEKOLAH
+                    </span>
+
+                </h5>
+
+            </div>
+
+            <div class="col-12 col-md-4 ms-auto mt-3 mt-md-0">
+
+                <div class="input-group">
+
+                    <span class="input-group-text bg-white">
+                        <i class="bi bi-search text-primary"></i>
+                    </span>
+
+                    <select
+                        id="cariSekolah"
+                        class="form-select border-start-0"
+                    >
+                        <option value="">
+                            Cari nama sekolah...
+                        </option>
+                    </select>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="card-body">
+
+        <form method="GET" class="d-flex gap-2 align-items-center mb-3 flex-wrap">
+
+            <div style="flex: 1; min-width: 220px;">
+                <div class="input-group">
+
+                    <span class="input-group-text bg-white">
+                        <i class="bi bi-geo-alt text-primary"></i>
+                    </span>
+
+                    <select name="kecamatan" class="form-select border-start-0">
+                        <option value="">Semua Kecamatan</option>
+                        {% for k in daftar_kecamatan %}
+                            <option value="{{ k }}" {% if request.GET.kecamatan == k %}selected{% endif %}>
+                                {{ k }}
+                            </option>
+                        {% endfor %}
+                    </select>
+
+                </div>
+            </div>
+
+            <div style="flex: 1; min-width: 220px;">
+                <div class="input-group">
+
+                    <span class="input-group-text bg-white">
+                        <i class="bi bi-grid text-primary"></i>
+                    </span>
+
+                    <select name="kategori" class="form-select border-start-0">
+                        <option value="">Semua Kategori</option>
+                        {% for kat in daftar_kategori %}
+                            <option value="{{ kat.id }}" {% if request.GET.kategori == kat.id|stringformat:"s" %}selected{% endif %}>
+                                {{ kat.nama }}
+                            </option>
+                        {% endfor %}
+                    </select>
+
+                </div>
+            </div>
+
+            <div style="flex: 1; min-width: 220px;">
+                <div class="input-group">
+
+                    <span class="input-group-text bg-white">
+                        <i class="bi bi-star text-primary"></i>
+                    </span>
+
+                    <select name="status_prestasi" class="form-select border-start-0">
+                        <option value="">Semua Status Prestasi</option>
+                        <option value="punya" {% if status_prestasi == "punya" %}selected{% endif %}>Sekolah Berprestasi</option>
+                        <option value="tidak" {% if status_prestasi == "tidak" %}selected{% endif %}>Tanpa Prestasi</option>
+                    </select>
+
+                </div>
+            </div>
+
+            <div style="width: 120px;">
+                <button type="submit" class="btn btn-primary w-100">
+                    Filter
+                </button>
+            </div>
+
+            <div style="width: 120px;">
+                <a href="/" class="btn btn-secondary w-100">
+                    Reset
+                </a>
+            </div>
+
+        </form>
+
+        <div class="map-statistik">
+
+            <div class="stat-item">
+                <i class="bi bi-building text-primary"></i>
+                <span>{{ total_sekolah_tampil }} Sekolah</span>
+            </div>
+
+            <div class="stat-item">
+                <i class="bi bi-trophy text-warning"></i>
+                <span>{{ total_prestasi }} Prestasi</span>
+            </div>
+
+            <div class="stat-item">
+                <i class="bi bi-person-badge text-success"></i>
+                <span>{{ total_guru }} Guru</span>
+            </div>
+
+            <div class="stat-item">
+                <i class="bi bi-people text-danger"></i>
+                <span>{{ total_murid }} Murid</span>
+            </div>
+
+        </div>
+
+        <div style="position: relative;">
+
+            <div class="map-statistik">
+                ...
+            </div>
+
+            <div id="map"></div>
+
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}
+
+
+{% block js %}
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+
+<script>
+
+    var map = L.map('map').setView([0.8, 117.4], 9);
+
+    var posisiAwalPeta = [0.8, 117.4];
+    var zoomAwalPeta = 9;
+
+    var osm = L.tileLayer(
+        'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        {
+            maxZoom: 19,
+            attribution: 'OpenStreetMap'
+        }
+    ).addTo(map);
+
+    var darkMap = L.tileLayer(
+        'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+        {
+            maxZoom: 19,
+            attribution: 'CartoDB'
+        }
+    );
+
+    var lightMap = L.tileLayer(
+        'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
+        {
+            maxZoom: 19,
+            attribution: 'CartoDB'
+        }
+    );
+
+    var satelliteMap = L.tileLayer(
+        'https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',
+        {
+            maxZoom: 20,
+            attribution: 'Google Satellite'
+        }
+    );
+
+    var baseMaps = {
+        "OpenStreetMap": osm,
+        "Light Map": lightMap,
+        "Dark Map": darkMap,
+        "Citra Satelit": satelliteMap
+    };
+
+    var tombolResetView = L.control({ position: 'topleft' });
+
+        tombolResetView.onAdd = function () {
+            var div = L.DomUtil.create('div', 'leaflet-bar');
+
+            div.innerHTML = `
+                <a href="#" title="Kembali ke tampilan awal">
+                    <i class="bi bi-house-door"></i>
+                </a>
+            `;
+
+            div.onclick = function(e) {
+                e.preventDefault();
+
+                map.flyTo(
+                    posisiAwalPeta,
+                    zoomAwalPeta,
+                    {
+                        animate: true,
+                        duration: 1.2
+                    }
+                );
+            };
+
+            return div;
+        };
+
+    tombolResetView.addTo(map);
+
+    var tombolLokasiSaya = L.control({ position: 'topleft' });
+
+    tombolLokasiSaya.onAdd = function () {
+        var div = L.DomUtil.create('div', 'leaflet-bar');
+
+        div.innerHTML = `
+            <a href="#" title="Gunakan lokasi saya">
+                <i class="bi bi-crosshair"></i>
+            </a>
+        `;
+
+        div.onclick = function(e) {
+            e.preventDefault();
+
+            map.locate({
+                setView: true,
+                maxZoom: 15,
+                enableHighAccuracy: true,
+                timeout: 10000,
+                maximumAge: 0
+            });
+        };
+
+        return div;
+    };
+
+    tombolLokasiSaya.addTo(map);
+
+    map.on('locationfound', function(e) {
+        lokasiSaya = e.latlng;
+
+        if (markerLokasiSaya) {
+            map.removeLayer(markerLokasiSaya);
+        }
+
+        var iconLokasiSaya = new L.Icon({
+            iconUrl: markerColors.black,
+            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+        });
+
+        markerLokasiSaya = L.marker(lokasiSaya, {
+            icon: iconLokasiSaya
+        })
+        .addTo(map)
+        .bindPopup('Lokasi Saya')
+        .openPopup();
+    });
+
+    map.on('locationerror', function() {
+        alert('Lokasi tidak bisa diakses. Pastikan izin lokasi browser diaktifkan.');
+    });
+
+    function hitungJarakKeSekolah(sekolah) {
+
+        if (!lokasiSaya) {
+            alert('Klik tombol lokasi saya dulu.');
+            return;
+        }
+
+        var titikSekolah = L.latLng(
+            sekolah.latitude,
+            sekolah.longitude
+        );
+
+        var jarakMeter = lokasiSaya.distanceTo(titikSekolah);
+        var jarakKm = (jarakMeter / 1000).toFixed(2);
+
+        if (garisJarak) {
+            map.removeLayer(garisJarak);
+        }
+
+        garisJarak = L.polyline(
+            [
+                lokasiSaya,
+                titikSekolah
+            ],
+            {
+                color: '#0d6efd',
+                weight: 4,
+                dashArray: '8, 8'
+            }
+        ).addTo(map);
+
+        garisJarak.bindPopup(
+            `Jarak lurus: <b>${jarakKm} km</b>`
+        ).openPopup();
+
+        map.fitBounds(garisJarak.getBounds(), {
+            padding: [50, 50]
+        });
+    }
+
+    var layerSD = L.markerClusterGroup();
+    var layerSMP = L.markerClusterGroup();
+    var layerTK = L.markerClusterGroup();
+    var layerPAUD = L.markerClusterGroup();
+    var layerKecamatan = L.layerGroup();
+
+    map.addLayer(layerSD);
+    map.addLayer(layerSMP);
+    map.addLayer(layerTK);
+    map.addLayer(layerPAUD);
+    map.addLayer(layerKecamatan);
+
+    var labelManual = {
+        "KECAMATAN SANDARAN": [1.002198956, 118.4999352],
+        "KECAMATAN SANGKULIRANG": [1.194765725, 118.0432149],
+        "KECAMATAN KALIORANG": [0.883106762, 117.8346354],
+        "KECAMATAN KAUBUN": [1.030171751, 117.8049949],
+        "KECAMATAN KARANGAN": [1.318983872, 117.6041679],
+        "KECAMATAN BENGALON": [0.84641067, 117.4130806],
+        "KECAMATAN SANGATTA UTARA": [0.562646042, 117.5505101],
+        "KECAMATAN SANGATTA SELATAN": [0.414441277, 117.3674127],
+        "KECAMATAN TELUK PANDAN": [0.191538676, 117.3240356],
+        "KECAMATAN RANTAU PULUNG": [0.620118975, 117.1973602],
+        "KECAMATAN BATU AMPAR": [0.651145106, 116.9085895],
+        "KECAMATAN TELEN": [0.859113224, 116.8400985],
+        "KECAMATAN MUARA BENGKAL": [0.402957254, 116.7990242],
+        "KECAMATAN MUARA ANCALONG": [0.50635056, 116.4908595],
+        "KECAMATAN BUSANG": [0.969346202, 116.2887763],
+        "KECAMATAN MUARA WAHAU": [1.432440183, 116.6265762],
+        "KECAMATAN LONG MESANGAT": [0.594114075, 116.71912],
+        "KECAMATAN KOMBENG": [1.244416116, 117.068396]
+    };
+
+    fetch('/static/geojson/kecamatan.geojson')
+        .then(response => response.json())
+        .then(data => {
+            L.geoJSON(data, {
+                style: function(feature) {
+                    return {
+                        color: '#198754',
+                        weight: 2,
+                        fillColor: '#198754',
+                        fillOpacity: 0.1
+                    };
+                },
+
+                onEachFeature: function(feature, layer) {
+                    let namaKecamatan =
+                        feature.properties.KECAMATAN ||
+                        feature.properties.NAMOBJ ||
+                        feature.properties.nama ||
+                        feature.properties.kecamatan ||
+                        'KECAMATAN';
+
+                    layer.bindPopup(`<b>Kecamatan:</b> ${namaKecamatan}`);
+
+                    var posisiLabel;
+
+                    if (labelManual[namaKecamatan]) {
+                        posisiLabel = labelManual[namaKecamatan];
+                    } else {
+                        var titikLabel = turf.pointOnFeature(feature);
+                        var koordinat = titikLabel.geometry.coordinates;
+                        posisiLabel = [koordinat[1], koordinat[0]];
+                    }
+
+                    L.marker(posisiLabel, {
+                        icon: L.divIcon({
+                            className: 'label-kecamatan',
+                            html: namaKecamatan,
+                            iconSize: [300, 30],
+                            iconAnchor: [150, 15]
+                        }),
+                        interactive: false
+                    }).addTo(layerKecamatan);
+                }
+            }).addTo(layerKecamatan);
+        });
+
+    var sekolahData = [
+        {% for s in sekolah %}
+        {
+            id: "{{ s.id }}",
+            nama: "{{ s.nama|escapejs }}",
+            kategori: "{{ s.kategori.nama|escapejs }}",
+            warna: "{{ s.kategori.warna_marker|escapejs }}",
+            status: "{{ s.status|escapejs }}",
+            murid: "{{ s.total_murid }}",
+            prestasi: "{{ s.total_prestasi }}",
+            guru: "{{ s.total_guru }}",
+            kecamatan: "{{ s.kecamatan|escapejs }}",
+            latitude: "{{ s.latitude }}",
+            longitude: "{{ s.longitude }}",
+            foto: "{% if s.foto %}{{ s.foto.url }}{% endif %}"
+        },
+        {% endfor %}
+    ];
+
+    var markerColors = {
+        blue: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png',
+        green: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
+        red: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
+        orange: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-orange.png',
+        yellow: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-yellow.png',
+        violet: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-violet.png',
+        grey: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-grey.png',
+        black: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-black.png'
+    };
+
+    function buatIcon(warna) {
+        return new L.Icon({
+            iconUrl: markerColors[warna] || markerColors.blue,
+            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+        });
+    }
+
+    var daftarMarkerSekolah = [];
+    var dataSearchSekolah = [];
+
+    var lokasiSaya = null;
+    var markerLokasiSaya = null;
+    var garisJarak = null;
+
+    sekolahData.forEach(function(s) {
+        if (s.latitude && s.longitude) {
+
+            var targetLayer = layerSD;
+
+            if (s.kategori === 'SD') {
+                targetLayer = layerSD;
+            } else if (s.kategori === 'SMP') {
+                targetLayer = layerSMP;
+            } else if (s.kategori === 'TK') {
+                targetLayer = layerTK;
+            } else if (s.kategori === 'PAUD') {
+                targetLayer = layerPAUD;
+            }
+
+            var marker = L.marker([
+                parseFloat(s.latitude),
+                parseFloat(s.longitude)
+            ], {
+                icon: buatIcon(s.warna)
+            });
+
+            var markerSekolah = {};
+
+            marker.bindPopup(`
+                <div style="width:240px;">
+
+                    ${
+                        s.foto
+                        ? `<img src="${s.foto}" width="100%" style="height:120px; object-fit:cover; border-radius:12px;">`
+                        : `<div style="height:120px; border-radius:12px; background:#f1f5f9; display:flex; align-items:center; justify-content:center;">
+                                <i class="bi bi-building" style="font-size:40px; color:#0d6efd;"></i>
+                        </div>`
+                    }
+
+                    <h6 class="mt-3 mb-2 fw-bold">
+                        ${s.nama}
+                    </h6>
+
+                    <div class="mb-2">
+                        <span class="badge bg-primary">
+                            ${s.kategori}
+                        </span>
+
+                        <span class="badge bg-success">
+                            ${s.status}
+                        </span>
+                    </div>
+
+                    <div style="font-size:13px; line-height:24px;">
+
+                        <div>
+                            <i class="bi bi-geo-alt text-primary"></i>
+                            ${s.kecamatan}
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <span>
+                                <i class="bi bi-people text-danger"></i>
+                                Murid
+                            </span>
+
+                            <b>${s.murid}</b>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <span>
+                                <i class="bi bi-person-badge text-success"></i>
+                                Guru
+                            </span>
+
+                            <b>${s.guru}</b>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <span>
+                                <i class="bi bi-trophy text-warning"></i>
+                                Prestasi
+                            </span>
+
+                            <b>${s.prestasi}</b>
+                        </div>
+
+                    </div>
+
+                    <div class="mt-2">
+                        ${
+                            parseInt(s.prestasi) > 0
+                            ? `<span class="badge bg-success">Sekolah Berprestasi</span>`
+                            : `<span class="badge bg-secondary">Belum Ada Prestasi</span>`
+                        }
+                    </div>
+
+                    <a
+                        href="/sekolah/${s.id}/"
+                        class="btn btn-primary btn-sm w-100 mt-3"
+                    >
+                        <i class="bi bi-eye"></i>
+                        Detail Sekolah
+                    </a>
+
+                </div>
+            `);
+
+            targetLayer.addLayer(marker);
+
+            daftarMarkerSekolah.push({
+                id: s.id,
+                nama: s.nama,
+                marker: marker,
+                latitude: parseFloat(s.latitude),
+                longitude: parseFloat(s.longitude)
+            });
+
+            dataSearchSekolah.push({
+                value: s.id,
+                text: s.nama + ' - ' + s.kategori + ' - ' + s.kecamatan
+            });
+        }
+    });
+
+    new TomSelect('#cariSekolah', {
+        options: dataSearchSekolah,
+        valueField: 'value',
+        labelField: 'text',
+        searchField: 'text',
+        maxOptions: 20,
+        create: false,
+        placeholder: 'Cari nama sekolah...',
+        onChange: function(value) {
+            if (!value) {
+                return;
+            }
+
+            var hasil = daftarMarkerSekolah.find(function(item) {
+                return String(item.id) === String(value);
+            });
+
+            if (hasil) {
+                map.flyTo(
+                    [hasil.latitude, hasil.longitude],
+                    17,
+                    {
+                        animate: true,
+                        duration: 1.5
+                    }
+                );
+
+                if (lokasiSaya) {
+                    hitungJarakKeSekolah(hasil);
+                }
+
+                if (!lokasiSaya) {
+
+                    setTimeout(function() {
+                        hasil.marker.openPopup();
+                    }, 1500);
+
+                }
+            }
+        }
+    });
+
+    var overlayMaps = {};
+
+    overlayMaps["Batas Kecamatan"] = layerKecamatan;
+    overlayMaps['<img src="' + markerColors.blue + '" width="14"> SD'] = layerSD;
+    overlayMaps['<img src="' + markerColors.green + '" width="14"> SMP'] = layerSMP;
+    overlayMaps['<img src="' + markerColors.orange + '" width="14"> TK'] = layerTK;
+    overlayMaps['<img src="' + markerColors.violet + '" width="14"> PAUD'] = layerPAUD;
+
+    L.control.layers(baseMaps, overlayMaps, {
+        collapsed: false
+    }).addTo(map);
+
+</script>
+<script>
+    const menuPeta = document.getElementById('menuPeta');
+    const tombolMenuPeta = document.getElementById('toggleSidebarPeta');
+    const tutupMenuPeta = document.getElementById('tutupMenuPeta');
+
+    tombolMenuPeta.addEventListener('click', function(e) {
+        e.preventDefault();
+        menuPeta.classList.add('aktif');
+    });
+
+    tutupMenuPeta.addEventListener('click', function() {
+        menuPeta.classList.remove('aktif');
+    });
+</script>
+{% endblock %}

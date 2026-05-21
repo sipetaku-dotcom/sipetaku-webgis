@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Data Guru
+{% endblock %}
+
+{% block content %}
+
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Data Guru {{ sekolah.nama }}</h5>
+
+        <a href="/tambah-guru/" class="btn btn-primary btn-sm">
+            Tambah Guru
+        </a>
+    </div>
+
+    <div class="card-body">
+
+        <table id="tableGuru" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Nama</th>
+                    <th>Jabatan</th>
+                    <th>Status</th>
+                    <th>Mata Pelajaran</th>
+                    <th>Pensiun</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for g in guru %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ g.nama }}</td>
+                    <td>{{ g.jabatan }}</td>
+                    <td>{{ g.status_pegawai }}</td>
+                    <td>{{ g.mata_pelajaran }}</td>
+                    <td>{{ g.tanggal_pensiun }}</td>
+
+                    <td>
+
+                        <a
+                            href="/edit-guru/{{ g.id }}/"
+                            class="btn btn-warning btn-sm"
+                        >
+                            Edit
+                        </a>
+
+                        <a
+                            href="/hapus-guru/{{ g.id }}/"
+                            class="btn btn-danger btn-sm tombol-hapus"
+                        >
+                            Hapus
+                        </a>
+
+                    </td>
+
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center">
+                        Belum ada data guru
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script>
+    $(document).ready(function () {
+        $('#tableGuru').DataTable({
+            pageLength: 10,
+            lengthMenu: [10, 25, 50, 100]
+        });
+
+        $('.tombol-hapus').on('click', function(e) {
+            e.preventDefault();
+
+            var href = $(this).attr('href');
+
+            Swal.fire({
+                title: 'Yakin hapus data?',
+                text: 'Data yang sudah dihapus tidak bisa dikembalikan.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, hapus',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = href;
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}
