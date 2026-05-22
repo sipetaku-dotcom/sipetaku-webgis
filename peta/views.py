@@ -11,11 +11,24 @@ from django.http import HttpResponse
 from openpyxl import Workbook
 import json
 from django.contrib.auth.decorators import login_required, user_passes_test
-from akun.views import ambil_profil_user
+from akun.views import (ambil_profil_user, user_admin_kabupaten)
 from django.template.loader import render_to_string
 from django.template.loader import get_template
 from xhtml2pdf import pisa
 from io import BytesIO
+
+
+def user_admin_kabupaten(request):
+
+    profil = ambil_profil_user(request)
+
+    if request.user.is_superuser:
+        return True
+
+    if profil and profil.role == 'admin_kabupaten':
+        return True
+
+    return False
 
 
 def index(request):
@@ -24,7 +37,7 @@ def index(request):
 
     if request.user.is_authenticated:
 
-        if request.user.is_superuser:
+        if user_admin_kabupaten(request):
             sekolah = Sekolah.objects.annotate(
                 total_prestasi=Count('prestasi', distinct=True),
                 total_guru=Count('guru', distinct=True),
@@ -76,7 +89,7 @@ def index(request):
             total_prestasi=0
         )
 
-    if request.user.is_superuser:
+    if user_admin_kabupaten(request):
 
         daftar_kecamatan = Sekolah.objects.values_list(
             'kecamatan',
@@ -137,7 +150,7 @@ def detail_sekolah(request, id):
 
     if request.user.is_authenticated:
 
-        if request.user.is_superuser:
+        if user_admin_kabupaten(request):
             pass
 
         elif profil and profil.role == 'admin_kecamatan':
@@ -220,11 +233,10 @@ def detail_sekolah(request, id):
 
 
 @login_required
-@user_passes_test(lambda u: u.is_superuser)
 def dashboard(request):
     profil = ambil_profil_user(request)
 
-    if request.user.is_superuser:
+    if user_admin_kabupaten(request):
 
         sekolah_qs = Sekolah.objects.all()
 
@@ -342,7 +354,7 @@ def dashboard(request):
         flat=True
     ).distinct().order_by('-tahun')
 
-    if request.user.is_superuser:
+    if user_admin_kabupaten(request):
 
         daftar_kecamatan = Sekolah.objects.values_list(
             'kecamatan',
@@ -364,6 +376,31 @@ def dashboard(request):
 
     daftar_kategori = KategoriSekolah.objects.all().order_by('nama')
 
+    sekolah_per_kecamatan = []
+
+    daftar_kecamatan_dashboard = sekolah_qs.values_list(
+        'kecamatan',
+        flat=True
+    ).distinct().order_by('kecamatan')
+
+    for kec in daftar_kecamatan_dashboard:
+
+        daftar_sekolah = sekolah_qs.filter(
+            kecamatan=kec
+        ).order_by('nama')
+
+        jumlah_per_kategori = daftar_sekolah.values(
+            'kategori__nama'
+        ).annotate(
+            jumlah=Count('id')
+        ).order_by('kategori__nama')
+
+        sekolah_per_kecamatan.append({
+            'nama_kecamatan': kec,
+            'jumlah_sekolah': daftar_sekolah.count(),
+            'jumlah_per_kategori': jumlah_per_kategori,
+        })
+
     ranking_sekolah = sekolah_qs.annotate(
         jumlah_prestasi=Count('prestasi')
     ).order_by('-jumlah_prestasi')[:10]
@@ -377,6 +414,7 @@ def dashboard(request):
         'total_prestasi': total_prestasi,
 
         'sekolah_per_kategori': sekolah_per_kategori,
+        'sekolah_per_kecamatan': sekolah_per_kecamatan,
 
         'guru_akan_pensiun': guru_akan_pensiun,
         'total_guru_akan_pensiun': total_guru_akan_pensiun,
@@ -430,7 +468,7 @@ def export_sekolah_excel(request):
 
     profil = ambil_profil_user(request)
 
-    if request.user.is_superuser:
+    if user_admin_kabupaten(request):
         sekolah = Sekolah.objects.all()
 
     elif profil and profil.role == 'admin_kecamatan':
@@ -491,7 +529,7 @@ def export_guru_excel(request):
 
     profil = ambil_profil_user(request)
 
-    if request.user.is_superuser:
+    if user_admin_kabupaten(request):
 
         guru = Guru.objects.select_related(
             'sekolah'
@@ -560,7 +598,7 @@ def export_murid_excel(request):
 
     profil = ambil_profil_user(request)
 
-    if request.user.is_superuser:
+    if user_admin_kabupaten(request):
 
         murid = Murid.objects.select_related(
             'sekolah'
@@ -614,7 +652,7 @@ def export_prestasi_excel(request):
 
     profil = ambil_profil_user(request)
 
-    if request.user.is_superuser:
+    if user_admin_kabupaten(request):
 
         prestasi = Prestasi.objects.select_related(
             'sekolah',
@@ -710,7 +748,7 @@ def export_aset_excel(request):
 
     profil = ambil_profil_user(request)
 
-    if request.user.is_superuser:
+    if user_admin_kabupaten(request):
 
         aset = Aset.objects.select_related(
             'sekolah'
@@ -759,7 +797,7 @@ def export_guru_pensiun_excel(request):
 
     profil = ambil_profil_user(request)
 
-    if request.user.is_superuser:
+    if user_admin_kabupaten(request):
 
         guru = Guru.objects.select_related('sekolah').filter(
             tanggal_pensiun__isnull=False,

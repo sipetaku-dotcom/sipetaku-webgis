@@ -1,140 +1,241 @@
 {% extends 'base.html' %}
 
-{% block title %}
-Data Aset
-{% endblock %}
+{% block title %}{% endblock %}
 
 {% block content %}
 
-<div class="card">
+<div class="card shadow-sm border-0">
 
-    <div class="card-header d-flex justify-content-between align-items-center">
+    <div class="card-header">
 
-        <h5 class="mb-0">
-            Data Aset {{ sekolah.nama }}
-        </h5>
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
 
-        <a href="/tambah-aset/" class="btn btn-primary btn-sm">
-            Tambah Aset
-        </a>
+            <div>
+
+                <h5 class="mb-0">
+                    <i class="bi bi-box-seam text-primary me-2"></i>
+                    Data Aset
+
+                    <span class="badge bg-primary ms-2">
+                        {{ aset|length }} Aset
+                    </span>
+                </h5>
+
+                <small class="text-muted">
+                    {{ sekolah.nama }}
+                </small>
+
+            </div>
+
+            <a
+                href="/tambah-aset/"
+                class="btn btn-primary btn-sm ms-auto"
+            >
+                <i class="bi bi-plus-circle me-1"></i>
+                Tambah Aset
+            </a>
+
+        </div>
 
     </div>
 
     <div class="card-body">
 
-        <table id="tableAset" class="table table-bordered table-striped">
+        <div class="table-responsive">
 
-            <thead>
-                <tr>
-                    <th>No</th>
-                    <th>Foto</th>
-                    <th>Nama</th>
-                    <th>Kategori</th>
-                    <th>Jumlah</th>
-                    <th>Kondisi</th>
-                    <th>Aksi</th>
-                </tr>
-            </thead>
+            <table
+                id="tableAset"
+                class="table table-bordered table-striped align-middle w-100"
+            >
 
-            <tbody>
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Aset</th>
+                        <th>Kategori</th>
+                        <th>Jumlah</th>
+                        <th>Kondisi</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
 
-                {% for a in aset %}
-                <tr>
+                <tbody>
 
-                    <td>
-                        {{ forloop.counter }}
-                    </td>
+                    {% for a in aset %}
+                    <tr>
 
-                    <td>
-                        {% if a.foto %}
-                            <img
-                                src="{{ a.foto.url }}"
-                                width="80"
-                                class="rounded"
+                        <td>{{ forloop.counter }}</td>
+
+                        <td>
+
+                            <div class="d-flex align-items-center gap-3">
+
+                                <div
+                                    class="flex-shrink-0"
+                                >
+
+                                    {% if a.foto %}
+                                        <img
+                                            src="{{ a.foto.url }}"
+                                            class="rounded border shadow-sm"
+                                            style="width:70px; height:70px; object-fit:cover;"
+                                        >
+                                    {% else %}
+
+                                        <div
+                                            class="rounded bg-light border d-flex align-items-center justify-content-center"
+                                            style="width:70px; height:70px;"
+                                        >
+                                            <i class="bi bi-image text-muted"></i>
+                                        </div>
+
+                                    {% endif %}
+
+                                </div>
+
+                                <div>
+
+                                    <div class="fw-bold">
+                                        {{ a.nama }}
+                                    </div>
+
+                                    <small class="text-muted">
+                                        {{ a.kategori }}
+                                    </small>
+
+                                </div>
+
+                            </div>
+
+                        </td>
+
+                        <td>
+                            <span class="badge bg-secondary">
+                                {{ a.kategori }}
+                            </span>
+                        </td>
+
+                        <td>
+                            <span class="badge bg-primary">
+                                {{ a.jumlah }}
+                            </span>
+                        </td>
+
+                        <td>
+
+                            {% if a.kondisi == 'Baik' %}
+
+                                <span class="badge bg-success">
+                                    {{ a.kondisi }}
+                                </span>
+
+                            {% elif a.kondisi == 'Rusak Ringan' %}
+
+                                <span class="badge bg-warning text-dark">
+                                    {{ a.kondisi }}
+                                </span>
+
+                            {% elif a.kondisi == 'Rusak Berat' %}
+
+                                <span class="badge bg-danger">
+                                    {{ a.kondisi }}
+                                </span>
+
+                            {% else %}
+
+                                <span class="badge bg-secondary">
+                                    {{ a.kondisi }}
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+                        <td class="text-nowrap">
+
+                            <a
+                                href="/edit-aset/{{ a.id }}/"
+                                class="btn btn-warning btn-sm"
                             >
-                        {% endif %}
-                    </td>
+                                <i class="bi bi-pencil-square"></i>
+                                Edit
+                            </a>
 
-                    <td>
-                        {{ a.nama }}
-                    </td>
+                            <a
+                                href="/hapus-aset/{{ a.id }}/"
+                                class="btn btn-danger btn-sm tombol-hapus"
+                            >
+                                <i class="bi bi-trash"></i>
+                                Hapus
+                            </a>
 
-                    <td>
-                        {{ a.kategori }}
-                    </td>
+                        </td>
 
-                    <td>
-                        {{ a.jumlah }}
-                    </td>
+                    </tr>
 
-                    <td>
-                        {{ a.kondisi }}
-                    </td>
+                    {% empty %}
 
-                    <td>
+                    <tr>
+                        <td class="text-center">-</td>
+                        <td class="text-center">Belum ada data aset</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
 
-                        <a
-                            href="/edit-aset/{{ a.id }}/"
-                            class="btn btn-warning btn-sm"
-                        >
-                            Edit
-                        </a>
+                    {% endfor %}
 
-                        <a
-                            href="/hapus-aset/{{ a.id }}/"
-                            class="btn btn-danger btn-sm tombol-hapus"
-                        >
-                            Hapus
-                        </a>
+                </tbody>
 
-                    </td>
+            </table>
 
-                </tr>
-
-                {% empty %}
-
-                <tr>
-                    <td colspan="6" class="text-center">
-                        Belum ada data aset
-                    </td>
-                </tr>
-
-                {% endfor %}
-
-            </tbody>
-
-        </table>
+        </div>
 
     </div>
 
 </div>
+
 {% endblock %}
 
 {% block js %}
+
 <script>
+
     $(document).ready(function () {
+
         $('#tableAset').DataTable({
+            responsive: true,
+            autoWidth: false,
             pageLength: 10,
             lengthMenu: [10, 25, 50, 100]
         });
-    });
-    $('.tombol-hapus').on('click', function(e) {
-        e.preventDefault();
 
-        var href = $(this).attr('href');
+        $('.tombol-hapus').on('click', function(e) {
 
-        Swal.fire({
-            title: 'Yakin hapus data?',
-            text: 'Data yang sudah dihapus tidak bisa dikembalikan.',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Ya, hapus',
-            cancelButtonText: 'Batal'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                window.location.href = href;
-            }
+            e.preventDefault();
+
+            var href = $(this).attr('href');
+
+            Swal.fire({
+                title: 'Yakin hapus aset?',
+                text: 'Data yang sudah dihapus tidak bisa dikembalikan.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, hapus',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+
+                if (result.isConfirmed) {
+                    window.location.href = href;
+                }
+
+            });
+
         });
+
     });
+
 </script>
+
 {% endblock %}

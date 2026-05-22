@@ -1,53 +1,94 @@
 {% extends 'base.html' %}
 
-{% block title %}
-Edit Prestasi
-{% endblock %}
+{% block title %}{% endblock %}
 
 {% block content %}
 
-<div class="card">
+<div class="card shadow-sm border-0">
+
     <div class="card-header">
-        <h5 class="mb-0">Edit Prestasi</h5>
+
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+            <h5 class="mb-0">
+                <i class="bi bi-pencil-square text-warning me-2"></i>
+                Edit Prestasi
+            </h5>
+
+            <a
+                href="/data-prestasi/"
+                class="btn btn-secondary btn-sm ms-auto"
+            >
+                <i class="bi bi-arrow-left me-1"></i>
+                Kembali
+            </a>
+
+        </div>
+
     </div>
 
     <div class="card-body">
+
         <form method="POST" enctype="multipart/form-data">
+
             {% csrf_token %}
 
             <div class="row">
+
                 {% for field in form %}
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">
-                            {{ field.label }}
-                        </label>
 
-                        {{ field }}
+                <div class="col-md-6 mb-3">
 
-                        {% if field.errors %}
-                            <div class="alert alert-danger py-2 mt-2 mb-0">
-                                {% for error in field.errors %}
-                                    <div>
-                                        <i class="bi bi-exclamation-triangle"></i>
-                                        {{ error }}
-                                    </div>
-                                {% endfor %}
-                            </div>
-                        {% endif %}
+                    <label class="form-label fw-semibold">
+                        {{ field.label }}
+                    </label>
+
+                    {{ field }}
+
+                    {% if field.errors %}
+
+                    <div class="alert alert-danger py-2 mt-2 mb-0">
+
+                        {% for error in field.errors %}
+                        <div>
+                            <i class="bi bi-exclamation-triangle me-1"></i>
+                            {{ error }}
+                        </div>
+                        {% endfor %}
+
                     </div>
+
+                    {% endif %}
+
+                </div>
+
                 {% endfor %}
+
             </div>
 
-            <button type="submit" class="btn btn-primary">
-                <i class="bi bi-save"></i>
-                Simpan
-            </button>
+            <div class="d-flex justify-content-end gap-2 mt-3">
 
-            <a href="/data-prestasi/" class="btn btn-secondary">
-                Kembali
-            </a>
+                <a
+                    href="/data-prestasi/"
+                    class="btn btn-secondary"
+                >
+                    Batal
+                </a>
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                >
+                    <i class="bi bi-save me-2"></i>
+                    Simpan Perubahan
+                </button>
+
+            </div>
+
         </form>
+
     </div>
+
 </div>
 
 {% endblock %}

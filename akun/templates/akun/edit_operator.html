@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Edit Operator
+{% endblock %}
+
+{% block content %}
+
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">
+            <i class="bi bi-pencil-square me-2"></i>
+            Edit Operator Sekolah
+        </h5>
+    </div>
+
+    <div class="card-body">
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="row">
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Nama Lengkap</label>
+                    <input
+                        type="text"
+                        name="nama_lengkap"
+                        class="form-control"
+                        value="{{ operator.user.first_name }}"
+                        required
+                    >
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Username</label>
+                    <input
+                        type="text"
+                        name="username"
+                        class="form-control"
+                        value="{{ operator.user.username }}"
+                        required
+                    >
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Password Baru</label>
+                    <input
+                        type="text"
+                        name="password"
+                        class="form-control"
+                        placeholder="Kosongkan jika tidak diganti"
+                    >
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Sekolah</label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        value="{{ operator.sekolah.nama }} - {{ operator.sekolah.kecamatan }} - {{ operator.sekolah.desa }}"
+                        readonly
+                    >
+                </div>
+
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+                <i class="bi bi-save me-2"></i>
+                Simpan Perubahan
+            </button>
+
+            <a href="/data-operator/" class="btn btn-secondary">
+                Kembali
+            </a>
+
+        </form>
+
+    </div>
+</div>
+
+{% endblock %}

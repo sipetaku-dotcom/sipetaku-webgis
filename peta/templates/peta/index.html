@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}{% endblock %}
 
@@ -20,6 +21,230 @@ halaman-peta
 />
 
 <style>
+    .map-toolbar-kanan {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        z-index: 1000;
+
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .map-toolbar-kanan button {
+        position: relative;
+        width: 48px;
+        height: 48px;
+
+        border: none;
+        border-radius: 10px;
+
+        background: rgba(255,255,255,0.92);
+        color: #495057;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        font-size: 22px;
+        box-shadow: 0 4px 14px rgba(0,0,0,0.18);
+
+        transition: all .2s ease;
+    }
+
+    .map-toolbar-kanan button:hover {
+        background: #0d6efd;
+        color: #ffffff;
+    }
+
+    .toolbar-badge {
+        position: absolute;
+        top: -6px;
+        right: -6px;
+
+        width: 22px;
+        height: 22px;
+
+        border-radius: 50%;
+
+        background: #dc3545;
+        color: #ffffff;
+
+        font-size: 12px;
+        font-weight: 700;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    [data-bs-theme="dark"] body.halaman-peta .map-toolbar-kanan button {
+        background: rgba(31,37,43,.92);
+        color: #ffffff;
+        border: 1px solid #495057;
+    }
+
+    [data-bs-theme="dark"] body.halaman-peta .map-toolbar-kanan button:hover {
+        background: #0d6efd;
+    }
+
+{% comment %} BATAS TOLLBAR KANAN {% endcomment %}
+
+    .panel-basemap {
+        position: absolute;
+
+        top: 130px;
+        right: 80px;
+
+        z-index: 1000;
+
+        width: 220px;
+
+        background: rgba(255,255,255,0.96);
+
+        border-radius: 14px;
+
+        padding: 10px;
+
+        box-shadow: 0 10px 30px rgba(0,0,0,.22);
+
+        display: none;
+    }
+
+    .panel-basemap.aktif {
+        display: block;
+    }
+
+    .panel-basemap button {
+        width: 100%;
+
+        border: none;
+
+        background: transparent;
+
+        border-radius: 10px;
+
+        padding: 10px 12px;
+
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        font-size: 14px;
+        font-weight: 500;
+
+        color: #212529;
+
+        transition: all .2s ease;
+    }
+
+    .panel-basemap button:hover {
+        background: rgba(13,110,253,.12);
+        color: #0d6efd;
+    }
+
+    [data-bs-theme="dark"] body.halaman-peta .panel-basemap {
+        background: rgba(31,37,43,.96);
+        border: 1px solid #495057;
+    }
+
+    [data-bs-theme="dark"] body.halaman-peta .panel-basemap button {
+        color: #ffffff;
+    }
+
+    [data-bs-theme="dark"] body.halaman-peta .panel-basemap button:hover {
+        background: rgba(13,110,253,.18);
+    }
+
+{% comment %} BATAS PANEL PETA DASAR {% endcomment %}
+    .panel-filter-sekolah {
+        position: absolute;
+        top: 0;
+        right: 100px;
+        z-index: 1000;
+
+        width: 330px;
+        background: rgba(255,255,255,0.96);
+        border-radius: 14px;
+        padding: 12px;
+        box-shadow: 0 10px 30px rgba(0,0,0,.22);
+        display: none;
+    }
+
+    .panel-filter-sekolah.aktif {
+        display: block;
+    }
+
+    .panel-filter-sekolah form {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .panel-filter-sekolah form > div {
+        width: 100% !important;
+        min-width: 100% !important;
+    }
+
+    .panel-filter-sekolah .input-group {
+        height: 40px;
+    }
+
+    .panel-filter-sekolah .input-group-text,
+    .panel-filter-sekolah .form-select {
+        height: 40px;
+    }
+
+    .panel-filter-sekolah .aksi-filter {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+
+    .panel-filter-sekolah .aksi-filter .btn {
+        height: 40px;
+        font-weight: 600;
+        border-radius: 8px;
+    }
+
+    [data-bs-theme="dark"] body.halaman-peta .panel-filter-sekolah {
+        background: rgba(31,37,43,.96);
+        border: 1px solid #495057;
+    }
+    {% comment %} BATAS PANEL FILTER SEKOLAH {% endcomment %}
+    .panel-cari-sekolah {
+        position: absolute;
+
+        top: 200px;
+        right: 68px;
+
+        z-index: 1000;
+
+        width: 320px;
+
+        background: rgba(255,255,255,0.96);
+
+        border-radius: 14px;
+
+        padding: 12px;
+
+        box-shadow: 0 10px 30px rgba(0,0,0,.22);
+
+        display: none;
+    }
+
+    .panel-cari-sekolah.aktif {
+        display: block;
+    }
+
+    [data-bs-theme="dark"] body.halaman-peta .panel-cari-sekolah {
+        background: rgba(31,37,43,.96);
+        border: 1px solid #495057;
+    }
+
+    {% comment %} BATAS PANEL CARI SEKOLAH {% endcomment %}
+
     body.halaman-peta .app-header,
     body.halaman-peta .app-content-header {
         display: none !important;
@@ -35,21 +260,14 @@ halaman-peta
     }
 
     body.halaman-peta .app-content {
-        padding-top: 12px !important;
+        padding-top: 8px !important;
     }
 
     #map {
-        height: calc(100vh - 190px);
+        height: calc(100vh - 130px);
         width: 100%;
-        border-radius: 12px;
-    }
 
-    @media (max-width: 576px) {
-        #map {
-            height: calc(100vh - 190px);
-            width: 100%;
-            border-radius: 12px;
-        }
+        border-radius: 0 !important;
     }
 
     .leaflet-bar a {
@@ -69,38 +287,6 @@ halaman-peta
         text-shadow: 1px 1px 2px white;
         pointer-events: none;
         white-space: nowrap;
-    }
-
-    .legend {
-        background: white;
-        padding: 12px 14px;
-        border-radius: 10px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.25);
-        font-size: 13px;
-        line-height: 24px;
-    }
-
-    .legend h6 {
-        margin: 0 0 8px 0;
-        font-weight: bold;
-    }
-
-    .legend img {
-        width: 16px;
-        margin-right: 6px;
-    }
-
-    .legend-box {
-        display: inline-block;
-        width: 16px;
-        height: 12px;
-        margin-right: 6px;
-        border: 2px solid #198754;
-        background: rgba(25, 135, 84, 0.15);
-    }
-
-    .legend .polygon {
-        vertical-align: middle;
     }
 
     .marker-cluster-small {
@@ -135,7 +321,7 @@ halaman-peta
         top: 16px;
         left: 16px;
         width: 280px;
-        background: white;
+        background: #ffffff;
         border-radius: 16px;
         box-shadow: 0 10px 35px rgba(0,0,0,0.25);
         z-index: 9999;
@@ -153,62 +339,225 @@ halaman-peta
         justify-content: space-between;
         align-items: center;
         border-bottom: 1px solid #e9ecef;
-        padding-bottom: 10px;
-        margin-bottom: 10px;
+        padding-bottom: 12px;
+        margin-bottom: 12px;
+    }
+
+    .menu-peta-logo {
+        width: 22px;
+        height: 22px;
+        object-fit: contain;
+        margin-left: 6px;
+    }
+
+    .menu-peta-title {
+        font-size: 17px;
+        font-weight: 700;
+        color: #212529;
+        margin-left: -5px;
+        line-height: 1;
     }
 
     .menu-peta-link {
         display: flex;
         align-items: center;
-        gap: 10px;
-        padding: 10px 12px;
+        gap: 12px;
+        padding: 12px 14px;
         color: #212529;
         text-decoration: none;
-        border-radius: 10px;
-        font-size: 14px;
+        border-radius: 12px;
+        font-size: 15px;
+        font-weight: 500;
+        transition: all .2s ease;
     }
 
-    .menu-peta-link:hover {
-        background: #f1f5ff;
+    .menu-peta-link i {
+        width: 22px;
+        display: flex;
+        justify-content: center;
         color: #0d6efd;
     }
 
-    .map-statistik{
+    .menu-peta-link:hover {
+        background: rgba(13,110,253,.12);
+        color: #212529;
+    }
+
+    .menu-peta-link.text-danger {
+        color: #212529 !important;
+    }
+
+    .menu-peta-link.text-danger i {
+        color: #dc3545 !important;
+    }
+
+    .menu-peta-link.text-danger:hover {
+        background: rgba(220,53,69,.12) !important;
+    }
+
+    .map-statistik {
         position: absolute;
-
         bottom: 20px;
-        left: 20px;
-
+        right: 20px;
         z-index: 999;
-
         display: flex;
         flex-wrap: wrap;
         gap: 10px;
-
         max-width: 70%;
     }
 
-    .stat-item{
+    #areaPetaFullscreen:fullscreen {
+        background: var(--bs-body-bg);
+        padding: 12px;
+        overflow: auto;
+    }
+
+    #areaPetaFullscreen:fullscreen #map {
+        height: calc(100vh - 145px);
+    }
+
+    .stat-item {
         background: rgba(255,255,255,0.92);
-
         backdrop-filter: blur(10px);
-
         border-radius: 14px;
-
         padding: 5px 12px;
-
         display: flex;
         align-items: center;
         gap: 8px;
-
         box-shadow: 0 4px 15px rgba(0,0,0,0.12);
-
         font-weight: 600;
         font-size: 14px;
-
-        min-height: unset;
     }
 
+    .ts-wrapper.single .ts-control {
+        min-height: 36px !important;
+
+        padding-top: 2px !important;
+        padding-bottom: 2px !important;
+        padding-left: 10px !important;
+
+        display: flex !important;
+        align-items: center !important;
+
+        flex-wrap: nowrap !important;
+
+        overflow: hidden !important;
+
+        font-size: 14px !important;
+    }
+
+    .ts-wrapper.single .ts-control input {
+        min-width: 60px !important;
+    }
+
+    .ts-control > div {
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+    }
+
+    [data-bs-theme="dark"] body.halaman-peta .card,
+    [data-bs-theme="dark"] body.halaman-peta .card-header,
+    [data-bs-theme="dark"] body.halaman-peta .card-body {
+        background-color: #1f252b !important;
+        color: #ffffff !important;
+        border-color: #3a4149 !important;
+    }
+
+    [data-bs-theme="dark"] body.halaman-peta .input-group-text,
+    [data-bs-theme="dark"] body.halaman-peta .form-select,
+    [data-bs-theme="dark"] body.halaman-peta .ts-control {
+        background-color: #1f252b !important;
+        color: #ffffff !important;
+        border-color: #495057 !important;
+    }
+
+    [data-bs-theme="dark"] body.halaman-peta .form-select option {
+        background-color: #1f252b !important;
+        color: #ffffff !important;
+    }
+
+    [data-bs-theme="dark"] body.halaman-peta .leaflet-control-layers,
+    [data-bs-theme="dark"] body.halaman-peta .leaflet-bar a {
+        background-color: #1f252b !important;
+        color: #ffffff !important;
+        border-color: #495057 !important;
+    }
+
+    [data-bs-theme="dark"] body.halaman-peta .leaflet-control-layers label {
+        color: #ffffff !important;
+    }
+
+    [data-bs-theme="dark"] body.halaman-peta .stat-item {
+        background-color: rgba(31,37,43,0.92) !important;
+        color: #ffffff !important;
+        border: 1px solid #495057 !important;
+    }
+
+    [data-bs-theme="dark"] body.halaman-peta .stat-item span {
+        color: #ffffff !important;
+        opacity: 1 !important;
+    }
+
+    [data-bs-theme="dark"] body.halaman-peta .menu-peta {
+        background-color: #1f252b !important;
+        color: #ffffff !important;
+    }
+
+    [data-bs-theme="dark"] body.halaman-peta .menu-peta-header {
+        border-bottom-color: #495057 !important;
+    }
+
+    [data-bs-theme="dark"] body.halaman-peta .menu-peta-title,
+    [data-bs-theme="dark"] body.halaman-peta .menu-peta-link {
+        color: #ffffff !important;
+    }
+
+    [data-bs-theme="dark"] body.halaman-peta .menu-peta-link:hover {
+        background-color: rgba(13,110,253,0.18) !important;
+        color: #ffffff !important;
+    }
+
+    [data-bs-theme="dark"] body.halaman-peta .menu-peta-link.text-danger {
+        color: #ffffff !important;
+    }
+
+    [data-bs-theme="dark"] body.halaman-peta .menu-peta-link.text-danger:hover {
+        background: rgba(220,53,69,.18) !important;
+    }
+
+    [data-bs-theme="dark"] body.halaman-peta .leaflet-popup-content-wrapper,
+    [data-bs-theme="dark"] body.halaman-peta .leaflet-popup-tip {
+        background-color: #1f252b !important;
+        color: #ffffff !important;
+    }
+
+    [data-bs-theme="dark"] .ts-control input {
+        color: #ffffff !important;
+    }
+
+    [data-bs-theme="dark"] .ts-control input::placeholder {
+        color: rgba(255,255,255,0.65) !important;
+    }
+
+    [data-bs-theme="dark"] .ts-dropdown {
+        background-color: #1f252b !important;
+        border-color: #495057 !important;
+    }
+
+    [data-bs-theme="dark"] .ts-dropdown .option {
+        color: #ffffff !important;
+    }
+
+    [data-bs-theme="dark"] .ts-dropdown .active {
+        background-color: rgba(13,110,253,0.18) !important;
+        color: #ffffff !important;
+    }
+
+    .aktif-toolbar {
+        background: #0d6efd !important;
+        color: #ffffff !important;
+    }
 </style>
 {% endblock %}
 
@@ -217,9 +566,27 @@ halaman-peta
 <div id="menuPeta" class="menu-peta">
 
     <div class="menu-peta-header">
-        <strong>SIPETAKU</strong>
 
-        <button type="button" id="tutupMenuPeta" class="btn-close"></button>
+        <div class="d-flex align-items-center gap-3 px-2">
+
+            <img
+                src="{% static 'img/logo.png' %}"
+                alt="Logo SIPETAKU"
+                class="menu-peta-logo"
+            >
+
+            <strong class="menu-peta-title">
+                SIPETAKU
+            </strong>
+
+        </div>
+
+        <button
+            type="button"
+            id="tutupMenuPeta"
+            class="btn-close">
+        </button>
+
     </div>
 
     <a href="/" class="menu-peta-link">
@@ -227,7 +594,7 @@ halaman-peta
         Peta Sekolah
     </a>
 
-    {% if request.user.is_superuser or request.user.profil.role == 'admin_kecamatan' %}
+    {% if request.user.is_superuser or request.user.profil.role == 'admin_kabupaten' or request.user.profil.role == 'admin_kecamatan' %}
         <a href="/dashboard/" class="menu-peta-link">
             <i class="bi bi-speedometer2"></i>
             Dashboard
@@ -275,7 +642,7 @@ halaman-peta
 
 </div>
 
-<div class="card">
+<div class="card" id="areaPetaFullscreen">
     <div class="card-header">
 
         <div class="row align-items-center">
@@ -310,28 +677,48 @@ halaman-peta
                         {{ total_sekolah_tampil }} SEKOLAH
                     </span>
 
+                    <button
+                        type="button"
+                        id="toggleFullscreen"
+                        class="btn btn-light border rounded-3"
+                        title="Fullscreen Peta"
+                    >
+                        <i class="bi bi-arrows-fullscreen text-primary"></i>
+                    </button>
+
+                    <button
+                        type="button"
+                        title="Label Kecamatan"
+                        onclick="toggleLabelKecamatan(this)"
+                    >
+                        <i class="bi bi-card-text"></i>
+                    </button>
+
                 </h5>
 
-            </div>
+                    <div class="map-statistik">
 
-            <div class="col-12 col-md-4 ms-auto mt-3 mt-md-0">
+                        <div class="stat-item">
+                            <i class="bi bi-building text-primary"></i>
+                            <span>{{ total_sekolah_tampil }} Sekolah</span>
+                        </div>
 
-                <div class="input-group">
+                        <div class="stat-item">
+                            <i class="bi bi-trophy text-warning"></i>
+                            <span>{{ total_prestasi }} Prestasi</span>
+                        </div>
 
-                    <span class="input-group-text bg-white">
-                        <i class="bi bi-search text-primary"></i>
-                    </span>
+                        <div class="stat-item">
+                            <i class="bi bi-person-badge text-success"></i>
+                            <span>{{ total_guru }} Guru</span>
+                        </div>
 
-                    <select
-                        id="cariSekolah"
-                        class="form-select border-start-0"
-                    >
-                        <option value="">
-                            Cari nama sekolah...
-                        </option>
-                    </select>
+                        <div class="stat-item">
+                            <i class="bi bi-people text-danger"></i>
+                            <span>{{ total_murid }} Murid</span>
+                        </div>
 
-                </div>
+                    </div>
 
             </div>
 
@@ -341,104 +728,161 @@ halaman-peta
 
     <div class="card-body">
 
-        <form method="GET" class="d-flex gap-2 align-items-center mb-3 flex-wrap">
+        <div id="panelFilterSekolah" class="panel-filter-sekolah">
 
-            <div style="flex: 1; min-width: 220px;">
-                <div class="input-group">
+            <form method="GET" class="d-flex gap-2 align-items-center mb-3 flex-wrap">
 
-                    <span class="input-group-text bg-white">
-                        <i class="bi bi-geo-alt text-primary"></i>
-                    </span>
+                <div style="flex: 1; min-width: 220px;">
+                    <div class="input-group">
 
-                    <select name="kecamatan" class="form-select border-start-0">
-                        <option value="">Semua Kecamatan</option>
-                        {% for k in daftar_kecamatan %}
-                            <option value="{{ k }}" {% if request.GET.kecamatan == k %}selected{% endif %}>
-                                {{ k }}
-                            </option>
-                        {% endfor %}
-                    </select>
+                        <span class="input-group-text bg-white">
+                            <i class="bi bi-geo-alt text-primary"></i>
+                        </span>
 
+                        <select name="kecamatan" class="form-select border-start-0">
+                            <option value="">Semua Kecamatan</option>
+                            {% for k in daftar_kecamatan %}
+                                <option value="{{ k }}" {% if request.GET.kecamatan == k %}selected{% endif %}>
+                                    {{ k }}
+                                </option>
+                            {% endfor %}
+                        </select>
+
+                    </div>
                 </div>
-            </div>
 
-            <div style="flex: 1; min-width: 220px;">
-                <div class="input-group">
+                <div style="flex: 1; min-width: 220px;">
+                    <div class="input-group">
 
-                    <span class="input-group-text bg-white">
-                        <i class="bi bi-grid text-primary"></i>
-                    </span>
+                        <span class="input-group-text bg-white">
+                            <i class="bi bi-grid text-primary"></i>
+                        </span>
 
-                    <select name="kategori" class="form-select border-start-0">
-                        <option value="">Semua Kategori</option>
-                        {% for kat in daftar_kategori %}
-                            <option value="{{ kat.id }}" {% if request.GET.kategori == kat.id|stringformat:"s" %}selected{% endif %}>
-                                {{ kat.nama }}
-                            </option>
-                        {% endfor %}
-                    </select>
+                        <select name="kategori" class="form-select border-start-0">
+                            <option value="">Semua Kategori</option>
+                            {% for kat in daftar_kategori %}
+                                <option value="{{ kat.id }}" {% if request.GET.kategori == kat.id|stringformat:"s" %}selected{% endif %}>
+                                    {{ kat.nama }}
+                                </option>
+                            {% endfor %}
+                        </select>
 
+                    </div>
                 </div>
-            </div>
 
-            <div style="flex: 1; min-width: 220px;">
-                <div class="input-group">
+                <div style="flex: 1; min-width: 220px;">
+                    <div class="input-group">
 
-                    <span class="input-group-text bg-white">
-                        <i class="bi bi-star text-primary"></i>
-                    </span>
+                        <span class="input-group-text bg-white">
+                            <i class="bi bi-star text-primary"></i>
+                        </span>
 
-                    <select name="status_prestasi" class="form-select border-start-0">
-                        <option value="">Semua Status Prestasi</option>
-                        <option value="punya" {% if status_prestasi == "punya" %}selected{% endif %}>Sekolah Berprestasi</option>
-                        <option value="tidak" {% if status_prestasi == "tidak" %}selected{% endif %}>Tanpa Prestasi</option>
-                    </select>
+                        <select name="status_prestasi" class="form-select border-start-0">
+                            <option value="">Semua Status Prestasi</option>
+                            <option value="punya" {% if status_prestasi == "punya" %}selected{% endif %}>Sekolah Berprestasi</option>
+                            <option value="tidak" {% if status_prestasi == "tidak" %}selected{% endif %}>Tanpa Prestasi</option>
+                        </select>
 
+                    </div>
                 </div>
-            </div>
 
-            <div style="width: 120px;">
-                <button type="submit" class="btn btn-primary w-100">
-                    Filter
-                </button>
-            </div>
+                <div style="width: 120px;">
+                    <button type="submit" class="btn btn-primary w-100">
+                        Filter
+                    </button>
+                </div>
 
-            <div style="width: 120px;">
-                <a href="/" class="btn btn-secondary w-100">
-                    Reset
-                </a>
-            </div>
+                <div style="width: 120px;">
+                    <a href="/" class="btn btn-secondary w-100">
+                        Reset
+                    </a>
+                </div>
 
-        </form>
-
-        <div class="map-statistik">
-
-            <div class="stat-item">
-                <i class="bi bi-building text-primary"></i>
-                <span>{{ total_sekolah_tampil }} Sekolah</span>
-            </div>
-
-            <div class="stat-item">
-                <i class="bi bi-trophy text-warning"></i>
-                <span>{{ total_prestasi }} Prestasi</span>
-            </div>
-
-            <div class="stat-item">
-                <i class="bi bi-person-badge text-success"></i>
-                <span>{{ total_guru }} Guru</span>
-            </div>
-
-            <div class="stat-item">
-                <i class="bi bi-people text-danger"></i>
-                <span>{{ total_murid }} Murid</span>
-            </div>
+            </form>
 
         </div>
 
+
+
         <div style="position: relative;">
 
-            <div class="map-statistik">
-                ...
+            <div class="map-toolbar-kanan">
+
+                <div id="panelCariSekolah" class="panel-cari-sekolah">
+
+                    <div class="input-group">
+
+                        <span class="input-group-text bg-white">
+                            <i class="bi bi-search text-primary"></i>
+                        </span>
+
+                        <select
+                            id="cariSekolah"
+                            class="form-select border-start-0"
+                        >
+                            <option value="">
+                                Cari nama sekolah...
+                            </option>
+                        </select>
+
+                    </div>
+
+                </div>
+
+                <div id="panelBaseMap" class="panel-basemap">
+
+                    <button type="button" onclick="gantiBaseMap('osm')">
+                        <i class="bi bi-map"></i>
+                        OpenStreetMap
+                    </button>
+
+                    <button type="button" onclick="gantiBaseMap('light')">
+                        <i class="bi bi-brightness-high"></i>
+                        Light Map
+                    </button>
+
+                    <button type="button" onclick="gantiBaseMap('dark')">
+                        <i class="bi bi-moon-stars"></i>
+                        Dark Map
+                    </button>
+
+                    <button type="button" onclick="gantiBaseMap('satellite')">
+                        <i class="bi bi-globe"></i>
+                        Satelit
+                    </button>
+                </div>
+
+                <button
+                    type="button"
+                    title="Filter Sekolah"
+                    onclick="togglePanelFilterSekolah()"
+                >
+                    <i class="bi bi-list-check"></i>
+                </button>
+
+                <button type="button" title="Semua Sekolah" onclick="fokusSemuaSekolah()">
+                    <i class="bi bi-map"></i>
+                    <span class="toolbar-badge">
+                        {{ total_sekolah_tampil }}
+                    </span>
+                </button>
+
+                <button
+                    type="button"
+                    title="Layer Peta"
+                    onclick="togglePanelBaseMap()"
+                >
+                    <i class="bi bi-layers"></i>
+                </button>
+
+                <button
+                    type="button"
+                    title="Cari Sekolah"
+                    onclick="togglePanelCariSekolah()"
+                >
+                    <i class="bi bi-search"></i>
+                </button>
+
             </div>
 
             <div id="map"></div>
@@ -495,13 +939,6 @@ halaman-peta
             attribution: 'Google Satellite'
         }
     );
-
-    var baseMaps = {
-        "OpenStreetMap": osm,
-        "Light Map": lightMap,
-        "Dark Map": darkMap,
-        "Citra Satelit": satelliteMap
-    };
 
     var tombolResetView = L.control({ position: 'topleft' });
 
@@ -568,7 +1005,7 @@ halaman-peta
         }
 
         var iconLokasiSaya = new L.Icon({
-            iconUrl: markerColors.black,
+            iconUrl: markerColors.red,
             shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
             iconSize: [25, 41],
             iconAnchor: [12, 41],
@@ -628,11 +1065,27 @@ halaman-peta
         });
     }
 
+    function fokusSemuaSekolah() {
+
+        if (clusterSekolah.getLayers().length > 0) {
+
+            map.fitBounds(
+                clusterSekolah.getBounds(),
+                {
+                    padding: [40, 40]
+                }
+            );
+
+        }
+
+    }
+
     var layerSD = L.markerClusterGroup();
     var layerSMP = L.markerClusterGroup();
     var layerTK = L.markerClusterGroup();
     var layerPAUD = L.markerClusterGroup();
     var layerKecamatan = L.layerGroup();
+    var layerLabelKecamatan = L.layerGroup();
 
     map.addLayer(layerSD);
     map.addLayer(layerSMP);
@@ -661,16 +1114,48 @@ halaman-peta
         "KECAMATAN KOMBENG": [1.244416116, 117.068396]
     };
 
+    var warnaKecamatan = [
+        '#198754',
+        '#0d6efd',
+        '#fd7e14',
+        '#6f42c1',
+        '#dc3545',
+        '#20c997',
+        '#ffc107',
+        '#0dcaf0',
+        '#d63384',
+        '#6610f2',
+        '#6c757d',
+        '#2b8a3e',
+        '#f76707',
+        '#4263eb',
+        '#ae3ec9',
+        '#c92a2a',
+        '#087f5b',
+        '#5c7cfa'
+    ];
+
+    var indexWarnaKecamatan = 0;
+
     fetch('/static/geojson/kecamatan.geojson')
         .then(response => response.json())
         .then(data => {
             L.geoJSON(data, {
                 style: function(feature) {
+
+                    var warna = warnaKecamatan[
+                        indexWarnaKecamatan % warnaKecamatan.length
+                    ];
+
+                    feature.properties.warnaPolygon = warna;
+
+                    indexWarnaKecamatan++;
+
                     return {
-                        color: '#198754',
+                        color: warna,
                         weight: 2,
-                        fillColor: '#198754',
-                        fillOpacity: 0.1
+                        fillColor: warna,
+                        fillOpacity: 0.15
                     };
                 },
 
@@ -685,6 +1170,7 @@ halaman-peta
                     layer.bindPopup(`<b>Kecamatan:</b> ${namaKecamatan}`);
 
                     var posisiLabel;
+                    var warna = feature.properties.warnaPolygon;
 
                     if (labelManual[namaKecamatan]) {
                         posisiLabel = labelManual[namaKecamatan];
@@ -697,12 +1183,21 @@ halaman-peta
                     L.marker(posisiLabel, {
                         icon: L.divIcon({
                             className: 'label-kecamatan',
-                            html: namaKecamatan,
+                            html: `
+                                <span style="
+                                    color: ${warna};
+                                    font-weight: 800;
+                                    text-shadow:
+                                        0 0 2px rgba(255,255,255,0.55);
+                                ">
+                                    ${namaKecamatan}
+                                </span>
+                            `,
                             iconSize: [300, 30],
                             iconAnchor: [150, 15]
                         }),
                         interactive: false
-                    }).addTo(layerKecamatan);
+                    }).addTo(layerLabelKecamatan);
                 }
             }).addTo(layerKecamatan);
         });
@@ -918,18 +1413,6 @@ halaman-peta
         }
     });
 
-    var overlayMaps = {};
-
-    overlayMaps["Batas Kecamatan"] = layerKecamatan;
-    overlayMaps['<img src="' + markerColors.blue + '" width="14"> SD'] = layerSD;
-    overlayMaps['<img src="' + markerColors.green + '" width="14"> SMP'] = layerSMP;
-    overlayMaps['<img src="' + markerColors.orange + '" width="14"> TK'] = layerTK;
-    overlayMaps['<img src="' + markerColors.violet + '" width="14"> PAUD'] = layerPAUD;
-
-    L.control.layers(baseMaps, overlayMaps, {
-        collapsed: false
-    }).addTo(map);
-
 </script>
 <script>
     const menuPeta = document.getElementById('menuPeta');
@@ -944,5 +1427,133 @@ halaman-peta
     tutupMenuPeta.addEventListener('click', function() {
         menuPeta.classList.remove('aktif');
     });
+</script>
+<script>
+    const tombolFullscreen =
+        document.getElementById('toggleFullscreen');
+
+    const areaPetaFullscreen =
+        document.getElementById('areaPetaFullscreen');
+
+    tombolFullscreen.addEventListener('click', function () {
+
+        if (!document.fullscreenElement) {
+
+            areaPetaFullscreen.requestFullscreen();
+
+            tombolFullscreen.innerHTML = `
+                <i class="bi bi-fullscreen-exit text-danger"></i>
+            `;
+
+        } else {
+
+            document.exitFullscreen();
+
+            tombolFullscreen.innerHTML = `
+                <i class="bi bi-arrows-fullscreen text-primary"></i>
+            `;
+        }
+
+    });
+
+    document.addEventListener('fullscreenchange', function () {
+        setTimeout(function () {
+            map.invalidateSize();
+        }, 300);
+    });
+
+
+    function fokusSemuaSekolah() {
+
+        var groupGabungan = L.featureGroup();
+
+        groupGabungan.addLayer(layerSD);
+        groupGabungan.addLayer(layerSMP);
+        groupGabungan.addLayer(layerTK);
+        groupGabungan.addLayer(layerPAUD);
+
+        if (groupGabungan.getLayers().length > 0) {
+
+            map.fitBounds(
+                groupGabungan.getBounds(),
+                {
+                    padding: [40, 40]
+                }
+            );
+
+        }
+
+    }
+
+
+    function togglePanelBaseMap() {
+
+        document
+            .getElementById('panelBaseMap')
+            .classList
+            .toggle('aktif');
+
+    }
+
+
+    function gantiBaseMap(mode) {
+
+        map.removeLayer(osm);
+        map.removeLayer(lightMap);
+        map.removeLayer(darkMap);
+        map.removeLayer(satelliteMap);
+
+        if (mode === 'osm') {
+            osm.addTo(map);
+        }
+
+        if (mode === 'light') {
+            lightMap.addTo(map);
+        }
+
+        if (mode === 'dark') {
+            darkMap.addTo(map);
+        }
+
+        if (mode === 'satellite') {
+            satelliteMap.addTo(map);
+        }
+
+    }
+
+
+    function togglePanelFilterSekolah() {
+        document
+            .getElementById('panelFilterSekolah')
+            .classList
+            .toggle('aktif');
+    }
+
+    function togglePanelCariSekolah() {
+
+        document
+            .getElementById('panelCariSekolah')
+            .classList
+            .toggle('aktif');
+
+    }
+
+    function toggleLabelKecamatan(button) {
+
+        if (map.hasLayer(layerLabelKecamatan)) {
+
+            map.removeLayer(layerLabelKecamatan);
+
+            button.classList.remove('aktif-toolbar');
+
+        } else {
+
+            map.addLayer(layerLabelKecamatan);
+
+            button.classList.add('aktif-toolbar');
+
+        }
+
+    }
 </script>
 {% endblock %}

@@ -10,27 +10,23 @@
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
 
             <h5 class="mb-0">
-                <i class="bi bi-person-badge text-primary me-2"></i>
-                Data Guru
+                <i class="bi bi-table text-primary me-2"></i>
+                Daftar Operator
 
                 <span class="badge bg-primary ms-2">
-                    {{ guru|length }} Guru
+                    {{ operator|length }} Operator
                 </span>
             </h5>
 
             <a
-                href="/tambah-guru/"
+                href="/tambah-user-operator/"
                 class="btn btn-primary btn-sm ms-auto"
             >
                 <i class="bi bi-person-plus me-1"></i>
-                Tambah Guru
+                Tambah Operator
             </a>
 
         </div>
-
-        <small class="text-muted">
-            {{ sekolah.nama }}
-        </small>
     </div>
 
     <div class="card-body">
@@ -38,25 +34,27 @@
         <div class="table-responsive">
 
             <table
-                id="tableGuru"
+                id="tableOperator"
                 class="table table-bordered table-striped align-middle w-100"
             >
+
                 <thead>
                     <tr>
                         <th>No</th>
-                        <th>Guru</th>
-                        <th>Jabatan</th>
-                        <th>Status</th>
-                        <th>Mata Pelajaran</th>
-                        <th>Pensiun</th>
+                        <th>Operator</th>
+                        <th>Username</th>
+                        <th>Sekolah</th>
+                        <th>NPSN</th>
+                        <th>Wilayah</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
 
                 <tbody>
 
-                    {% for g in guru %}
+                    {% for o in operator %}
                     <tr>
+
                         <td>{{ forloop.counter }}</td>
 
                         <td>
@@ -71,37 +69,50 @@
 
                                 <div>
                                     <div class="fw-bold">
-                                        {{ g.nama }}
+                                        {{ o.user.first_name|default:"-" }}
                                     </div>
 
                                     <small class="text-muted">
-                                        {{ g.nip|default:"Tanpa NIP" }}
+                                        Operator Sekolah
                                     </small>
                                 </div>
 
                             </div>
                         </td>
 
-                        <td>{{ g.jabatan }}</td>
-
                         <td>
                             <span class="badge bg-secondary">
-                                {{ g.status_pegawai }}
+                                {{ o.user.username }}
                             </span>
                         </td>
 
                         <td>
-                            {{ g.mata_pelajaran|default:"-" }}
+                            <div class="fw-semibold">
+                                {{ o.sekolah.nama }}
+                            </div>
                         </td>
 
                         <td>
-                            {{ g.tanggal_pensiun|default:"-" }}
+                            {{ o.sekolah.npsn }}
+                        </td>
+
+                        <td>
+
+                            <div>
+                                <i class="bi bi-geo-alt text-primary me-1"></i>
+                                {{ o.sekolah.kecamatan }}
+                            </div>
+
+                            <small class="text-muted">
+                                {{ o.sekolah.desa }}
+                            </small>
+
                         </td>
 
                         <td class="text-nowrap">
 
                             <a
-                                href="/edit-guru/{{ g.id }}/"
+                                href="/edit-operator/{{ o.id }}/"
                                 class="btn btn-warning btn-sm"
                             >
                                 <i class="bi bi-pencil-square"></i>
@@ -109,7 +120,7 @@
                             </a>
 
                             <a
-                                href="/hapus-guru/{{ g.id }}/"
+                                href="/hapus-operator/{{ o.id }}/"
                                 class="btn btn-danger btn-sm tombol-hapus"
                             >
                                 <i class="bi bi-trash"></i>
@@ -117,21 +128,21 @@
                             </a>
 
                         </td>
+
                     </tr>
 
                     {% empty %}
+
                     <tr>
-                        <td class="text-center">-</td>
-                        <td class="text-center">Belum ada data guru</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td colspan="7" class="text-center">
+                            Belum ada data operator
+                        </td>
                     </tr>
+
                     {% endfor %}
 
                 </tbody>
+
             </table>
 
         </div>
@@ -145,8 +156,10 @@
 {% block js %}
 
 <script>
+
     $(document).ready(function () {
-        $('#tableGuru').DataTable({
+
+        $('#tableOperator').DataTable({
             responsive: true,
             autoWidth: false,
             pageLength: 10,
@@ -154,24 +167,30 @@
         });
 
         $('.tombol-hapus').on('click', function(e) {
+
             e.preventDefault();
 
             var href = $(this).attr('href');
 
             Swal.fire({
-                title: 'Yakin hapus guru?',
-                text: 'Data yang sudah dihapus tidak bisa dikembalikan.',
+                title: 'Yakin hapus operator?',
+                text: 'User akan dihapus dan sekolah bisa dipilih operator baru.',
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonText: 'Ya, hapus',
                 cancelButtonText: 'Batal'
             }).then((result) => {
+
                 if (result.isConfirmed) {
                     window.location.href = href;
                 }
+
             });
+
         });
+
     });
+
 </script>
 
 {% endblock %}

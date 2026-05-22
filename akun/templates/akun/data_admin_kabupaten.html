@@ -10,27 +10,23 @@
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
 
             <h5 class="mb-0">
-                <i class="bi bi-person-badge text-primary me-2"></i>
-                Data Guru
+                <i class="bi bi-person-vcard text-primary me-2"></i>
+                Daftar Admin Kabupaten
 
                 <span class="badge bg-primary ms-2">
-                    {{ guru|length }} Guru
+                    {{ admin_kabupaten|length }} Admin
                 </span>
             </h5>
 
             <a
-                href="/tambah-guru/"
+                href="/tambah-user-admin-kabupaten/"
                 class="btn btn-primary btn-sm ms-auto"
             >
                 <i class="bi bi-person-plus me-1"></i>
-                Tambah Guru
+                Tambah Admin Kabupaten
             </a>
 
         </div>
-
-        <small class="text-muted">
-            {{ sekolah.nama }}
-        </small>
     </div>
 
     <div class="card-body">
@@ -38,25 +34,24 @@
         <div class="table-responsive">
 
             <table
-                id="tableGuru"
+                id="tableAdminKabupaten"
                 class="table table-bordered table-striped align-middle w-100"
             >
+
                 <thead>
                     <tr>
                         <th>No</th>
-                        <th>Guru</th>
-                        <th>Jabatan</th>
-                        <th>Status</th>
-                        <th>Mata Pelajaran</th>
-                        <th>Pensiun</th>
+                        <th>Admin Kabupaten</th>
+                        <th>Username</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
 
                 <tbody>
 
-                    {% for g in guru %}
+                    {% for a in admin_kabupaten %}
                     <tr>
+
                         <td>{{ forloop.counter }}</td>
 
                         <td>
@@ -66,42 +61,32 @@
                                     class="rounded-circle bg-primary-subtle d-flex align-items-center justify-content-center flex-shrink-0"
                                     style="width:50px; height:50px;"
                                 >
-                                    <i class="bi bi-person-fill text-primary"></i>
+                                    <i class="bi bi-person-fill-check text-primary"></i>
                                 </div>
 
                                 <div>
                                     <div class="fw-bold">
-                                        {{ g.nama }}
+                                        {{ a.user.first_name|default:"-" }}
                                     </div>
 
                                     <small class="text-muted">
-                                        {{ g.nip|default:"Tanpa NIP" }}
+                                        Admin Kabupaten
                                     </small>
                                 </div>
 
                             </div>
                         </td>
 
-                        <td>{{ g.jabatan }}</td>
-
                         <td>
                             <span class="badge bg-secondary">
-                                {{ g.status_pegawai }}
+                                {{ a.user.username }}
                             </span>
-                        </td>
-
-                        <td>
-                            {{ g.mata_pelajaran|default:"-" }}
-                        </td>
-
-                        <td>
-                            {{ g.tanggal_pensiun|default:"-" }}
                         </td>
 
                         <td class="text-nowrap">
 
                             <a
-                                href="/edit-guru/{{ g.id }}/"
+                                href="/edit-admin-kabupaten/{{ a.id }}/"
                                 class="btn btn-warning btn-sm"
                             >
                                 <i class="bi bi-pencil-square"></i>
@@ -109,7 +94,7 @@
                             </a>
 
                             <a
-                                href="/hapus-guru/{{ g.id }}/"
+                                href="/hapus-admin-kabupaten/{{ a.id }}/"
                                 class="btn btn-danger btn-sm tombol-hapus"
                             >
                                 <i class="bi bi-trash"></i>
@@ -117,21 +102,21 @@
                             </a>
 
                         </td>
+
                     </tr>
 
                     {% empty %}
+
                     <tr>
-                        <td class="text-center">-</td>
-                        <td class="text-center">Belum ada data guru</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td colspan="4" class="text-center">
+                            Belum ada data admin kabupaten
+                        </td>
                     </tr>
+
                     {% endfor %}
 
                 </tbody>
+
             </table>
 
         </div>
@@ -145,8 +130,10 @@
 {% block js %}
 
 <script>
+
     $(document).ready(function () {
-        $('#tableGuru').DataTable({
+
+        $('#tableAdminKabupaten').DataTable({
             responsive: true,
             autoWidth: false,
             pageLength: 10,
@@ -154,24 +141,30 @@
         });
 
         $('.tombol-hapus').on('click', function(e) {
+
             e.preventDefault();
 
             var href = $(this).attr('href');
 
             Swal.fire({
-                title: 'Yakin hapus guru?',
-                text: 'Data yang sudah dihapus tidak bisa dikembalikan.',
+                title: 'Yakin hapus admin kabupaten?',
+                text: 'User admin kabupaten akan dihapus.',
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonText: 'Ya, hapus',
                 cancelButtonText: 'Batal'
             }).then((result) => {
+
                 if (result.isConfirmed) {
                     window.location.href = href;
                 }
+
             });
+
         });
+
     });
+
 </script>
 
 {% endblock %}

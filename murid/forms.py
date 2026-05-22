@@ -25,8 +25,14 @@ class MuridForm(forms.ModelForm):
             'tempat_lahir': forms.TextInput(attrs={'class': 'form-control'}),
             'tanggal_lahir': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
             'kelas': forms.TextInput(attrs={'class': 'form-control'}),
-            'alamat': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
-            'prestasi': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+            'alamat': forms.Textarea(attrs={'class': 'form-control', 'rows': 1}),
+            'prestasi': forms.Textarea(
+                attrs={
+                    'class': 'form-control',
+                    'rows': 1,
+                    'placeholder': 'Opsional'
+                }
+            ),
         }
 
     def clean_nisn(self):

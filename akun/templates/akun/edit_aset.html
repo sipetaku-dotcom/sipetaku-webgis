@@ -1,17 +1,30 @@
 {% extends 'base.html' %}
 
-{% block title %}
-Edit Aset
-{% endblock %}
+{% block title %}{% endblock %}
 
 {% block content %}
 
-<div class="card">
+<div class="card shadow-sm border-0">
 
     <div class="card-header">
-        <h5 class="mb-0">
-            Edit Aset
-        </h5>
+
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+            <h5 class="mb-0">
+                <i class="bi bi-pencil-square text-primary me-2"></i>
+                Edit Aset
+            </h5>
+
+            <a
+                href="/data-aset/"
+                class="btn btn-secondary btn-sm ms-auto"
+            >
+                <i class="bi bi-arrow-left me-1"></i>
+                Kembali
+            </a>
+
+        </div>
+
     </div>
 
     <div class="card-body">
@@ -23,76 +36,99 @@ Edit Aset
             <div class="row">
 
                 {% for field in form %}
-                    <div class="col-md-6 mb-3">
 
-                        <label class="form-label">
-                            {{ field.label }}
-                        </label>
+                <div class="col-md-6 mb-3">
 
-                        {{ field }}
+                    <label class="form-label fw-semibold">
+                        {{ field.label }}
+                    </label>
 
-                        {% if field.name == 'foto' %}
+                    {{ field }}
 
-                            <div class="mt-3">
+                    {% if field.name == 'foto' %}
 
-                                {% if aset and aset.foto %}
-                                    <p class="mb-1">Foto saat ini:</p>
-                                    <img
-                                        src="{{ aset.foto.url }}"
-                                        id="previewFoto"
-                                        class="img-fluid rounded border"
-                                        style="max-height: 250px;"
-                                    >
-                                {% else %}
-                                    <img
-                                        id="previewFoto"
-                                        class="img-fluid rounded border d-none"
-                                        style="max-height: 250px;"
-                                    >
-                                {% endif %}
+                    <div class="mt-3">
 
-                            </div>
+                        {% if aset and aset.foto %}
+
+                            <p class="mb-1 text-muted">
+                                Foto saat ini:
+                            </p>
+
+                            <img
+                                src="{{ aset.foto.url }}"
+                                id="previewFoto"
+                                class="img-fluid rounded border shadow-sm"
+                                style="max-height:250px;"
+                            >
+
+                        {% else %}
+
+                            <img
+                                id="previewFoto"
+                                class="img-fluid rounded border shadow-sm d-none"
+                                style="max-height:250px;"
+                            >
 
                         {% endif %}
 
-                        {% if field.errors %}
-                            <div class="alert alert-danger py-2 mt-2 mb-0">
-                                {% for error in field.errors %}
-                                    <div>
-                                        <i class="bi bi-exclamation-triangle"></i>
-                                        {{ error }}
-                                    </div>
-                                {% endfor %}
-                            </div>
-                        {% endif %}
-                        
                     </div>
+
+                    {% endif %}
+
+                    {% if field.errors %}
+
+                    <div class="alert alert-danger py-2 mt-2 mb-0">
+
+                        {% for error in field.errors %}
+                        <div>
+                            <i class="bi bi-exclamation-triangle me-1"></i>
+                            {{ error }}
+                        </div>
+                        {% endfor %}
+
+                    </div>
+
+                    {% endif %}
+
+                </div>
+
                 {% endfor %}
 
             </div>
 
-            <button type="submit" class="btn btn-primary">
-                <i class="bi bi-save"></i>
-                Simpan
-            </button>
+            <div class="d-flex justify-content-end gap-2 mt-3">
 
-            <a
-                href="/data-aset/"
-                class="btn btn-secondary"
-            >
-                Kembali
-            </a>
+                <a
+                    href="/data-aset/"
+                    class="btn btn-secondary"
+                >
+                    Batal
+                </a>
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                >
+                    <i class="bi bi-save me-2"></i>
+                    Simpan Perubahan
+                </button>
+
+            </div>
 
         </form>
 
     </div>
 
 </div>
+
 {% endblock %}
 
 {% block js %}
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+
         const inputFoto = document.querySelector('input[type="file"][name="foto"]');
         const previewFoto = document.getElementById('previewFoto');
 
@@ -106,6 +142,8 @@ Edit Aset
                 }
             });
         }
+
     });
 </script>
+
 {% endblock %}

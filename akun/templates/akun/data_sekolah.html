@@ -1,0 +1,154 @@
+{% extends 'base.html' %}
+
+{% block title %}{% endblock %}
+
+{% block content %}
+
+<div class="card shadow-sm border-0">
+
+    <div class="card-header">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+            <h5 class="mb-0">
+                <i class="bi bi-building text-primary me-2"></i>
+                Daftar Sekolah
+
+                <span class="badge bg-primary ms-2">
+                    {{ sekolah|length }} Sekolah
+                </span>
+            </h5>
+
+            <a
+                href="/tambah-sekolah/"
+                class="btn btn-primary btn-sm ms-auto"
+            >
+                <i class="bi bi-building-add me-1"></i>
+                Tambah Sekolah
+            </a>
+
+        </div>
+    </div>
+
+    <div class="card-body">
+
+        <div class="table-responsive">
+
+            <table
+                id="tableSekolah"
+                class="table table-bordered table-striped align-middle w-100"
+            >
+
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Sekolah</th>
+                        <th>NPSN</th>
+                        <th>Kategori</th>
+                        <th>Status</th>
+                        <th>Wilayah</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for s in sekolah %}
+                    <tr>
+
+                        <td>{{ forloop.counter }}</td>
+
+                        <td>
+                            <div class="d-flex align-items-center gap-3">
+
+                                <div
+                                    class="rounded-circle bg-primary-subtle d-flex align-items-center justify-content-center flex-shrink-0"
+                                    style="width:50px; height:50px;"
+                                >
+                                    <i class="bi bi-building text-primary"></i>
+                                </div>
+
+                                <div>
+                                    <div class="fw-bold">
+                                        {{ s.nama }}
+                                    </div>
+
+                                    <small class="text-muted">
+                                        Data Sekolah
+                                    </small>
+                                </div>
+
+                            </div>
+                        </td>
+
+                        <td>
+                            <span class="badge bg-secondary">
+                                {{ s.npsn }}
+                            </span>
+                        </td>
+
+                        <td>
+                            <span class="badge bg-primary">
+                                {{ s.kategori.nama }}
+                            </span>
+                        </td>
+
+                        <td>
+                            {% if s.status == 'Negeri' %}
+                                <span class="badge bg-success">
+                                    {{ s.status }}
+                                </span>
+                            {% else %}
+                                <span class="badge bg-secondary">
+                                    {{ s.status }}
+                                </span>
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            <div>
+                                <i class="bi bi-geo-alt text-primary me-1"></i>
+                                {{ s.kecamatan }}
+                            </div>
+
+                            <small class="text-muted">
+                                {{ s.desa }}
+                            </small>
+                        </td>
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+                        <td colspan="6" class="text-center">
+                            Belum ada data sekolah
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block js %}
+
+<script>
+    $(document).ready(function () {
+        $('#tableSekolah').DataTable({
+            responsive: true,
+            autoWidth: false,
+            pageLength: 10,
+            lengthMenu: [10, 25, 50, 100]
+        });
+    });
+</script>
+
+{% endblock %}

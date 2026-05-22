@@ -1,98 +1,260 @@
 {% extends 'base.html' %}
 
-{% block title %}
-Data Prestasi
-{% endblock %}
+{% block title %}{% endblock %}
 
 {% block content %}
 
-<div class="card">
-    <div class="card-header d-flex justify-content-between align-items-center">
-        <h5 class="mb-0">Data Prestasi {{ sekolah.nama }}</h5>
+<div class="card shadow-sm border-0">
 
-        <a href="/tambah-prestasi/" class="btn btn-primary btn-sm">
-            Tambah Prestasi
-        </a>
+    <div class="card-header">
+
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+            <div>
+
+                <h5 class="mb-0">
+                    <i class="bi bi-trophy text-warning me-2"></i>
+                    Data Prestasi
+
+                    <span class="badge bg-primary ms-2">
+                        {{ prestasi|length }} Prestasi
+                    </span>
+                </h5>
+
+                <small class="text-muted">
+                    {{ sekolah.nama }}
+                </small>
+
+            </div>
+
+            <a
+                href="/tambah-prestasi/"
+                class="btn btn-primary btn-sm ms-auto"
+            >
+                <i class="bi bi-plus-circle me-1"></i>
+                Tambah Prestasi
+            </a>
+
+        </div>
+
     </div>
 
     <div class="card-body">
-        <table id="tablePrestasiOperator" class="table table-bordered table-striped">
-            <thead>
-                <tr>
-                    <th>No</th>
-                    <th>Murid</th>
-                    <th>Lomba</th>
-                    <th>Bidang</th>
-                    <th>Tingkat</th>
-                    <th>Juara</th>
-                    <th>Tahun</th>
-                    <th>Aksi</th>
-                </tr>
-            </thead>
 
-            <tbody>
-                {% for p in prestasi %}
-                <tr>
-                    <td>{{ forloop.counter }}</td>
-                    <td>{{ p.murid.nama }}</td>
-                    <td>{{ p.nama_lomba }}</td>
-                    <td>{{ p.bidang_lomba }}</td>
-                    <td>{{ p.tingkat }}</td>
-                    <td>{{ p.juara }}</td>
-                    <td>{{ p.tahun }}</td>
-                    
-                    <td>
-                        <a href="/edit-prestasi/{{ p.id }}/" class="btn btn-warning btn-sm">
-                            Edit
-                        </a>
+        <div class="table-responsive">
 
-                        <a
-                            href="/hapus-prestasi/{{ p.id }}/"
-                            class="btn btn-danger btn-sm tombol-hapus"
-                        >
-                            Hapus
-                        </a>
-                    </td>
-                    
-                </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="7" class="text-center">
-                        Belum ada data prestasi
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+            <table
+                id="tablePrestasiOperator"
+                class="table table-bordered table-striped align-middle w-100"
+            >
+
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Murid</th>
+                        <th>Lomba</th>
+                        <th>Bidang</th>
+                        <th>Tingkat</th>
+                        <th>Juara</th>
+                        <th>Tahun</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for p in prestasi %}
+                    <tr>
+
+                        <td>{{ forloop.counter }}</td>
+
+                        <td>
+
+                            <div class="d-flex align-items-center gap-3">
+
+                                <div
+                                    class="rounded-circle bg-warning-subtle d-flex align-items-center justify-content-center flex-shrink-0"
+                                    style="width:50px; height:50px;"
+                                >
+                                    <i class="bi bi-person-fill text-warning"></i>
+                                </div>
+
+                                <div>
+
+                                    <div class="fw-bold">
+                                        {{ p.murid.nama }}
+                                    </div>
+
+                                    <small class="text-muted">
+                                        {{ p.murid.kelas }}
+                                    </small>
+
+                                </div>
+
+                            </div>
+
+                        </td>
+
+                        <td>
+                            <div class="fw-semibold">
+                                {{ p.nama_lomba }}
+                            </div>
+                        </td>
+
+                        <td>
+                            {{ p.bidang_lomba }}
+                        </td>
+
+                        <td>
+
+                            {% if p.tingkat == 'Internasional' %}
+                                <span class="badge bg-dark">
+                                    {{ p.tingkat }}
+                                </span>
+
+                            {% elif p.tingkat == 'Nasional' %}
+                                <span class="badge bg-danger">
+                                    {{ p.tingkat }}
+                                </span>
+
+                            {% elif p.tingkat == 'Provinsi' %}
+                                <span class="badge bg-warning text-dark">
+                                    {{ p.tingkat }}
+                                </span>
+
+                            {% elif p.tingkat == 'Kabupaten' %}
+                                <span class="badge bg-success">
+                                    {{ p.tingkat }}
+                                </span>
+
+                            {% else %}
+                                <span class="badge bg-primary">
+                                    {{ p.tingkat }}
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+                        <td>
+
+                            {% if p.juara == 'Juara 1' %}
+                                <span class="badge bg-success">
+                                    🥇 {{ p.juara }}
+                                </span>
+
+                            {% elif p.juara == 'Juara 2' %}
+                                <span class="badge bg-primary">
+                                    🥈 {{ p.juara }}
+                                </span>
+
+                            {% elif p.juara == 'Juara 3' %}
+                                <span class="badge bg-warning text-dark">
+                                    🥉 {{ p.juara }}
+                                </span>
+
+                            {% else %}
+                                <span class="badge bg-secondary">
+                                    {{ p.juara }}
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+                        <td>
+                            <span class="badge bg-secondary">
+                                {{ p.tahun }}
+                            </span>
+                        </td>
+
+                        <td class="text-nowrap">
+
+                            <a
+                                href="/edit-prestasi/{{ p.id }}/"
+                                class="btn btn-warning btn-sm"
+                            >
+                                <i class="bi bi-pencil-square"></i>
+                                Edit
+                            </a>
+
+                            <a
+                                href="/hapus-prestasi/{{ p.id }}/"
+                                class="btn btn-danger btn-sm tombol-hapus"
+                            >
+                                <i class="bi bi-trash"></i>
+                                Hapus
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+                        <td class="text-center">-</td>
+                        <td class="text-center">Belum ada data prestasi</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
     </div>
+
 </div>
+
 {% endblock %}
 
 {% block js %}
+
 <script>
+
     $(document).ready(function () {
+
         $('#tablePrestasiOperator').DataTable({
+            responsive: true,
+            autoWidth: false,
             pageLength: 10,
             lengthMenu: [10, 25, 50, 100]
         });
-    });
-    $('.tombol-hapus').on('click', function(e) {
-        e.preventDefault();
 
-        var href = $(this).attr('href');
+        $('.tombol-hapus').on('click', function(e) {
 
-        Swal.fire({
-            title: 'Yakin hapus data?',
-            text: 'Data yang sudah dihapus tidak bisa dikembalikan.',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Ya, hapus',
-            cancelButtonText: 'Batal'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                window.location.href = href;
-            }
+            e.preventDefault();
+
+            var href = $(this).attr('href');
+
+            Swal.fire({
+                title: 'Yakin hapus prestasi?',
+                text: 'Data yang sudah dihapus tidak bisa dikembalikan.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, hapus',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+
+                if (result.isConfirmed) {
+                    window.location.href = href;
+                }
+
+            });
+
         });
+
     });
+
 </script>
+
 {% endblock %}

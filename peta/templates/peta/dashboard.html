@@ -5,200 +5,142 @@
 {% block content %}
 
 <style>
-
-.dashboard-card{
-    transition: all 0.3s ease;
-    cursor: pointer;
-}
-
-.dashboard-card:hover{
-    transform: translateY(-6px);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-}
-
-.chart-container {
-    position: relative;
-    height: 320px;
-}
-
-@media (max-width: 576px) {
-    .chart-container {
-        height: 240px;
+    .dashboard-card {
+        transition: all 0.25s ease;
     }
-}
 
+    .dashboard-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+    }
+
+    .chart-container {
+        position: relative;
+        height: 280px;
+    }
+
+    @media (max-width: 576px) {
+        .chart-container {
+            height: 240px;
+        }
+    }
 </style>
+
 <div class="card shadow-sm border-0 mb-4">
     <div class="card-body">
-
-        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+        <div class="d-flex justify-content-between align-items-start flex-wrap gap-3">
 
             <div>
-                <h3 class="fw-bold mb-1">
-                    <i class="bi bi-speedometer2 text-primary"></i>
+                <h3 class="fw-bold mb-2">
+                    <i class="bi bi-speedometer2 text-primary me-2"></i>
                     Dashboard SIPETAKU
                 </h3>
 
                 <p class="text-muted mb-0">
-                    Monitoring data sekolah, guru, murid, prestasi dan aset.
+                    Monitoring data sekolah, guru, murid, prestasi, aset dan guru akan pensiun.
                 </p>
             </div>
 
-            <div>
-                <span class="badge bg-primary-subtle text-primary border px-3 py-2">
-                    Sistem Informasi Pemetaan Sekolah Kutai Timur
-                </span>
-            </div>
+            <span class="badge bg-primary-subtle text-primary border px-3 py-2">
+                Kutai Timur
+            </span>
 
         </div>
-
     </div>
 </div>
 
 <div class="row g-3 mb-4">
 
-    <div class="col-12 col-md-6 col-xl-3">
+    <div class="col-6 col-md-4 col-xl-2">
         <div class="card border-0 shadow-sm h-100 dashboard-card">
-            <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <div class="text-muted small mb-1">Total Sekolah</div>
-                        <h2 class="fw-bold mb-0">{{ total_sekolah }}</h2>
-                    </div>
-                    <div class="rounded-circle d-flex align-items-center justify-content-center"
-                         style="width:60px; height:60px; background:#e7f1ff;">
-                        <i class="bi bi-building text-primary fs-3"></i>
-                    </div>
-                </div>
+            <div class="card-body text-center">
+                <i class="bi bi-building text-primary fs-2"></i>
+                <div class="fw-bold mt-2 fs-4">{{ total_sekolah }}</div>
+                <small class="text-muted">Sekolah</small>
             </div>
         </div>
     </div>
 
-    <div class="col-12 col-md-6 col-xl-3">
+    <div class="col-6 col-md-4 col-xl-2">
         <div class="card border-0 shadow-sm h-100 dashboard-card">
-            <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <div class="text-muted small mb-1">Total Murid</div>
-                        <h2 class="fw-bold mb-0">{{ total_murid }}</h2>
-                    </div>
-                    <div class="rounded-circle d-flex align-items-center justify-content-center"
-                         style="width:60px; height:60px; background:#fff3cd;">
-                        <i class="bi bi-people text-warning fs-3"></i>
-                    </div>
-                </div>
+            <div class="card-body text-center">
+                <i class="bi bi-people text-primary fs-2"></i>
+                <div class="fw-bold mt-2 fs-4">{{ total_murid }}</div>
+                <small class="text-muted">Murid</small>
             </div>
         </div>
     </div>
 
-    <div class="col-12 col-md-6 col-xl-3">
+    <div class="col-6 col-md-4 col-xl-2">
         <div class="card border-0 shadow-sm h-100 dashboard-card">
-            <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <div class="text-muted small mb-1">Total Guru</div>
-                        <h2 class="fw-bold mb-0">{{ total_guru }}</h2>
-                    </div>
-                    <div class="rounded-circle d-flex align-items-center justify-content-center"
-                         style="width:60px; height:60px; background:#d1e7dd;">
-                        <i class="bi bi-person-badge text-success fs-3"></i>
-                    </div>
-                </div>
+            <div class="card-body text-center">
+                <i class="bi bi-person-badge text-success fs-2"></i>
+                <div class="fw-bold mt-2 fs-4">{{ total_guru }}</div>
+                <small class="text-muted">Guru</small>
             </div>
         </div>
     </div>
 
-    <div class="col-12 col-md-6 col-xl-3">
+    <div class="col-6 col-md-4 col-xl-2">
         <div class="card border-0 shadow-sm h-100 dashboard-card">
-            <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <div class="text-muted small mb-1">Total Aset</div>
-                        <h2 class="fw-bold mb-0">{{ total_aset }}</h2>
-                    </div>
-                    <div class="rounded-circle d-flex align-items-center justify-content-center"
-                         style="width:60px; height:60px; background:#cff4fc;">
-                        <i class="bi bi-box-seam text-info fs-3"></i>
-                    </div>
-                </div>
+            <div class="card-body text-center">
+                <i class="bi bi-trophy text-warning fs-2"></i>
+                <div class="fw-bold mt-2 fs-4">{{ total_prestasi }}</div>
+                <small class="text-muted">Prestasi</small>
             </div>
         </div>
     </div>
 
-    <div class="col-12 col-md-6 col-xl-3">
+    <div class="col-6 col-md-4 col-xl-2">
         <div class="card border-0 shadow-sm h-100 dashboard-card">
-            <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <div class="text-muted small mb-1">Guru Akan Pensiun</div>
-                        <h2 class="fw-bold mb-0">{{ total_guru_akan_pensiun }}</h2>
-                    </div>
-                    <div class="rounded-circle d-flex align-items-center justify-content-center"
-                         style="width:60px; height:60px; background:#f8d7da;">
-                        <i class="bi bi-calendar-check text-danger fs-3"></i>
-                    </div>
-                </div>
+            <div class="card-body text-center">
+                <i class="bi bi-box-seam text-danger fs-2"></i>
+                <div class="fw-bold mt-2 fs-4">{{ total_aset }}</div>
+                <small class="text-muted">Aset</small>
             </div>
         </div>
     </div>
 
-    <div class="col-12 col-md-6 col-xl-3">
+    <div class="col-6 col-md-4 col-xl-2">
         <div class="card border-0 shadow-sm h-100 dashboard-card">
-            <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <div class="text-muted small mb-1">Total Prestasi</div>
-                        <h2 class="fw-bold mb-0">{{ total_prestasi }}</h2>
-                    </div>
-                    <div class="rounded-circle d-flex align-items-center justify-content-center"
-                         style="width:60px; height:60px; background:#f8d7da;">
-                        <i class="bi bi-trophy text-danger fs-3"></i>
-                    </div>
-                </div>
+            <div class="card-body text-center">
+                <i class="bi bi-calendar-check text-danger fs-2"></i>
+                <div class="fw-bold mt-2 fs-4">{{ total_guru_akan_pensiun }}</div>
+                <small class="text-muted">Akan Pensiun</small>
             </div>
         </div>
     </div>
 
 </div>
 
-<div class="card mt-3">
-
+<div class="card shadow-sm border-0 mb-4">
     <div class="card-header">
-        <h5 class="card-title mb-0">
+        <h5 class="mb-0">
+            <i class="bi bi-file-earmark-excel text-success me-2"></i>
             Laporan Excel
         </h5>
     </div>
 
     <div class="card-body">
-
         <div class="row g-2">
 
             <div class="col-md-4">
-                <a
-                    href="/export/sekolah/"
-                    class="btn btn-success w-100"
-                >
-                    <i class="bi bi-building"></i>
+                <a href="/export/sekolah/" class="btn btn-success w-100">
+                    <i class="bi bi-building me-1"></i>
                     Export Sekolah
                 </a>
             </div>
 
             <div class="col-md-4">
-                <a
-                    href="/export/guru/"
-                    class="btn btn-primary w-100"
-                >
-                    <i class="bi bi-person-badge"></i>
+                <a href="/export/guru/" class="btn btn-primary w-100">
+                    <i class="bi bi-person-badge me-1"></i>
                     Export Guru
                 </a>
             </div>
 
             <div class="col-md-4">
-                <a
-                    href="/export/murid/"
-                    class="btn btn-warning w-100"
-                >
-                    <i class="bi bi-people"></i>
+                <a href="/export/murid/" class="btn btn-warning w-100">
+                    <i class="bi bi-people me-1"></i>
                     Export Murid
                 </a>
             </div>
@@ -208,30 +150,151 @@
                     href="/export/prestasi/?tingkat={{ tingkat_terpilih }}&tahun={{ tahun_terpilih }}&kecamatan={{ kecamatan_terpilih }}&kategori={{ kategori_terpilih }}"
                     class="btn btn-info w-100"
                 >
-                    <i class="bi bi-trophy"></i>
+                    <i class="bi bi-trophy me-1"></i>
                     Export Prestasi
                 </a>
             </div>
 
             <div class="col-md-4">
-                <a
-                    href="/export/aset/"
-                    class="btn btn-secondary w-100"
-                >
-                    <i class="bi bi-box-seam"></i>
+                <a href="/export/aset/" class="btn btn-secondary w-100">
+                    <i class="bi bi-box-seam me-1"></i>
                     Export Aset
                 </a>
             </div>
 
             <div class="col-md-4">
-                <a
-                    href="/export/guru-pensiun/"
-                    class="btn btn-dark w-100"
-                >
-                    <i class="bi bi-calendar-check"></i>
+                <a href="/export/guru-pensiun/" class="btn btn-dark w-100">
+                    <i class="bi bi-calendar-check me-1"></i>
                     Export Guru Pensiun
                 </a>
             </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="row g-3 mb-4">
+
+    <div class="col-12 col-lg-4">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+                <h6 class="fw-bold mb-3">
+                    <i class="bi bi-bar-chart text-primary me-1"></i>
+                    Prestasi per Tingkat
+                </h6>
+
+                <div class="chart-container">
+                    <canvas id="chartPrestasi"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-lg-4">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+                <h6 class="fw-bold mb-3">
+                    <i class="bi bi-pie-chart text-success me-1"></i>
+                    Sekolah per Kategori
+                </h6>
+
+                <div class="chart-container">
+                    <canvas id="chartKategori"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-lg-4">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+                <h6 class="fw-bold mb-3">
+                    <i class="bi bi-calendar-check text-danger me-1"></i>
+                    Guru Pensiun per Kecamatan
+                </h6>
+
+                <div class="chart-container">
+                    <canvas id="chartPensiun"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="card shadow-sm border-0 mb-4">
+
+    <div class="card-header">
+        <h5 class="mb-0">
+            <i class="bi bi-geo-alt text-primary me-2"></i>
+            Daftar Sekolah per Kecamatan
+        </h5>
+    </div>
+
+    <div class="card-body">
+
+        <div class="table-responsive">
+
+            <table
+                id="tableSekolahKecamatan"
+                class="table table-bordered table-striped align-middle w-100"
+            >
+
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Kecamatan</th>
+                        <th>Jumlah per Kategori</th>
+                        <th>Jumlah Sekolah</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for item in sekolah_per_kecamatan %}
+                    <tr>
+
+                        <td>{{ forloop.counter }}</td>
+
+                        <td>
+                            <div class="fw-bold">
+                                <i class="bi bi-geo-alt text-primary me-1"></i>
+                                {{ item.nama_kecamatan }}
+                            </div>
+                        </td>
+
+                        <td>
+                            {% for k in item.jumlah_per_kategori %}
+                                <span class="badge bg-secondary me-1 mb-1">
+                                    {{ k.kategori__nama }} : {{ k.jumlah }}
+                                </span>
+                            {% empty %}
+                                <span class="text-muted">-</span>
+                            {% endfor %}
+                        </td>
+
+                        <td>
+                            <span class="badge bg-primary">
+                                {{ item.jumlah_sekolah }} Sekolah
+                            </span>
+                        </td>
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+                        <td class="text-center">-</td>
+                        <td class="text-center">Belum ada data kecamatan</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
 
         </div>
 
@@ -239,49 +302,276 @@
 
 </div>
 
-<div class="card mt-3">
+<div class="card shadow-sm border-0 mb-4">
     <div class="card-header">
-        <h5 class="card-title mb-0">Jumlah Sekolah per Kategori</h5>
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+            <h5 class="mb-0">
+                <i class="bi bi-trophy text-warning me-2"></i>
+                Daftar Prestasi
+            </h5>
+
+        </div>
+
+        <form method="GET" class="mt-3">
+            <div class="row g-2 align-items-center">
+
+                <div class="col-md-3">
+                    <select name="tingkat" class="form-select form-select-sm">
+                        <option value="">Semua Tingkat</option>
+                        <option value="Sekolah" {% if tingkat_terpilih == "Sekolah" %}selected{% endif %}>Sekolah</option>
+                        <option value="Kecamatan" {% if tingkat_terpilih == "Kecamatan" %}selected{% endif %}>Kecamatan</option>
+                        <option value="Kabupaten" {% if tingkat_terpilih == "Kabupaten" %}selected{% endif %}>Kabupaten</option>
+                        <option value="Provinsi" {% if tingkat_terpilih == "Provinsi" %}selected{% endif %}>Provinsi</option>
+                        <option value="Nasional" {% if tingkat_terpilih == "Nasional" %}selected{% endif %}>Nasional</option>
+                        <option value="Internasional" {% if tingkat_terpilih == "Internasional" %}selected{% endif %}>Internasional</option>
+                    </select>
+                </div>
+
+                <div class="col-md-2">
+                    <select name="tahun" class="form-select form-select-sm">
+                        <option value="">Semua Tahun</option>
+                        {% for t in daftar_tahun %}
+                            <option value="{{ t }}" {% if tahun_terpilih == t|stringformat:"s" %}selected{% endif %}>
+                                {{ t }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <select name="kecamatan" class="form-select form-select-sm">
+                        <option value="">Semua Kecamatan</option>
+                        {% for k in daftar_kecamatan %}
+                            <option value="{{ k }}" {% if kecamatan_terpilih == k %}selected{% endif %}>
+                                {{ k }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-2">
+                    <select name="kategori" class="form-select form-select-sm">
+                        <option value="">Semua Kategori</option>
+                        {% for kat in daftar_kategori %}
+                            <option value="{{ kat.id }}" {% if kategori_terpilih == kat.id|stringformat:"s" %}selected{% endif %}>
+                                {{ kat.nama }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="d-grid gap-2 d-md-flex w-100">
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary btn-sm flex-fill"
+                        >
+                            <i class="bi bi-funnel me-1"></i>
+                            Filter
+                        </button>
+
+                        <a
+                            href="/dashboard/"
+                            class="btn btn-secondary btn-sm flex-fill"
+                        >
+                            <i class="bi bi-arrow-clockwise me-1"></i>
+                            Reset
+                        </a>
+
+                    </div>
+                </div>
+
+            </div>
+        </form>
     </div>
 
     <div class="card-body">
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>Kategori</th>
-                    <th>Jumlah Sekolah</th>
-                </tr>
-            </thead>
-
-            <tbody>
-                {% for k in sekolah_per_kategori %}
+        <div class="table-responsive">
+            <table id="tablePrestasi" class="table table-bordered table-striped align-middle w-100">
+                <thead>
                     <tr>
-                        <td>{{ k.nama }}</td>
-                        <td>{{ k.jumlah }}</td>
+                        <th>No</th>
+                        <th>Sekolah</th>
+                        <th>Murid</th>
+                        <th>Lomba</th>
+                        <th>Tingkat</th>
+                        <th>Juara</th>
+                        <th>Tahun</th>
+                        <th>Detail</th>
                     </tr>
-                {% empty %}
+                </thead>
+
+                <tbody>
+                    {% for p in daftar_prestasi %}
                     <tr>
-                        <td colspan="2" class="text-center">
-                            Belum ada data kategori
+                        <td>{{ forloop.counter }}</td>
+                        <td>
+                            <a href="/sekolah/{{ p.sekolah.id }}/" class="fw-semibold text-decoration-none">
+                                {{ p.sekolah.nama }}
+                            </a>
+                        </td>
+                        <td>{{ p.murid.nama }}</td>
+                        <td>{{ p.nama_lomba }}</td>
+                        <td>{{ p.tingkat }}</td>
+                        <td>
+                            {% if p.juara == "Juara 1" %}
+                                <span class="badge bg-success">{{ p.juara }}</span>
+                            {% elif p.juara == "Juara 2" %}
+                                <span class="badge bg-primary">{{ p.juara }}</span>
+                            {% elif p.juara == "Juara 3" %}
+                                <span class="badge bg-warning">{{ p.juara }}</span>
+                            {% else %}
+                                <span class="badge bg-secondary">{{ p.juara }}</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ p.tahun }}</td>
+                        <td>
+                            <a href="/sekolah/{{ p.sekolah.id }}/" class="btn btn-primary btn-sm">
+                                <i class="bi bi-eye"></i>
+                                Lihat
+                            </a>
                         </td>
                     </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+
+                    {% empty %}
+                    <tr>
+                        <td class="text-center">-</td>
+                        <td class="text-center">Tidak ada data prestasi</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 
-<div class="card mt-3">
+<div class="row g-3 mb-4">
+
+    <div class="col-12 col-lg-6">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="bi bi-building text-primary me-2"></i>
+                    Jumlah Sekolah per Kategori
+                </h5>
+            </div>
+
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped align-middle">
+                        <thead>
+                            <tr>
+                                <th>Kategori</th>
+                                <th>Jumlah Sekolah</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for k in sekolah_per_kategori %}
+                            <tr>
+                                <td>{{ k.nama }}</td>
+                                <td>
+                                    <span class="badge bg-primary">
+                                        {{ k.jumlah }}
+                                    </span>
+                                </td>
+                            </tr>
+
+                            {% empty %}
+                            <tr>
+                                <td class="text-center">-</td>
+                                <td class="text-center">Belum ada data kategori</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-lg-6">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="bi bi-award text-success me-2"></i>
+                    Top 10 Sekolah Berprestasi
+                </h5>
+            </div>
+
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped align-middle">
+                        <thead>
+                            <tr>
+                                <th>Ranking</th>
+                                <th>Sekolah</th>
+                                <th>Kecamatan</th>
+                                <th>Prestasi</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for s in ranking_sekolah %}
+                            <tr>
+                                <td>
+                                    <span class="badge bg-primary">
+                                        #{{ forloop.counter }}
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <a href="/sekolah/{{ s.id }}/" class="fw-semibold text-decoration-none">
+                                        {{ s.nama }}
+                                    </a>
+                                </td>
+
+                                <td>{{ s.kecamatan }}</td>
+
+                                <td>
+                                    <span class="badge bg-success">
+                                        {{ s.jumlah_prestasi }}
+                                    </span>
+                                </td>
+                            </tr>
+
+                            {% empty %}
+                            <tr>
+                                <td class="text-center">-</td>
+                                <td class="text-center">Belum ada data prestasi</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="card shadow-sm border-0 mb-4">
     <div class="card-header">
-        <h5 class="card-title mb-0">
+        <h5 class="mb-0">
+            <i class="bi bi-calendar-check text-danger me-2"></i>
             Guru Akan Pensiun 1 Tahun Ke Depan
         </h5>
     </div>
 
     <div class="card-body">
-        <a href="/export/guru-pensiun/" class="btn btn-dark mb-3">Export Guru Akan Pensiun</a>
         <div class="table-responsive">
-            <table class="table table-bordered table-striped">
+            <table id="tablePensiun" class="table table-bordered table-striped align-middle w-100">
                 <thead>
                     <tr>
                         <th>No</th>
@@ -303,171 +593,16 @@
                         <td>{{ g.status_pegawai }}</td>
                         <td>{{ g.tanggal_pensiun }}</td>
                     </tr>
+
                     {% empty %}
                     <tr>
-                        <td colspan="6" class="text-center">
-                            Belum ada guru yang akan pensiun 1 tahun ke depan
-                        </td>
+                        <td class="text-center">-</td>
+                        <td class="text-center">Belum ada guru yang akan pensiun 1 tahun ke depan</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
                     </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
-
-<div class="card mt-3">
-    <div class="card-header">
-        <h5 class="card-title mb-0">Filter Prestasi</h5>
-    </div>
-
-    <div class="card-body">
-
-        <form method="GET" class="row">
-
-            <div class="col-12 col-md-3 mb-2">
-                <select name="tingkat" class="form-select">
-                    <option value="">Semua Tingkat</option>
-
-                    <option value="Sekolah" {% if tingkat_terpilih == "Sekolah" %}selected{% endif %}>Sekolah</option>
-                    <option value="Kecamatan" {% if tingkat_terpilih == "Kecamatan" %}selected{% endif %}>Kecamatan</option>
-                    <option value="Kabupaten" {% if tingkat_terpilih == "Kabupaten" %}selected{% endif %}>Kabupaten</option>
-                    <option value="Provinsi" {% if tingkat_terpilih == "Provinsi" %}selected{% endif %}>Provinsi</option>
-                    <option value="Nasional" {% if tingkat_terpilih == "Nasional" %}selected{% endif %}>Nasional</option>
-                    <option value="Internasional" {% if tingkat_terpilih == "Internasional" %}selected{% endif %}>Internasional</option>
-                </select>
-            </div>
-
-            <div class="col-12 col-md-3 mb-2">
-                <select name="tahun" class="form-select">
-                    <option value="">Semua Tahun</option>
-
-                    {% for t in daftar_tahun %}
-                        <option
-                            value="{{ t }}"
-                            {% if tahun_terpilih == t|stringformat:"s" %}selected{% endif %}
-                        >
-                            {{ t }}
-                        </option>
-                    {% endfor %}
-                </select>
-            </div>
-
-            <div class="col-12 col-md-3 mb-2">
-                <select name="kecamatan" class="form-select">
-                    <option value="">Semua Kecamatan</option>
-
-                    {% for k in daftar_kecamatan %}
-                        <option
-                            value="{{ k }}"
-                            {% if kecamatan_terpilih == k %}selected{% endif %}
-                        >
-                            {{ k }}
-                        </option>
-                    {% endfor %}
-                </select>
-            </div>
-
-            <div class="col-12 col-md-3 mb-2">
-                <select name="kategori" class="form-select">
-                    <option value="">Semua Kategori</option>
-
-                    {% for kat in daftar_kategori %}
-                        <option
-                            value="{{ kat.id }}"
-                            {% if kategori_terpilih == kat.id|stringformat:"s" %}selected{% endif %}
-                        >
-                            {{ kat.nama }}
-                        </option>
-                    {% endfor %}
-                </select>
-            </div>
-
-            <div class="col-12 col-md-2 mb-2">
-                <button type="submit" class="btn btn-primary w-100">
-                    Filter
-                </button>
-            </div>
-
-            <div class="col-12 col-md-2 mb-2">
-                <a href="/dashboard/" class="btn btn-secondary w-100">
-                    Reset
-                </a>
-            </div>
-
-        </form>
-
-    </div>
-</div>
-
-<div class="card mt-3">
-    <div class="card-header">
-        <h5 class="card-title mb-0">Daftar Prestasi</h5>
-    </div>
-
-    <div class="card-body">
-        <div class="table-responsive">
-            <table id="tablePrestasi" class="table table-bordered table-striped">
-
-                <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Sekolah</th>
-                        <th>Murid</th>
-                        <th>Lomba</th>
-                        <th>Tingkat</th>
-                        <th>Juara</th>
-                        <th>Tahun</th>
-                        <th>Detail</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    {% for p in daftar_prestasi %}
-                    <tr>
-                        <td>{{ forloop.counter }}</td>
-                        <td>
-                            <a href="/sekolah/{{ p.sekolah.id }}/">
-                                {{ p.sekolah.nama }}
-                            </a>
-                        </td>
-                        <td>{{ p.murid.nama }}</td>
-                        <td>{{ p.nama_lomba }}</td>
-                        <td>{{ p.tingkat }}</td>
-                        <td>
-                            {% if p.juara == "Juara 1" %}
-                                <span class="badge bg-success">{{ p.juara }}</span>
-                            {% elif p.juara == "Juara 2" %}
-                                <span class="badge bg-primary">{{ p.juara }}</span>
-                            {% elif p.juara == "Juara 3" %}
-                                <span class="badge bg-warning">{{ p.juara }}</span>
-                            {% else %}
-                                <span class="badge bg-secondary">{{ p.juara }}</span>
-                            {% endif %}
-                        </td>
-                        <td>{{ p.tahun }}</td>
-
-                        <td>
-                            <a
-                                href="/sekolah/{{ p.sekolah.id }}/"
-                                class="btn btn-primary btn-sm"
-                            >
-                                Lihat
-                            </a>
-                        </td>
-
-                    </tr>
-                    {% empty %}
-                        <tr>
-                            <td class="text-center">-</td>
-                            <td class="text-center">Tidak ada data prestasi</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
                     {% endfor %}
                 </tbody>
 
@@ -476,16 +611,17 @@
     </div>
 </div>
 
-<div class="card mt-3">
+<div class="card shadow-sm border-0">
     <div class="card-header">
-        <h5 class="card-title mb-0">
+        <h5 class="mb-0">
+            <i class="bi bi-bar-chart text-success me-2"></i>
             Prestasi per Tingkat
         </h5>
     </div>
 
     <div class="card-body">
         <div class="table-responsive">
-            <table class="table table-bordered table-striped">
+            <table class="table table-bordered table-striped align-middle">
                 <thead>
                     <tr>
                         <th>Tingkat</th>
@@ -497,109 +633,62 @@
                     {% for p in prestasi_per_tingkat %}
                     <tr>
                         <td>{{ p.tingkat }}</td>
-                        <td>{{ p.jumlah }}</td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="2" class="text-center">
-                            Belum ada data prestasi
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
-
-<div class="card mt-3">
-
-    <div class="card-header">
-        <h5 class="card-title mb-0">
-            Top 10 Sekolah Berprestasi
-        </h5>
-    </div>
-
-    <div class="card-body">
-        <div class="table-responsive">
-            <table class="table table-bordered table-striped">
-
-                <thead>
-                    <tr>
-                        <th>Ranking</th>
-                        <th>Sekolah</th>
-                        <th>Kecamatan</th>
-                        <th>Total Prestasi</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-
-                    {% for s in ranking_sekolah %}
-                    <tr>
-
                         <td>
-                            {{ forloop.counter }}
-                        </td>
-
-                        <td>
-                            <a href="/sekolah/{{ s.id }}/">
-                                {{ s.nama }}
-                            </a>
-                        </td>
-
-                        <td>
-                            {{ s.kecamatan }}
-                        </td>
-
-                        <td>
-                            <span class="badge bg-success">
-                                {{ s.jumlah_prestasi }}
+                            <span class="badge bg-primary">
+                                {{ p.jumlah }}
                             </span>
                         </td>
-
                     </tr>
 
                     {% empty %}
-
                     <tr>
-                        <td colspan="4" class="text-center">
-                            Belum ada data prestasi
-                        </td>
+                        <td class="text-center">-</td>
+                        <td class="text-center">Belum ada data prestasi</td>
                     </tr>
-
                     {% endfor %}
-
                 </tbody>
 
             </table>
         </div>
     </div>
-
 </div>
+
+{% endblock %}
+
+{% block js %}
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<div class="card mt-3">
-    <div class="card-header">
-        <h5 class="card-title mb-0">
-            Grafik Prestasi per Tingkat
-        </h5>
-    </div>
+<script>
+    $(document).ready(function () {
+        $('#tablePrestasi').DataTable({
+            responsive: true,
+            autoWidth: false,
+            pageLength: 10,
+            lengthMenu: [10, 25, 50, 100]
+        });
 
-    <div class="card-body">
-        <div class="chart-container">
-            <canvas id="chartPrestasi"></canvas>
-        </div>
-    </div>
-</div>
+        $('#tablePensiun').DataTable({
+            responsive: true,
+            autoWidth: false,
+            pageLength: 10,
+            lengthMenu: [10, 25, 50, 100]
+        });
+
+        $('#tableSekolahKecamatan').DataTable({
+            responsive: true,
+            autoWidth: false,
+            pageLength: 10,
+            lengthMenu: [10, 25, 50, 100]
+        });
+    });
+</script>
 
 <script>
     const labelPrestasi = {{ label_prestasi|safe }};
     const dataPrestasi = {{ data_prestasi|safe }};
 
-    const ctxPrestasi = document.getElementById('chartPrestasi');
-
-    new Chart(ctxPrestasi, {
+    new Chart(document.getElementById('chartPrestasi'), {
         type: 'bar',
         data: {
             labels: labelPrestasi,
@@ -613,48 +702,25 @@
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    labels: {
-                        font: {
-                            size: 14
-                        }
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        precision: 0
                     }
                 }
-            },
-            animation: {
-                duration: 1500
             }
         }
     });
-</script>
 
-<div class="card mt-3">
-    <div class="card-header">
-        <h5 class="card-title mb-0">
-            Grafik Sekolah per Kategori
-        </h5>
-    </div>
-
-    <div class="card-body">
-        <div class="chart-container">
-            <canvas id="chartKategori"></canvas>
-        </div>
-    </div>
-</div>
-
-<script>
     const labelKategori = {{ label_kategori|safe }};
     const dataKategori = {{ data_kategori|safe }};
 
-    const ctxKategori = document.getElementById('chartKategori');
-
-    new Chart(ctxKategori, {
+    new Chart(document.getElementById('chartKategori'), {
         type: 'doughnut',
         data: {
             labels: labelKategori,
             datasets: [{
-                label: 'Jumlah Sekolah',
                 data: dataKategori,
                 borderWidth: 2
             }]
@@ -665,43 +731,16 @@
             cutout: '60%',
             plugins: {
                 legend: {
-                    position: 'bottom',
-                    labels: {
-                        padding: 20,
-                        font: {
-                            size: 14
-                        }
-                    }
+                    position: 'bottom'
                 }
-            },
-            animation: {
-                duration: 1500
             }
         }
     });
-</script>
 
-<div class="card mt-3">
-    <div class="card-header">
-        <h5 class="card-title mb-0">
-            Grafik Guru Akan Pensiun per Kecamatan
-        </h5>
-    </div>
-
-    <div class="card-body">
-        <div class="chart-container">
-            <canvas id="chartPensiun"></canvas>
-        </div>
-    </div>
-</div>
-
-<script>
     const labelPensiun = {{ label_pensiun|safe }};
     const dataPensiun = {{ data_pensiun|safe }};
 
-    const ctxPensiun = document.getElementById('chartPensiun');
-
-    new Chart(ctxPensiun, {
+    new Chart(document.getElementById('chartPensiun'), {
         type: 'bar',
         data: {
             labels: labelPensiun,
@@ -709,60 +748,22 @@
                 label: 'Guru Akan Pensiun',
                 data: dataPensiun,
                 borderRadius: 10,
-                borderSkipped: false,
-                barPercentage: 0.5,
-                categoryPercentage: 0.5
+                borderSkipped: false
             }]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
-
-            plugins: {
-                legend: {
-                    labels: {
-                        font: {
-                            size: 14
-                        }
-                    }
-                }
-            },
-
             scales: {
-                x: {
-                    ticks: {
-                        maxRotation: 0
-                    }
-                },
                 y: {
                     beginAtZero: true,
                     ticks: {
                         precision: 0
                     }
                 }
-            },
-
-            animation: {
-                duration: 1500
             }
         }
     });
 </script>
-{% endblock %}
 
-{% block js %}
-<script>
-    $(window).on('load', function () {
-
-        if ($.fn.DataTable && $('#tablePrestasi').length) {
-
-            $('#tablePrestasi').DataTable({
-                pageLength: 10,
-                lengthMenu: [10, 25, 50, 100]
-            });
-
-        }
-
-    });
-</script>
 {% endblock %}

@@ -13,6 +13,16 @@ class KategoriSekolah(models.Model):
 
     def __str__(self):
         return self.nama
+    
+
+class Kecamatan(models.Model):
+    nama = models.CharField(
+        max_length=100,
+        unique=True
+    )
+
+    def __str__(self):
+        return self.nama
 
 
 class Sekolah(models.Model):
@@ -42,7 +52,7 @@ class Sekolah(models.Model):
     status = models.CharField(max_length=20, choices=STATUS)
 
     alamat = models.TextField()
-    kecamatan = models.CharField(max_length=100)
+    kecamatan = models.CharField(max_length=100)    
     desa = models.CharField(max_length=100)
 
     x_utm = models.FloatField(verbose_name="Easting / X UTM")

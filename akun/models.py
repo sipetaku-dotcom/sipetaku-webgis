@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from sekolah.models import Sekolah
 
 
 class ProfilUser(models.Model):
@@ -23,6 +24,13 @@ class ProfilUser(models.Model):
 
     kecamatan = models.CharField(
         max_length=100,
+        blank=True,
+        null=True
+    )
+
+    sekolah = models.ForeignKey(
+        Sekolah,
+        on_delete=models.SET_NULL,
         blank=True,
         null=True
     )
