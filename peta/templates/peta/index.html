@@ -1482,13 +1482,13 @@ halaman-peta halaman-peta-v2
         });
     }
 
-    var layerKB = L.markerClusterGroup();
-    var layerSD = L.markerClusterGroup();
-    var layerSMP = L.markerClusterGroup();
-    var layerSPS = L.markerClusterGroup();
-    var layerTK = L.markerClusterGroup();
-    var layerTKI = L.markerClusterGroup();
-    var layerTPA = L.markerClusterGroup();
+    var layerKB = L.layerGroup();
+    var layerSD = L.layerGroup();
+    var layerSMP = L.layerGroup();
+    var layerSPS = L.layerGroup();
+    var layerTK = L.layerGroup();
+    var layerTKI = L.layerGroup();
+    var layerTPA = L.layerGroup();
 
     var layerKecamatan = L.layerGroup();
     var layerLabelKecamatan = L.layerGroup();
@@ -1802,12 +1802,20 @@ halaman-peta halaman-peta-v2
                 targetLayer = layerTPA;
             }
 
-            var marker = L.marker([
-                parseFloat(s.latitude),
-                parseFloat(s.longitude)
-            ], {
-                icon: buatIcon(s.warna)
-            });
+            var lat = parseFloat(
+                String(s.latitude).replace(",", ".")
+            );
+
+            var lng = parseFloat(
+                String(s.longitude).replace(",", ".")
+            );
+
+            var marker = L.marker(
+                [lat, lng],
+                {
+                    icon: buatIcon(s.warna)
+                }
+            );
 
             var markerSekolah = {};
 
@@ -1895,8 +1903,8 @@ halaman-peta halaman-peta-v2
 
             var labelMarker = L.marker(
                 [
-                    parseFloat(s.latitude),
-                    parseFloat(s.longitude)
+                    lat,
+                    lng
                 ],
                 {
                     icon: L.divIcon({
@@ -1927,8 +1935,8 @@ halaman-peta halaman-peta-v2
                 prestasi: parseInt(s.prestasi),
                 guru: parseInt(s.guru),
                 murid: parseInt(s.murid),
-                latitude: parseFloat(s.latitude),
-                longitude: parseFloat(s.longitude)
+                latitude: lat,
+                longitude: lng
             });
 
             dataSearchSekolah.push({
