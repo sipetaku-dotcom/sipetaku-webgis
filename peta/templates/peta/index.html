@@ -1739,14 +1739,30 @@ halaman-peta halaman-peta-v2
     ];
 
     var markerColors = {
-        blue: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png',
-        green: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
-        red: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
-        orange: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-orange.png',
-        yellow: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-yellow.png',
-        violet: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-violet.png',
-        grey: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-grey.png',
-        black: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-black.png'
+
+        blue:
+        'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png',
+
+        green:
+        'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
+
+        red:
+        'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
+
+        orange:
+        'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-orange.png',
+
+        yellow:
+        'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-yellow.png',
+
+        violet:
+        'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-violet.png',
+
+        grey:
+        'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-grey.png',
+
+        black:
+        'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-black.png'
     };
 
     var legendaKategori = {};
@@ -1955,19 +1971,33 @@ halaman-peta halaman-peta-v2
             var kategori = item[0];
             var warna = item[1];
 
+            var iconLegenda =
+                markerColors[warna] || markerColors.blue;
+
             htmlLegenda += `
                 <div class="legend-item">
-                    <img src="${markerColors[warna]}" width="16">
-                    <span>${kategori}</span>
+
+                    <img
+                        src="${iconLegenda}"
+                        width="16"
+                    >
+
+                    <span>
+                        ${kategori}
+                    </span>
+
                 </div>
             `;
         });
 
-        document.getElementById('isiLegendaSekolah').innerHTML =
-            htmlLegenda;
+        document.getElementById(
+            'isiLegendaSekolah'
+        ).innerHTML = htmlLegenda;
     }
 
+    console.log(legendaKategori);
     renderLegendaSekolah(legendaKategori);
+
 
     new TomSelect('#cariSekolah', {
         options: dataSearchSekolah,
