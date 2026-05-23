@@ -13,6 +13,8 @@ from prestasi.forms import PrestasiForm
 from django.contrib import messages
 from .models import ProfilUser
 import json
+import requests
+from django.conf import settings
 from sekolah.models import Sekolah
 from sekolah.wilayah import DATA_WILAYAH
 from django.contrib.auth.models import User
@@ -67,6 +69,42 @@ def login_view(request):
         username = request.POST.get('username')
         password = request.POST.get('password')
 
+        token = request.POST.get(
+            'cf-turnstile-response'
+        )
+
+        data = {
+            'secret': settings.TURNSTILE_SECRET_KEY,
+            'response': token
+        }
+
+        try:
+
+            hasil = requests.post(
+                'https://challenges.cloudflare.com/turnstile/v0/siteverify',
+                data=data
+            )
+
+            hasil_json = hasil.json()
+
+        except:
+
+            messages.error(
+                request,
+                'Gagal memverifikasi captcha'
+            )
+
+            return redirect('/login/')
+
+        if not hasil_json.get('success'):
+
+            messages.error(
+                request,
+                'Captcha tidak valid'
+            )
+
+            return redirect('/login/')
+
         user = authenticate(
             request,
             username=username,
@@ -78,7 +116,7 @@ def login_view(request):
             login(request, user)
 
             return redirect('/')
-        
+
         else:
 
             messages.error(
@@ -86,7 +124,16 @@ def login_view(request):
                 'Username atau password anda salah'
             )
 
-    return render(request, 'akun/login.html')
+    context = {
+        'turnstile_site_key':
+            settings.TURNSTILE_SITE_KEY
+    }
+
+    return render(
+        request,
+        'akun/login.html',
+        context
+    )
 
 
 def logout_view(request):

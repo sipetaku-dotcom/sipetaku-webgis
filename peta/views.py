@@ -107,7 +107,10 @@ def index(request):
 
     else:
 
-        daftar_kecamatan = []
+        daftar_kecamatan = sekolah.values_list(
+            'kecamatan',
+            flat=True
+        ).distinct().order_by('kecamatan')
 
     daftar_kategori = KategoriSekolah.objects.all().order_by('nama')
 

@@ -4,7 +4,7 @@
 {% block title %}{% endblock %}
 
 {% block body_class %}
-halaman-peta halaman-peta-v2
+halaman-peta
 {% endblock %}
 
 {% block css %}
@@ -21,227 +21,6 @@ halaman-peta halaman-peta-v2
 />
 
 <style>
-    @media (max-width: 768px) {
-
-        body.halaman-peta-v2 .card-header {
-            padding: 10px !important;
-        }
-
-        body.halaman-peta-v2 .card-title {
-            gap: 8px !important;
-            flex-wrap: wrap;
-        }
-
-        body.halaman-peta-v2 .card-title span[style*="font-size"] {
-            font-size: 0.95rem !important;
-        }
-
-        body.halaman-peta-v2 .badge {
-            font-size: 0.75rem !important;
-        }
-
-        body.halaman-peta-v2 #map {
-            height: calc(100vh - 75px) !important;
-            border-radius: 0 !important;
-        }
-
-        body.halaman-peta-v2 .card-body {
-            padding: 0 !important;
-        }
-
-        body.halaman-peta-v2 .map-statistik {
-            left: 10px;
-            right: 10px;
-            bottom: 12px;
-            max-width: unset;
-            flex-wrap: nowrap;
-            overflow-x: auto;
-            padding-bottom: 4px;
-        }
-
-        body.halaman-peta-v2 .stat-item {
-            flex-shrink: 0;
-            white-space: nowrap;
-            font-size: 12px;
-            padding: 5px 10px;
-        }
-
-        body.halaman-peta-v2 .map-toolbar-kanan {
-            top: 12px;
-            right: 12px;
-            gap: 8px;
-        }
-
-        body.halaman-peta-v2 .map-toolbar-kanan button {
-            width: 42px;
-            height: 42px;
-            font-size: 18px;
-        }
-
-    }
-    {% comment %} CSS MOBIL BATAS DARI ATAS {% endcomment %}
-
-    @media (max-width: 768px) {
-
-        /* HEADER */
-        body.halaman-peta-v2 .card-header {
-            padding: 8px 10px !important;
-        }
-
-        body.halaman-peta-v2 .card-title {
-            gap: 6px !important;
-            align-items: center !important;
-        }
-
-        body.halaman-peta-v2 .card-title span {
-            font-size: 15px !important;
-        }
-
-        body.halaman-peta-v2 .card-title .badge {
-            font-size: 11px !important;
-            padding: 6px 8px !important;
-        }
-
-        /* MAP */
-        body.halaman-peta-v2 #map {
-            height: calc(100vh - 58px) !important;
-        }
-
-        /* TOOLBAR KANAN */
-        body.halaman-peta-v2 .map-toolbar-kanan {
-            top: 70px !important;
-            right: 10px !important;
-            gap: 8px !important;
-        }
-
-        body.halaman-peta-v2 .map-toolbar-kanan button {
-            width: 44px !important;
-            height: 44px !important;
-            border-radius: 14px !important;
-            font-size: 18px !important;
-        }
-
-        /* TOOLBAR KIRI LEAFLET */
-        body.halaman-peta-v2 .leaflet-touch .leaflet-bar a {
-            width: 38px !important;
-            height: 38px !important;
-            line-height: 38px !important;
-            font-size: 18px !important;
-        }
-
-        /* STATISTIK */
-        body.halaman-peta-v2 .map-statistik {
-            left: 10px !important;
-            right: 10px !important;
-            bottom: 10px !important;
-
-            display: flex !important;
-            gap: 6px !important;
-
-            overflow-x: auto !important;
-
-            padding-bottom: 2px !important;
-
-            scrollbar-width: none;
-        }
-
-        body.halaman-peta-v2 .map-statistik::-webkit-scrollbar {
-            display: none;
-        }
-
-        body.halaman-peta-v2 .stat-item {
-            flex-shrink: 0 !important;
-
-            padding: 5px 10px !important;
-
-            border-radius: 999px !important;
-
-            font-size: 11px !important;
-        }
-
-    }
-
-    @media (max-width: 768px) {
-
-        body.halaman-peta-v2 .map-toolbar-kanan {
-            top: 12px !important;
-            right: 12px !important;
-            gap: 8px !important;
-        }
-
-        body.halaman-peta-v2 .map-statistik {
-            position: static !important;
-            margin-top: 8px !important;
-            margin-bottom: 8px !important;
-            padding: 0 10px !important;
-
-            display: flex !important;
-            flex-wrap: nowrap !important;
-            overflow-x: auto !important;
-            gap: 6px !important;
-
-            max-width: 100% !important;
-            z-index: auto !important;
-        }
-
-        body.halaman-peta-v2 .map-statistik::-webkit-scrollbar {
-            display: none;
-        }
-
-        body.halaman-peta-v2 .stat-item {
-            flex-shrink: 0 !important;
-            white-space: nowrap !important;
-        }
-
-    }
-
-        /* DESKTOP */
-    .map-statistik {
-        position: absolute !important;
-
-        top: 20px !important;
-        right: 20px !important;
-
-        left: auto !important;
-        bottom: auto !important;
-
-        z-index: 999 !important;
-
-        display: flex !important;
-        flex-wrap: wrap !important;
-        gap: 10px !important;
-
-        max-width: 70% !important;
-    }
-
-    /* MOBILE */
-    @media (max-width: 768px) {
-
-        body.halaman-peta-v2 .map-statistik {
-
-            position: static !important;
-
-            margin-top: 8px !important;
-            margin-bottom: 8px !important;
-
-            padding: 0 10px !important;
-
-            display: flex !important;
-            flex-wrap: nowrap !important;
-
-            overflow-x: auto !important;
-
-            gap: 6px !important;
-
-            max-width: 100% !important;
-
-            z-index: auto !important;
-        }
-
-    }
-
-    {% comment %} BATAS CSS MOBILE 2 {% endcomment %}
-
     .map-toolbar-kanan {
         position: absolute;
         top: 20px;
@@ -417,13 +196,23 @@ halaman-peta halaman-peta-v2
         height: 40px;
     }
 
+    .panel-filter-sekolah .aksi-filter {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+
+    .panel-filter-sekolah .aksi-filter .btn {
+        height: 40px;
+        font-weight: 600;
+        border-radius: 8px;
+    }
 
     [data-bs-theme="dark"] body.halaman-peta .panel-filter-sekolah {
         background: rgba(31,37,43,.96);
         border: 1px solid #495057;
     }
-
-{% comment %} BATAS PANEL FILTER SEKOLAH {% endcomment %}
+    {% comment %} BATAS PANEL FILTER SEKOLAH {% endcomment %}
     .panel-cari-sekolah {
         position: absolute;
 
@@ -454,7 +243,7 @@ halaman-peta halaman-peta-v2
         border: 1px solid #495057;
     }
 
-{% comment %} BATAS PANEL CARI SEKOLAH {% endcomment %}
+    {% comment %} BATAS PANEL CARI SEKOLAH {% endcomment %}
 
     body.halaman-peta .app-header,
     body.halaman-peta .app-content-header {
@@ -688,6 +477,17 @@ halaman-peta halaman-peta-v2
         color: #ffffff !important;
     }
 
+    [data-bs-theme="dark"] body.halaman-peta .leaflet-control-layers,
+    [data-bs-theme="dark"] body.halaman-peta .leaflet-bar a {
+        background-color: #1f252b !important;
+        color: #ffffff !important;
+        border-color: #495057 !important;
+    }
+
+    [data-bs-theme="dark"] body.halaman-peta .leaflet-control-layers label {
+        color: #ffffff !important;
+    }
+
     [data-bs-theme="dark"] body.halaman-peta .stat-item {
         background-color: rgba(31,37,43,0.92) !important;
         color: #ffffff !important;
@@ -757,131 +557,6 @@ halaman-peta halaman-peta-v2
     .aktif-toolbar {
         background: #0d6efd !important;
         color: #ffffff !important;
-    }
-
-{% comment %} LABEL SEKOLAH DAN LAINNYA {% endcomment %}
-
-    .label-sekolah {
-        background: transparent;
-        border: none;
-        box-shadow: none;
-        pointer-events: none;
-        white-space: nowrap;
-        text-align: center;
-    }
-
-    .label-sekolah span {
-
-        background: rgba(0,0,0,0.78);
-
-        color: #ffffff;
-
-        padding: 2px 8px;
-
-        border-radius: 999px;
-
-        font-size: 10px;
-        font-weight: 700;
-
-        box-shadow: 0 2px 8px rgba(0,0,0,0.18);
-
-        backdrop-filter: blur(4px);
-    }
-
-    [data-bs-theme="dark"] body.halaman-peta .label-sekolah span {
-        text-shadow: 0 0 2px rgba(0,0,0,0.85);
-    }
-
-    /* MODE TERANG */
-    .tombol-menu-peta,
-    .badge-jumlah-sekolah {
-
-        background-color: rgba(13,110,253,0.14) !important;
-
-        color: #0d6efd !important;
-
-        border-color: rgba(13,110,253,0.20) !important;
-    }
-
-    /* MODE GELAP */
-    [data-bs-theme="dark"] body.halaman-peta .tombol-menu-peta,
-    [data-bs-theme="dark"] body.halaman-peta .badge-jumlah-sekolah {
-
-        background-color: rgba(31,37,43,0.92) !important;
-
-        color: #ffffff !important;
-
-        border-color: rgba(255,255,255,0.14) !important;
-    }
-
-    /* LEAFLET TOOLBAR MODE GELAP */
-    [data-bs-theme="dark"] body.halaman-peta .leaflet-bar a {
-
-        background-color: #1f252b !important;
-
-        color: #ffffff !important;
-
-        border-color: #495057 !important;
-    }
-
-    /* HOVER */
-    [data-bs-theme="dark"] body.halaman-peta .leaflet-bar a:hover {
-
-        background-color: #0d6efd !important;
-
-        color: #ffffff !important;
-    }
-
-    /* BORDER GROUP */
-    [data-bs-theme="dark"] body.halaman-peta .leaflet-bar {
-
-        border-color: #495057 !important;
-
-        box-shadow: 0 4px 14px rgba(0,0,0,0.35) !important;
-    }
-
-    .legend-peta {
-        position: absolute;
-        left: 12px;
-        bottom: 12px;
-        z-index: 1000;
-
-        width: 85px;
-        background: rgba(255,255,255,0.94);
-        border-radius: 10px;
-        padding: 10px;
-        box-shadow: 0 6px 24px rgba(0,0,0,0.22);
-
-        display: none;
-    }
-
-    .legend-peta.aktif {
-        display: block;
-    }
-
-    .legend-title {
-        font-size: 13px;
-        font-weight: 500;
-        margin-bottom: 8px;
-    }
-
-    .legend-item {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        font-size: 12px;
-        font-weight: 500;
-        margin-bottom: 6px;
-    }
-
-    .legend-item img {
-        width: 14px;
-    }
-
-    [data-bs-theme="dark"] body.halaman-peta .legend-peta {
-        background: rgba(31,37,43,0.94);
-        color: #ffffff;
-        border: 1px solid #495057;
     }
 </style>
 {% endblock %}
@@ -977,55 +652,76 @@ halaman-peta halaman-peta-v2
                 <h5 class="card-title mb-0 d-flex align-items-center gap-3 fw-semibold">
 
                     <a
-                        class="badge tombol-menu-peta border fw-semibold text-decoration-none d-flex align-items-center justify-content-center"
+                        class="btn btn-light border me-2"
                         href="#"
                         id="toggleSidebarPeta"
-                        style="
-                            width: 40px;
-                            height: 40px;
-                            font-size: 18px;
-                            border-radius: 5px;
-                        "
                     >
-                        <i class="bi bi-layout-wtf"></i>
+                        <i class="bi bi-list"></i>
                     </a>
+
+                    <span
+                        class="d-flex align-items-center justify-content-center rounded bg-primary-subtle"
+                        style="width:40px; height:40px;"
+                    >
+                        <i class="bi bi-map text-primary"></i>
+                    </span>
 
                     <span style="font-size: 1.15rem;">
                         PETA SEBARAN
                     </span>
 
-                    <span id="badgeTotalSekolah" class="badge badge-jumlah-sekolah border fw-semibold">
+                    <span
+                        class="badge bg-primary-subtle text-primary border fw-semibold"
+                        style="font-size: 0.95rem; padding: 8px 12px;"
+                    >
                         {{ total_sekolah_tampil }} SEKOLAH
                     </span>
 
+                    <button
+                        type="button"
+                        id="toggleFullscreen"
+                        class="btn btn-light border rounded-3"
+                        title="Fullscreen Peta"
+                    >
+                        <i class="bi bi-arrows-fullscreen text-primary"></i>
+                    </button>
+
+                    <button
+                        type="button"
+                        title="Label Kecamatan"
+                        onclick="toggleLabelKecamatan(this)"
+                    >
+                        <i class="bi bi-card-text"></i>
+                    </button>
+
                 </h5>
+
+                    <div class="map-statistik">
+
+                        <div class="stat-item">
+                            <i class="bi bi-building text-primary"></i>
+                            <span>{{ total_sekolah_tampil }} Sekolah</span>
+                        </div>
+
+                        <div class="stat-item">
+                            <i class="bi bi-trophy text-warning"></i>
+                            <span>{{ total_prestasi }} Prestasi</span>
+                        </div>
+
+                        <div class="stat-item">
+                            <i class="bi bi-person-badge text-success"></i>
+                            <span>{{ total_guru }} Guru</span>
+                        </div>
+
+                        <div class="stat-item">
+                            <i class="bi bi-people text-danger"></i>
+                            <span>{{ total_murid }} Murid</span>
+                        </div>
+
+                    </div>
 
             </div>
 
-        </div>
-
-    </div>
-
-    <div class="map-statistik">
-
-        <div class="stat-item">
-            <i class="bi bi-building text-primary"></i>
-            <span id="statTotalSekolah">{{ total_sekolah_tampil }} Sekolah</span>
-        </div>
-
-        <div class="stat-item">
-            <i class="bi bi-trophy text-warning"></i>
-            <span id="statTotalPrestasi">{{ total_prestasi }} Prestasi</span>
-        </div>
-
-        <div class="stat-item">
-            <i class="bi bi-person-badge text-success"></i>
-            <span id="statTotalGuru">{{ total_guru }} Guru</span>
-        </div>
-
-        <div class="stat-item">
-            <i class="bi bi-people text-danger"></i>
-            <span id="statTotalMurid">{{ total_murid }} Murid</span>
         </div>
 
     </div>
@@ -1034,7 +730,7 @@ halaman-peta halaman-peta-v2
 
         <div id="panelFilterSekolah" class="panel-filter-sekolah">
 
-            <form id="formFilterSekolah" class="d-flex gap-2 align-items-center mb-3 flex-wrap">
+            <form method="GET" class="d-flex gap-2 align-items-center mb-3 flex-wrap">
 
                 <div style="flex: 1; min-width: 220px;">
                     <div class="input-group">
@@ -1043,7 +739,7 @@ halaman-peta halaman-peta-v2
                             <i class="bi bi-geo-alt text-primary"></i>
                         </span>
 
-                        <select id="filterKecamatan" name="kecamatan" class="form-select border-start-0">
+                        <select name="kecamatan" class="form-select border-start-0">
                             <option value="">Semua Kecamatan</option>
                             {% for k in daftar_kecamatan %}
                                 <option value="{{ k }}" {% if request.GET.kecamatan == k %}selected{% endif %}>
@@ -1062,7 +758,7 @@ halaman-peta halaman-peta-v2
                             <i class="bi bi-grid text-primary"></i>
                         </span>
 
-                        <select id="filterKategori" name="kategori" class="form-select border-start-0">
+                        <select name="kategori" class="form-select border-start-0">
                             <option value="">Semua Kategori</option>
                             {% for kat in daftar_kategori %}
                                 <option value="{{ kat.id }}" {% if request.GET.kategori == kat.id|stringformat:"s" %}selected{% endif %}>
@@ -1081,7 +777,7 @@ halaman-peta halaman-peta-v2
                             <i class="bi bi-star text-primary"></i>
                         </span>
 
-                        <select id="filterPrestasi" name="status_prestasi" class="form-select border-start-0">
+                        <select name="status_prestasi" class="form-select border-start-0">
                             <option value="">Semua Status Prestasi</option>
                             <option value="punya" {% if status_prestasi == "punya" %}selected{% endif %}>Sekolah Berprestasi</option>
                             <option value="tidak" {% if status_prestasi == "tidak" %}selected{% endif %}>Tanpa Prestasi</option>
@@ -1091,13 +787,13 @@ halaman-peta halaman-peta-v2
                 </div>
 
                 <div style="width: 120px;">
-                    <button type="button" id="tombolFilterPeta" class="btn btn-primary w-100">
+                    <button type="submit" class="btn btn-primary w-100">
                         Filter
                     </button>
                 </div>
 
                 <div style="width: 120px;">
-                    <a href="#" id="resetFilterPeta" class="btn btn-secondary w-100">
+                    <a href="/" class="btn btn-secondary w-100">
                         Reset
                     </a>
                 </div>
@@ -1161,15 +857,14 @@ halaman-peta halaman-peta-v2
                     title="Filter Sekolah"
                     onclick="togglePanelFilterSekolah()"
                 >
-                    <i class="bi bi-funnel"></i>
+                    <i class="bi bi-list-check"></i>
                 </button>
 
-                <button
-                    type="button"
-                    title="Zoom Semua Sekolah"
-                    onclick="fokusSemuaSekolah()"
-                >
-                    <i class="bi bi-zoom-in"></i>
+                <button type="button" title="Semua Sekolah" onclick="fokusSemuaSekolah()">
+                    <i class="bi bi-map"></i>
+                    <span class="toolbar-badge">
+                        {{ total_sekolah_tampil }}
+                    </span>
                 </button>
 
                 <button
@@ -1188,34 +883,15 @@ halaman-peta halaman-peta-v2
                     <i class="bi bi-search"></i>
                 </button>
 
-                <button
-                    type="button"
-                    title="Legenda"
-                    onclick="toggleLegendaPeta()"
-                >
-                    <i class="bi bi-info-circle"></i>
-                </button>
-
             </div>
 
             <div id="map"></div>
-
-            <div id="legendaPeta" class="legend-peta">
-                <div class="legend-title">
-                    LEGENDA
-                </div>
-                <div id="isiLegendaSekolah"></div>
-            </div>
 
         </div>
 
     </div>
 </div>
-<button
-    type="button"
-    id="toggleFullscreen"
-    class="d-none"
-></button>
+
 {% endblock %}
 
 
@@ -1321,99 +997,6 @@ halaman-peta halaman-peta-v2
 
     tombolLokasiSaya.addTo(map);
 
-
-    var tombolFullscreenMap = L.control({ position: 'topleft' });
-
-    tombolFullscreenMap.onAdd = function () {
-        var div = L.DomUtil.create('div', 'leaflet-bar');
-
-        div.innerHTML = `
-            <a href="#" title="Fullscreen Peta">
-                <i class="bi bi-arrows-fullscreen"></i>
-            </a>
-        `;
-
-        div.onclick = function(e) {
-            e.preventDefault();
-            document.getElementById('toggleFullscreen').click();
-        };
-
-        return div;
-    };
-
-    tombolFullscreenMap.addTo(map);
-
-
-    var tombolLabelMap = L.control({ position: 'topleft' });
-
-    tombolLabelMap.onAdd = function () {
-
-        var div = L.DomUtil.create('div', 'leaflet-bar');
-
-        div.innerHTML = `
-            <a href="#" title="Label Kecamatan">
-                <i class="bi bi-card-text"></i>
-            </a>
-        `;
-
-        div.onclick = function(e) {
-
-            e.preventDefault();
-
-            if (map.hasLayer(layerLabelKecamatan)) {
-
-                map.removeLayer(layerLabelKecamatan);
-
-            } else {
-
-                map.addLayer(layerLabelKecamatan);
-
-            }
-
-        };
-
-        return div;
-    };
-
-
-    var tombolLabelSekolahMap = L.control({ position: 'topleft' });
-
-    tombolLabelSekolahMap.onAdd = function () {
-
-        var div = L.DomUtil.create('div', 'leaflet-bar');
-
-        div.innerHTML = `
-            <a href="#" title="Label Sekolah">
-                <i class="bi bi-building"></i>
-            </a>
-        `;
-
-        div.onclick = function(e) {
-
-            e.preventDefault();
-
-            if (map.hasLayer(layerLabelSekolah)) {
-
-                map.removeLayer(layerLabelSekolah);
-
-            } else {
-
-                map.addLayer(layerLabelSekolah);
-
-            }
-
-        };
-
-        return div;
-    };
-
-    tombolLabelSekolahMap.addTo(map);
-
-
-
-    tombolLabelMap.addTo(map);
-
-
     map.on('locationfound', function(e) {
         lokasiSaya = e.latlng;
 
@@ -1482,27 +1065,32 @@ halaman-peta halaman-peta-v2
         });
     }
 
-    var layerKB = L.markerClusterGroup();
+    function fokusSemuaSekolah() {
+
+        if (clusterSekolah.getLayers().length > 0) {
+
+            map.fitBounds(
+                clusterSekolah.getBounds(),
+                {
+                    padding: [40, 40]
+                }
+            );
+
+        }
+
+    }
+
     var layerSD = L.markerClusterGroup();
     var layerSMP = L.markerClusterGroup();
-    var layerSPS = L.markerClusterGroup();
     var layerTK = L.markerClusterGroup();
-    var layerTKI = L.markerClusterGroup();
-    var layerTPA = L.markerClusterGroup();
-
+    var layerPAUD = L.markerClusterGroup();
     var layerKecamatan = L.layerGroup();
     var layerLabelKecamatan = L.layerGroup();
-    var layerLabelSekolah = L.layerGroup();
-    var markerAktifSekarang = [];
 
-    map.addLayer(layerKB);
     map.addLayer(layerSD);
     map.addLayer(layerSMP);
-    map.addLayer(layerSPS);
     map.addLayer(layerTK);
-    map.addLayer(layerTKI);
-    map.addLayer(layerTPA);
-
+    map.addLayer(layerPAUD);
     map.addLayer(layerKecamatan);
 
     var labelManual = {
@@ -1579,113 +1167,8 @@ halaman-peta halaman-peta-v2
                         feature.properties.kecamatan ||
                         'KECAMATAN';
 
-                    var daftarSekolahKecamatan = sekolahData.filter(function(s) {
-                        return s.kecamatan.toUpperCase() === namaKecamatan.replace('KECAMATAN ', '').toUpperCase()
-                            || s.kecamatan.toUpperCase() === namaKecamatan.toUpperCase();
-                    });
+                    layer.bindPopup(`<b>Kecamatan:</b> ${namaKecamatan}`);
 
-                    var kategoriList = ['KB', 'SD', 'SMP', 'SPS', 'TK', 'TKI', 'TPA'];
-
-                    var daftarSekolahKecamatan = sekolahData.filter(function(s) {
-                        return s.kecamatan.toUpperCase() === namaKecamatan.replace('KECAMATAN ', '').toUpperCase()
-                            || s.kecamatan.toUpperCase() === namaKecamatan.toUpperCase();
-                    });
-
-                    var kategoriList = [
-                        'KB',
-                        'SD',
-                        'SMP',
-                        'SPS',
-                        'TK',
-                        'TKI',
-                        'TPA'
-                    ];
-
-                    var totalSekolah = daftarSekolahKecamatan.length;
-
-                    var isiPopup = `
-                        <div style="min-width:180px;">
-
-                            <div style="
-                                font-size:13px;
-                                font-weight:800;
-                                margin-bottom:8px;
-                                white-space: nowrap;
-                                overflow: hidden;
-                                text-overflow: ellipsis;
-                                text-align:center;
-                            ">
-                                ${namaKecamatan}
-                            </div>
-
-                            <div style="
-                                background:#0d6efd;
-                                color:white;
-                                padding:6px 10px;
-                                border-radius:8px;
-                                margin-bottom:8px;
-                                font-size:12px;
-                            ">
-                                ${totalSekolah} Sekolah
-                            </div>
-                    `;
-
-                    kategoriList.forEach(function(kategori) {
-
-                        var jumlah = daftarSekolahKecamatan.filter(function(s) {
-                            return s.kategori === kategori;
-                        }).length;
-
-                        isiPopup += `
-                            <div style="
-                                display:flex;
-                                justify-content:space-between;
-                                align-items:center;
-
-                                padding:3px 5px;
-
-                                border-radius:8px;
-
-                                margin-bottom:6px;
-
-                                background:rgba(13,110,253,0.06);
-
-                                font-size:12px;
-                            ">
-
-                                <span style="font-weight:600;">
-                                    ${kategori}
-                                </span>
-
-                                <span style="
-                                    background:#0d6efd;
-                                    color:white;
-
-                                    min-width:20px;
-                                    height:20px;
-
-                                    border-radius:999px;
-
-                                    display:flex;
-                                    align-items:center;
-                                    justify-content:center;
-
-                                    font-size:12px;
-                                    font-weight:400;
-                                ">
-                                    ${jumlah}
-                                </span>
-
-                            </div>
-                        `;
-                    });
-
-                    isiPopup += `</div>`;
-
-                    layer.bindPopup(isiPopup);
-
-                    
-                    
                     var posisiLabel;
                     var warna = feature.properties.warnaPolygon;
 
@@ -1749,8 +1232,6 @@ halaman-peta halaman-peta-v2
         black: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-black.png'
     };
 
-    var legendaKategori = {};
-
     function buatIcon(warna) {
         return new L.Icon({
             iconUrl: markerColors[warna] || markerColors.blue,
@@ -1770,36 +1251,18 @@ halaman-peta halaman-peta-v2
     var garisJarak = null;
 
     sekolahData.forEach(function(s) {
-        if (!legendaKategori[s.kategori]) {
-
-            legendaKategori[s.kategori] = s.warna;
-
-        }
-
         if (s.latitude && s.longitude) {
 
             var targetLayer = layerSD;
 
-            if (s.kategori === 'KB') {
-                targetLayer = layerKB;
-
-            } else if (s.kategori === 'SD') {
+            if (s.kategori === 'SD') {
                 targetLayer = layerSD;
-
             } else if (s.kategori === 'SMP') {
                 targetLayer = layerSMP;
-
-            } else if (s.kategori === 'SPS') {
-                targetLayer = layerSPS;
-
             } else if (s.kategori === 'TK') {
                 targetLayer = layerTK;
-
-            } else if (s.kategori === 'TKI') {
-                targetLayer = layerTKI;
-
-            } else if (s.kategori === 'TPA') {
-                targetLayer = layerTPA;
+            } else if (s.kategori === 'PAUD') {
+                targetLayer = layerPAUD;
             }
 
             var marker = L.marker([
@@ -1893,40 +1356,10 @@ halaman-peta halaman-peta-v2
 
             targetLayer.addLayer(marker);
 
-            var labelMarker = L.marker(
-                [
-                    parseFloat(s.latitude),
-                    parseFloat(s.longitude)
-                ],
-                {
-                    icon: L.divIcon({
-                        className: 'label-sekolah',
-                        html: `
-                            <span>
-                                ${s.nama}
-                            </span>
-                        `,
-                        iconSize: [220, 24],
-                        iconAnchor: [110, 60]
-                    }),
-                    interactive: false
-                }
-            );
-
-            labelMarker.addTo(layerLabelSekolah); 
-
             daftarMarkerSekolah.push({
                 id: s.id,
                 nama: s.nama,
                 marker: marker,
-                labelMarker: labelMarker,
-                layer: targetLayer,
-                kategori: s.kategori,
-                warna: s.warna,
-                kecamatan: s.kecamatan,
-                prestasi: parseInt(s.prestasi),
-                guru: parseInt(s.guru),
-                murid: parseInt(s.murid),
                 latitude: parseFloat(s.latitude),
                 longitude: parseFloat(s.longitude)
             });
@@ -1937,29 +1370,6 @@ halaman-peta halaman-peta-v2
             });
         }
     });
-
-    function renderLegendaSekolah(dataLegenda) {
-
-        var htmlLegenda = '';
-
-        Object.entries(dataLegenda).forEach(function(item) {
-
-            var kategori = item[0];
-            var warna = item[1];
-
-            htmlLegenda += `
-                <div class="legend-item">
-                    <img src="${markerColors[warna]}" width="16">
-                    <span>${kategori}</span>
-                </div>
-            `;
-        });
-
-        document.getElementById('isiLegendaSekolah').innerHTML =
-            htmlLegenda;
-    }
-
-    renderLegendaSekolah(legendaKategori);
 
     new TomSelect('#cariSekolah', {
         options: dataSearchSekolah,
@@ -2055,29 +1465,24 @@ halaman-peta halaman-peta-v2
 
     function fokusSemuaSekolah() {
 
-        var bounds = L.latLngBounds([]);
+        var groupGabungan = L.featureGroup();
 
-        var dataFokus =
-            markerAktifSekarang.length > 0
-            ? markerAktifSekarang
-            : daftarMarkerSekolah;
+        groupGabungan.addLayer(layerSD);
+        groupGabungan.addLayer(layerSMP);
+        groupGabungan.addLayer(layerTK);
+        groupGabungan.addLayer(layerPAUD);
 
-        dataFokus.forEach(function(item) {
+        if (groupGabungan.getLayers().length > 0) {
 
-            bounds.extend([
-                item.latitude,
-                item.longitude
-            ]);
-
-        });
-
-        if (bounds.isValid()) {
-
-            map.fitBounds(bounds, {
-                padding: [50, 50]
-            });
+            map.fitBounds(
+                groupGabungan.getBounds(),
+                {
+                    padding: [40, 40]
+                }
+            );
 
         }
+
     }
 
 
@@ -2133,166 +1538,22 @@ halaman-peta halaman-peta-v2
 
     }
 
-    function toggleLegendaPeta() {
-        document
-            .getElementById('legendaPeta')
-            .classList
-            .toggle('aktif');
-    }
+    function toggleLabelKecamatan(button) {
 
-{% comment %} FUNGSI FILTER {% endcomment %}
+        if (map.hasLayer(layerLabelKecamatan)) {
 
-    function bersihkanLayerSekolah() {
+            map.removeLayer(layerLabelKecamatan);
 
-        layerKB.clearLayers();
-        layerSD.clearLayers();
-        layerSMP.clearLayers();
-        layerSPS.clearLayers();
-        layerTK.clearLayers();
-        layerTKI.clearLayers();
-        layerTPA.clearLayers();
+            button.classList.remove('aktif-toolbar');
 
-        layerLabelSekolah.clearLayers();
-    }
+        } else {
 
-    function tampilkanMarkerSesuaiFilter() {
+            map.addLayer(layerLabelKecamatan);
 
-        var kecamatan =
-            document.getElementById('filterKecamatan').value;
+            button.classList.add('aktif-toolbar');
 
-        var kategoriSelect =
-            document.getElementById('filterKategori');
-
-        var kategoriText =
-            kategoriSelect.options[
-                kategoriSelect.selectedIndex
-            ].text;
-
-        var kategoriValue =
-            kategoriSelect.value;
-
-        var prestasi =
-            document.getElementById('filterPrestasi').value;
-
-        var legendaFilter = {};
-
-        markerAktifSekarang = [];
-
-        var totalSekolahFilter = 0;
-        var totalPrestasiFilter = 0;
-        var totalGuruFilter = 0;
-        var totalMuridFilter = 0;
-
-        bersihkanLayerSekolah();
-
-        daftarMarkerSekolah.forEach(function(item) {
-
-            var cocok = true;
-
-            if (kecamatan && item.kecamatan !== kecamatan) {
-                cocok = false;
-            }
-
-            if (kategoriValue && item.kategori !== kategoriText) {
-                cocok = false;
-            }
-
-            if (prestasi === 'punya' && item.prestasi <= 0) {
-                cocok = false;
-            }
-
-            if (prestasi === 'tidak' && item.prestasi > 0) {
-                cocok = false;
-            }
-
-            if (cocok) {
-
-                markerAktifSekarang.push(item);
-
-                item.layer.addLayer(item.marker);
-
-                layerLabelSekolah.addLayer(item.labelMarker);
-
-                legendaFilter[item.kategori] = item.warna;
-
-                totalSekolahFilter += 1;
-                totalPrestasiFilter += item.prestasi;
-                totalGuruFilter += item.guru;
-                totalMuridFilter += item.murid;
-
-            }
-
-        });
-
-        map.addLayer(layerLabelSekolah);
-
-        document
-            .getElementById('legendaPeta')
-            .classList
-            .add('aktif');
-
-        renderLegendaSekolah(legendaFilter);
-
-        document.getElementById('badgeTotalSekolah').innerText =
-            totalSekolahFilter + ' SEKOLAH';
-
-        document.getElementById('statTotalSekolah').innerText =
-            totalSekolahFilter + ' Sekolah';
-
-        document.getElementById('statTotalPrestasi').innerText =
-            totalPrestasiFilter + ' Prestasi';
-
-        document.getElementById('statTotalGuru').innerText =
-            totalGuruFilter + ' Guru';
-
-        document.getElementById('statTotalMurid').innerText =
-            totalMuridFilter + ' Murid';
+        }
 
     }
-
-    /* SUBMIT FILTER */
-    document
-        .getElementById('tombolFilterPeta')
-        .addEventListener('click', function(e) {
-
-            e.preventDefault();
-
-            tampilkanMarkerSesuaiFilter();
-
-            togglePanelFilterSekolah();
-    });
-
-    /* RESET FILTER */
-    document
-        .getElementById('resetFilterPeta')
-        .addEventListener('click', function(e) {
-
-            e.preventDefault();
-
-            document.getElementById(
-                'filterKecamatan'
-            ).value = '';
-
-            document.getElementById(
-                'filterKategori'
-            ).value = '';
-
-            document.getElementById(
-                'filterPrestasi'
-            ).value = '';
-
-            tampilkanMarkerSesuaiFilter();
-
-            map.removeLayer(layerLabelSekolah);
-
-            document
-                .getElementById('legendaPeta')
-                .classList
-                .remove('aktif');
-
-            renderLegendaSekolah(legendaKategori);
-
-            togglePanelFilterSekolah();
-    });
 </script>
 {% endblock %}
