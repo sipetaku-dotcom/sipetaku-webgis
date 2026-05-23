@@ -83,31 +83,27 @@ TEMPLATES = [
 WSGI_APPLICATION = 'config.wsgi.application'
 
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config(
-            'DB_NAME',
-            default='sipetaku_db'
-        ),
-        'USER': config(
-            'DB_USER',
-            default='sipetaku_user'
-        ),
-        'PASSWORD': config(
-            'DB_PASSWORD',
-            default='SipetakuDB@2026'
-        ),
-        'HOST': config(
-            'DB_HOST',
-            default='localhost'
-        ),
-        'PORT': config(
-            'DB_PORT',
-            default='5432'
-        ),
+if config('USE_SQLITE', default=False, cast=bool):
+
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
-}
+
+else:
+
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': config('DB_NAME', default='sipetaku_db'),
+            'USER': config('DB_USER', default='sipetaku_user'),
+            'PASSWORD': config('DB_PASSWORD', default='SipetakuDB@2026'),
+            'HOST': config('DB_HOST', default='localhost'),
+            'PORT': config('DB_PORT', default='5432'),
+        }
+    }
 
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -137,6 +133,11 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+]
+
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MEDIA_URL = 'media/'
@@ -148,17 +149,6 @@ LOGIN_REDIRECT_URL = '/dashboard/'
 LOGOUT_REDIRECT_URL = '/login/'
 
 
-TURNSTILE_SITE_KEY = config(
-    '0x4AAAAAADU2nZWaKW5IiiT5',
-    default=''
-)
-
-TURNSTILE_SECRET_KEY = config(
-    '0x4AAAAAADU2nSZyzCpPutWdBx75zNCbtog',
-    default=''
-)
-
-
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 X_FRAME_OPTIONS = 'DENY'
@@ -167,3 +157,12 @@ CSRF_COOKIE_HTTPONLY = True
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+if not DEBUG:
+
+    SECURE_SSL_REDIRECT = True
+
+    SESSION_COOKIE_SECURE = True
+
+    CSRF_COOKIE_SECURE = True
