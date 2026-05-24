@@ -883,6 +883,60 @@ halaman-peta halaman-peta-v2
         color: #ffffff;
         border: 1px solid #495057;
     }
+
+    .panel-ukur-jarak {
+
+        position: absolute;
+
+        top: 10px;
+        left: 50px;
+
+        z-index: 1200;
+
+        width: 260px;
+
+        background: rgba(255,255,255,0.96);
+
+        backdrop-filter: blur(10px);
+
+        border-radius: 16px;
+
+        padding: 16px;
+
+        box-shadow:
+            0 10px 25px rgba(0,0,0,0.12);
+
+        display: none;
+    }
+
+    .panel-ukur-title {
+
+        font-size: 15px;
+        font-weight: 700;
+
+        margin-bottom: 10px;
+
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .panel-ukur-info {
+
+        font-size: 13px;
+
+        color: #6c757d;
+
+        margin-bottom: 12px;
+    }
+
+    .panel-ukur-total {
+
+        font-size: 14px;
+        font-weight: 700;
+
+        color: #0d6efd;
+    }
 </style>
 {% endblock %}
 
@@ -1190,6 +1244,14 @@ halaman-peta halaman-peta-v2
 
                 <button
                     type="button"
+                    title="Ukur Jarak"
+                    onclick="toggleUkurJarak()"
+                >
+                    <i class="bi bi-rulers"></i>
+                </button>
+
+                <button
+                    type="button"
                     title="Legenda"
                     onclick="toggleLegendaPeta()"
                 >
@@ -1199,6 +1261,41 @@ halaman-peta halaman-peta-v2
             </div>
 
             <div id="map"></div>
+
+            <div id="panelUkurJarak" class="panel-ukur-jarak">
+
+                <div class="panel-ukur-title">
+                    <i class="bi bi-rulers"></i>
+                    Ukur Jarak
+                </div>
+
+                <div class="panel-ukur-info">
+                    Klik titik di peta untuk mulai mengukur.
+                </div>
+
+                <div class="panel-ukur-total">
+                    Total: <span id="totalJarakUkur">0 m</span>
+                </div>
+
+                <div class="d-flex gap-2 mt-2">
+                    <button
+                        type="button"
+                        class="btn btn-sm btn-secondary w-100"
+                        onclick="resetUkurJarak()"
+                    >
+                        Reset
+                    </button>
+
+                    <button
+                        type="button"
+                        class="btn btn-sm btn-primary w-100"
+                        onclick="selesaiUkurJarak()"
+                    >
+                        Selesai
+                    </button>
+                </div>
+
+            </div>
 
             <div id="legendaPeta" class="legend-peta">
                 <div class="legend-title">
@@ -1228,6 +1325,16 @@ halaman-peta halaman-peta-v2
 <script>
 
     var map = L.map('map').setView([0.8, 117.4], 9);
+
+    var modeUkurJarak = false;
+
+    var titikUkur = [];
+
+    var markerUkur = [];
+
+    var garisUkur = null;
+
+    var totalJarak = 0;
 
     var posisiAwalPeta = [0.8, 117.4];
     var zoomAwalPeta = 9;
@@ -1682,9 +1789,23 @@ halaman-peta halaman-peta-v2
 
                     isiPopup += `</div>`;
 
-                    layer.bindPopup(isiPopup);
+                    layer.on('click', function(e) {
 
-                    
+                        if (modeUkurJarak) {
+
+                            L.DomEvent.stop(e);
+
+                            map.closePopup();
+
+                            tambahTitikUkur(e.latlng);
+
+                            return;
+                        }
+
+                        layer.bindPopup(isiPopup).openPopup(e.latlng);
+
+                    });
+
                     
                     var posisiLabel;
                     var warna = feature.properties.warnaPolygon;
@@ -1914,6 +2035,20 @@ halaman-peta halaman-peta-v2
 
                 </div>
             `);
+
+            marker.on('click', function(e) {
+
+                if (modeUkurJarak) {
+
+                    L.DomEvent.stop(e);
+
+                    map.closePopup();
+
+                    tambahTitikUkur(e.latlng);
+
+                }
+
+            });
 
             targetLayer.addLayer(marker);
 
@@ -2176,6 +2311,124 @@ halaman-peta halaman-peta-v2
             .getElementById('legendaPeta')
             .classList
             .toggle('aktif');
+    }
+
+    function toggleUkurJarak() {
+
+        modeUkurJarak = !modeUkurJarak;
+
+        const panel = document.getElementById('panelUkurJarak');
+
+        if (modeUkurJarak) {
+            panel.style.display = 'block';
+            map.getContainer().style.cursor = 'crosshair';
+        } else {
+            panel.style.display = 'none';
+            map.getContainer().style.cursor = '';
+        }
+    }
+
+
+    map.on('click', function(e) {
+
+        if (!modeUkurJarak) {
+            return;
+        }
+
+        L.DomEvent.stop(e);
+
+        map.closePopup();
+
+        tambahTitikUkur(e.latlng);
+    });
+
+
+    function tambahTitikUkur(latlng) {
+
+        map.closePopup();
+
+        titikUkur.push(latlng);
+
+        const marker = L.circleMarker(latlng, {
+            radius: 5,
+            color: '#0d6efd',
+            fillColor: '#0d6efd',
+            fillOpacity: 1
+        }).addTo(map);
+
+        markerUkur.push(marker);
+
+        updateGarisUkur();
+    }
+
+
+    function updateGarisUkur() {
+
+        if (garisUkur) {
+            map.removeLayer(garisUkur);
+        }
+
+        if (titikUkur.length < 2) {
+            return;
+        }
+
+        garisUkur = L.polyline(titikUkur, {
+            color: '#0d6efd',
+            weight: 4,
+            dashArray: '8, 8'
+        }).addTo(map);
+
+        totalJarak = 0;
+
+        for (let i = 1; i < titikUkur.length; i++) {
+            totalJarak += map.distance(
+                titikUkur[i - 1],
+                titikUkur[i]
+            );
+        }
+
+        document.getElementById('totalJarakUkur').innerText =
+            formatJarak(totalJarak);
+    }
+
+
+    function formatJarak(meter) {
+
+        if (meter >= 1000) {
+            return (meter / 1000).toFixed(2) + ' km';
+        }
+
+        return meter.toFixed(0) + ' m';
+    }
+
+
+    function resetUkurJarak() {
+
+        titikUkur = [];
+        totalJarak = 0;
+
+        markerUkur.forEach(function(marker) {
+            map.removeLayer(marker);
+        });
+
+        markerUkur = [];
+
+        if (garisUkur) {
+            map.removeLayer(garisUkur);
+            garisUkur = null;
+        }
+
+        document.getElementById('totalJarakUkur').innerText = '0 m';
+    }
+
+
+    function selesaiUkurJarak() {
+
+        modeUkurJarak = false;
+
+        document.getElementById('panelUkurJarak').style.display = 'none';
+
+        map.getContainer().style.cursor = '';
     }
 
 {% comment %} FUNGSI FILTER {% endcomment %}
