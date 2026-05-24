@@ -7,7 +7,7 @@ from django.conf.urls.static import static
 from akun import views as akun_views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin-sipetaku-rahasia-2026/', admin.site.urls),
     
     path('', include('peta.urls')),
     path('', include('akun.urls')),

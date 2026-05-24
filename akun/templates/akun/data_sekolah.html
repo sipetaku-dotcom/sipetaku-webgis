@@ -46,6 +46,7 @@
                         <th>Kategori</th>
                         <th>Status</th>
                         <th>Wilayah</th>
+                        <th>Aksi</th>
                     </tr>
                 </thead>
 
@@ -114,6 +115,29 @@
                             </small>
                         </td>
 
+                        <td>
+
+                            <div class="d-flex gap-2">
+
+                                <a
+                                    href="{% url 'edit_sekolah' s.id %}"
+                                    class="btn btn-warning btn-sm"
+                                >
+                                    <i class="bi bi-pencil-square"></i>
+                                </a>
+
+                                <a
+                                    href="{% url 'hapus_sekolah' s.id %}"
+                                    class="btn btn-danger btn-sm"
+                                    onclick="return confirm('Yakin ingin menghapus sekolah ini?')"
+                                >
+                                    <i class="bi bi-trash"></i>
+                                </a>
+
+                            </div>
+
+                        </td>
+
                     </tr>
 
                     {% empty %}
@@ -122,6 +146,7 @@
                         <td colspan="6" class="text-center">
                             Belum ada data sekolah
                         </td>
+                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>

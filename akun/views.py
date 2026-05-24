@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from sekolah.forms import SekolahForm
@@ -137,6 +137,74 @@ def data_sekolah(request):
     }
 
     return render(request, 'akun/data_sekolah.html', context)
+
+
+@login_required
+def edit_sekolah(request, id):
+
+    if not user_admin_kabupaten(request):
+        return redirect('/')
+
+    sekolah = get_object_or_404(
+        Sekolah,
+        id=id
+    )
+
+    if request.method == 'POST':
+
+        form = SekolahForm(
+            request.POST,
+            request.FILES,
+            instance=sekolah
+        )
+
+        if form.is_valid():
+
+            form.save()
+
+            messages.success(
+                request,
+                'Data sekolah berhasil diubah'
+            )
+
+            return redirect('/data-sekolah/')
+
+    else:
+
+        form = SekolahForm(instance=sekolah)
+
+    context = {
+        'form': form,
+        'sekolah': sekolah,
+        'data_wilayah': json.dumps(DATA_WILAYAH),
+    }
+
+    return render(
+        request,
+        'akun/edit_sekolah.html',
+        context
+    )
+
+
+@login_required
+def hapus_sekolah(request, id):
+
+    if not user_admin_kabupaten(request):
+        return redirect('/')
+
+    sekolah = get_object_or_404(
+        Sekolah,
+        id=id
+    )
+
+    sekolah.delete()
+
+    messages.success(
+        request,
+        'Data sekolah berhasil dihapus'
+    )
+
+    return redirect('/data-sekolah/')
 
 
 @login_required
