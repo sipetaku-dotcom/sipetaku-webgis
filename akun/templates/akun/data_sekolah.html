@@ -128,8 +128,8 @@
 
                                 <a
                                     href="{% url 'hapus_sekolah' s.id %}"
-                                    class="btn btn-danger btn-sm"
-                                    onclick="return confirm('Yakin ingin menghapus sekolah ini?')"
+                                    class="btn btn-danger btn-sm tombol-hapus"
+                                    data-nama="{{ s.nama }}"
                                 >
                                     <i class="bi bi-trash"></i>
                                 </a>
@@ -165,20 +165,64 @@
     </div>
 
 </div>
-
 {% endblock %}
 
 {% block js %}
 
 <script>
+
     $(document).ready(function () {
+
         $('#tableSekolah').DataTable({
             responsive: true,
             autoWidth: false,
             pageLength: 10,
             lengthMenu: [10, 25, 50, 100]
         });
+
+        $('.tombol-hapus').on('click', function(e) {
+
+            e.preventDefault();
+
+            var href = $(this).attr('href');
+
+            var namaSekolah = $(this).data('nama');
+
+            Swal.fire({
+
+                icon: 'warning',
+
+                title: 'Yakin hapus sekolah?',
+
+                html:
+                    'Data sekolah <b>' +
+                    namaSekolah +
+                    '</b> akan dihapus.',
+
+                showCancelButton: true,
+
+                confirmButtonText: 'Ya, hapus',
+
+                cancelButtonText: 'Batal',
+
+                confirmButtonColor: '#6c5ce7',
+
+                cancelButtonColor: '#6c757d',
+
+                reverseButtons: true
+
+            }).then((result) => {
+
+                if (result.isConfirmed) {
+                    window.location.href = href;
+                }
+
+            });
+
+        });
+
     });
+
 </script>
 
 {% endblock %}
