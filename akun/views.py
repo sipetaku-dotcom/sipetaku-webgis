@@ -1124,30 +1124,76 @@ def profil_sekolah(request):
         if sekolah is None:
             return redirect('/')
 
-    except:
-        return render(request, 'akun/belum_terhubung.html')
+    except Exception:
+
+        return render(
+            request,
+            'akun/belum_terhubung.html'
+        )
+
 
     if request.method == 'POST':
+
         form = SekolahForm(
             request.POST,
             request.FILES,
             instance=sekolah
         )
 
-        if form.is_valid():
-            form.save()
-            return redirect('/profil-sekolah/')
-
     else:
-        form = SekolahForm(instance=sekolah)
+
+        form = SekolahForm(
+            instance=sekolah
+        )
+
+
+    # =====================================================
+    # NPSN TIDAK BOLEH DIUBAH OLEH OPERATOR
+    # =====================================================
+
+    form.fields['npsn'].disabled = True
+
+    form.fields['npsn'].help_text = (
+        'Perubahan NPSN hanya dapat dilakukan oleh Admin Kabupaten.'
+    )
+
+
+    # =====================================================
+    # SIMPAN PERUBAHAN
+    # =====================================================
+
+    if (
+        request.method == 'POST'
+        and
+        form.is_valid()
+    ):
+
+        form.save()
+
+        messages.success(
+            request,
+            'Profil sekolah berhasil diperbarui.'
+        )
+
+        return redirect(
+            'profil_sekolah'
+        )
+
 
     context = {
         'form': form,
         'sekolah': sekolah,
-        'data_wilayah': json.dumps(DATA_WILAYAH),
+        'data_wilayah': json.dumps(
+            DATA_WILAYAH
+        ),
     }
 
-    return render(request, 'akun/profil_sekolah.html', context)
+
+    return render(
+        request,
+        'akun/profil_sekolah.html',
+        context
+    )
 
 
 @login_required

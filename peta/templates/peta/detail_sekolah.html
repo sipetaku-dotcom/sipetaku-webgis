@@ -6,6 +6,10 @@
 
 {% block css %}
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+<link
+    rel="stylesheet"
+    href="https://unpkg.com/maplibre-gl@5/dist/maplibre-gl.css"
+/>
 
 <style>
 
@@ -549,6 +553,8 @@
 {% block js %}
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="https://unpkg.com/maplibre-gl@5/dist/maplibre-gl.js"></script>
+<script src="https://unpkg.com/@maplibre/maplibre-gl-leaflet/leaflet-maplibre-gl.js"></script>
 
 <script>
 
@@ -679,12 +685,9 @@
             15
         );
 
-        L.tileLayer(
-            'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-            {
-                attribution: '&copy; OpenStreetMap'
-            }
-        ).addTo(mapSekolah);
+        L.maplibreGL({
+            style: 'https://tiles.openfreemap.org/styles/liberty'
+        }).addTo(mapSekolah);
 
         L.marker([latSekolah, lngSekolah])
             .addTo(mapSekolah)
