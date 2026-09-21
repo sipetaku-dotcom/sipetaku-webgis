@@ -140,7 +140,8 @@ class SekolahForm(forms.ModelForm):
                 forms.NumberInput(
                     attrs={
                         'class': 'form-control',
-                        'step': '0.001',
+                        'step': 'any',
+                        'inputmode': 'decimal',
                         'placeholder': (
                             'Contoh: 555123.456'
                         ),
@@ -151,7 +152,8 @@ class SekolahForm(forms.ModelForm):
                 forms.NumberInput(
                     attrs={
                         'class': 'form-control',
-                        'step': '0.001',
+                        'step': 'any',
+                        'inputmode': 'decimal',
                         'placeholder': (
                             'Contoh: 123456.789'
                         ),
