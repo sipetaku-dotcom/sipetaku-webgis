@@ -1,0 +1,766 @@
+{% extends 'base.html' %}
+
+{% block title %}{% endblock %}
+
+
+{% block content %}
+
+<div class="container-fluid">
+
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <div class="card shadow-sm border-0 mb-4">
+
+        <div class="card-header bg-body border-0">
+
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+                <div>
+
+                    <h5 class="mb-1">
+
+                        <i class="bi bi-clock-history text-primary me-2"></i>
+
+                        Riwayat Pegawai
+
+                    </h5>
+
+
+                    <small class="text-muted">
+
+                        Riwayat penempatan dan status
+                        kepegawaian
+
+                    </small>
+
+                </div>
+
+
+                <a
+                    href="{% url 'data_pegawai' %}"
+                    class="btn btn-outline-secondary btn-sm"
+                >
+
+                    <i class="bi bi-arrow-left me-1"></i>
+
+                    Kembali ke Data Pegawai
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         IDENTITAS PEGAWAI
+    ====================================================== -->
+
+    <div class="card border-0 shadow-sm mb-4">
+
+        <div class="card-body">
+
+            <div class="row g-3 align-items-center">
+
+
+                <!-- FOTO / ICON PEGAWAI -->
+
+                <div class="col-lg-auto">
+
+                    <div
+                        class="rounded-circle bg-primary-subtle d-flex align-items-center justify-content-center"
+                        style="
+                            width: 72px;
+                            height: 72px;
+                        "
+                    >
+
+                        {% if pegawai.jenis_kelamin == 'L' %}
+
+                            <i class="bi bi-person-fill text-primary fs-2"></i>
+
+                        {% elif pegawai.jenis_kelamin == 'P' %}
+
+                            <i class="bi bi-person-fill text-danger fs-2"></i>
+
+                        {% else %}
+
+                            <i class="bi bi-person-fill text-secondary fs-2"></i>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- NAMA -->
+
+                <div class="col-lg-3">
+
+                    <div class="text-muted small">
+
+                        Nama Pegawai
+
+                    </div>
+
+
+                    <div class="fw-bold fs-5">
+
+                        {{ pegawai.nama }}
+
+                    </div>
+
+
+                    <small class="text-muted">
+
+                        {{ pegawai.get_jenis_kelamin_display }}
+
+                    </small>
+
+                </div>
+
+
+
+                <!-- NIP -->
+
+                <div class="col-lg-2 col-md-4">
+
+                    <div class="text-muted small">
+
+                        NIP
+
+                    </div>
+
+
+                    <div class="fw-semibold">
+
+                        {% if pegawai.nip %}
+
+                            {{ pegawai.nip }}
+
+                        {% else %}
+
+                            <span class="text-muted">
+                                -
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- NIK -->
+
+                <div class="col-lg-2 col-md-4">
+
+                    <div class="text-muted small">
+
+                        NIK
+
+                    </div>
+
+
+                    <div class="fw-semibold">
+
+                        {% if pegawai.nik %}
+
+                            {{ pegawai.nik }}
+
+                        {% else %}
+
+                            <span class="text-muted">
+                                -
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- NUPTK -->
+
+                <div class="col-lg-2 col-md-4">
+
+                    <div class="text-muted small">
+
+                        NUPTK
+
+                    </div>
+
+
+                    <div class="fw-semibold">
+
+                        {% if pegawai.nuptk %}
+
+                            {{ pegawai.nuptk }}
+
+                        {% else %}
+
+                            <span class="text-muted">
+                                -
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         TABEL RIWAYAT PEGAWAI
+    ====================================================== -->
+
+    <div class="card shadow-sm border-0">
+
+        <div class="card-header bg-body">
+
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+                <div>
+
+                    <h5 class="mb-1">
+
+                        <i class="bi bi-table text-primary me-2"></i>
+
+                        Riwayat Penempatan
+
+                    </h5>
+
+
+                    <small class="text-muted">
+
+                        Riwayat sekolah, jabatan,
+                        status kepegawaian, dan status akhir
+
+                    </small>
+
+                </div>
+
+
+                <span class="badge bg-secondary px-3 py-2">
+
+                    <i class="bi bi-clock-history me-1"></i>
+
+                    Seluruh Riwayat
+
+                </span>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="card-body">
+
+            <div class="table-responsive">
+
+                <table
+                    id="tableRiwayatPegawai"
+                    class="table table-bordered table-striped table-hover align-middle w-100"
+                >
+
+                    <thead>
+
+                        <tr>
+
+                            <th class="text-center">
+
+                                No
+
+                            </th>
+
+                            <th>
+
+                                Tahun Ajaran
+
+                            </th>
+
+                            <th>
+
+                                Sekolah
+
+                            </th>
+
+                            <th>
+
+                                Jenis
+
+                            </th>
+
+                            <th>
+
+                                Jabatan
+
+                            </th>
+
+                            <th>
+
+                                Status Pegawai
+
+                            </th>
+
+                            <th>
+
+                                Periode
+
+                            </th>
+
+                            <th>
+
+                                Status Akhir
+
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+
+                    <tbody>
+
+                        {% for data in daftar_riwayat %}
+
+                            <tr>
+
+
+                                <!-- =====================================
+                                     NO
+                                ====================================== -->
+
+                                <td class="text-center">
+
+                                    {{ forloop.counter }}
+
+                                </td>
+
+
+
+                                <!-- =====================================
+                                     TAHUN AJARAN
+                                ====================================== -->
+
+                                <td>
+
+                                    <span class="fw-semibold">
+
+                                        {{ data.tahun_ajaran.nama }}
+
+                                    </span>
+
+                                </td>
+
+
+
+                                <!-- =====================================
+                                     SEKOLAH
+                                ====================================== -->
+
+                                <td>
+
+                                    <div class="fw-semibold">
+
+                                        {{ data.sekolah.nama }}
+
+                                    </div>
+
+
+                                    <small class="text-muted">
+
+                                        {{ data.sekolah.kecamatan }}
+
+                                    </small>
+
+                                </td>
+
+
+
+                                <!-- =====================================
+                                     JENIS PEGAWAI
+                                ====================================== -->
+
+                                <td>
+
+                                    {% if data.jenis_pegawai == 'PENDIDIK' %}
+
+                                        <span class="badge bg-success">
+
+                                            <i class="bi bi-person-video3 me-1"></i>
+
+                                            Guru / Pendidik
+
+                                        </span>
+
+                                    {% elif data.jenis_pegawai == 'TENAGA_KEPENDIDIKAN' %}
+
+                                        <span class="badge bg-warning text-dark">
+
+                                            <i class="bi bi-person-workspace me-1"></i>
+
+                                            Tenaga Kependidikan
+
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="badge bg-secondary">
+
+                                            {{ data.get_jenis_pegawai_display }}
+
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+
+                                <!-- =====================================
+                                     JABATAN
+                                ====================================== -->
+
+                                <td>
+
+                                    {% if data.jabatan %}
+
+                                        <div class="fw-semibold">
+
+                                            {{ data.jabatan }}
+
+                                        </div>
+
+                                    {% else %}
+
+                                        <span class="text-muted">
+
+                                            -
+
+                                        </span>
+
+                                    {% endif %}
+
+
+                                    {% if data.mata_pelajaran %}
+
+                                        <small class="text-muted">
+
+                                            {{ data.mata_pelajaran }}
+
+                                        </small>
+
+                                    {% endif %}
+
+                                </td>
+
+
+
+                                <!-- =====================================
+                                     STATUS PEGAWAI
+                                ====================================== -->
+
+                                <td>
+
+                                    {% if data.status_pegawai == 'PNS' %}
+
+                                        <span class="badge bg-primary">
+
+                                            PNS
+
+                                        </span>
+
+
+                                    {% elif data.status_pegawai == 'PPPK' %}
+
+                                        <span class="badge bg-info text-dark">
+
+                                            PPPK
+
+                                        </span>
+
+
+                                    {% elif data.status_pegawai == 'HONORER' %}
+
+                                        <span class="badge bg-warning text-dark">
+
+                                            Honorer
+
+                                        </span>
+
+
+                                    {% else %}
+
+                                        <span class="badge bg-secondary">
+
+                                            {{ data.get_status_pegawai_display }}
+
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+
+                                <!-- =====================================
+                                     PERIODE
+                                ====================================== -->
+
+                                <td>
+
+                                    <div class="small">
+
+                                        <span class="text-muted">
+                                            Mulai
+                                        </span>
+
+                                        {% if data.tanggal_mulai %}
+
+                                            <span class="fw-semibold">
+
+                                                {{ data.tanggal_mulai|date:"d M Y" }}
+
+                                            </span>
+
+                                        {% else %}
+
+                                            <span class="text-muted">
+
+                                                -
+
+                                            </span>
+
+                                        {% endif %}
+
+                                    </div>
+
+
+                                    <div class="small mt-1">
+
+                                        <span class="text-muted">
+                                            Selesai
+                                        </span>
+
+                                        {% if data.tanggal_selesai %}
+
+                                            <span class="fw-semibold">
+
+                                                {{ data.tanggal_selesai|date:"d M Y" }}
+
+                                            </span>
+
+                                        {% else %}
+
+                                            <span class="text-muted">
+
+                                                -
+
+                                            </span>
+
+                                        {% endif %}
+
+                                    </div>
+
+                                </td>
+
+
+
+                                <!-- =====================================
+                                     STATUS AKHIR
+                                ====================================== -->
+
+                                <td>
+
+                                    {% if data.status_akhir == 'AKTIF' %}
+
+                                        <span class="badge bg-success">
+
+                                            <i class="bi bi-check-circle me-1"></i>
+
+                                            Aktif
+
+                                        </span>
+
+
+                                    {% elif data.status_akhir == 'MUTASI' %}
+
+                                        <span class="badge bg-warning text-dark">
+
+                                            <i class="bi bi-arrow-left-right me-1"></i>
+
+                                            Mutasi
+
+                                        </span>
+
+
+                                    {% elif data.status_akhir == 'PENSIUN' %}
+
+                                        <span class="badge bg-secondary">
+
+                                            <i class="bi bi-hourglass-split me-1"></i>
+
+                                            Pensiun
+
+                                        </span>
+
+
+                                    {% elif data.status_akhir == 'BERHENTI' %}
+
+                                        <span class="badge bg-danger">
+
+                                            <i class="bi bi-person-x me-1"></i>
+
+                                            Berhenti
+
+                                        </span>
+
+
+                                    {% elif data.status_akhir == 'MENINGGAL' %}
+
+                                        <span class="badge bg-dark">
+
+                                            <i class="bi bi-person-dash me-1"></i>
+
+                                            Meninggal
+
+                                        </span>
+
+
+                                    {% else %}
+
+                                        <span class="badge bg-secondary">
+
+                                            {{ data.get_status_akhir_display }}
+
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+{% endblock %}
+
+
+
+{% block js %}
+
+<script>
+
+$(document).ready(function () {
+
+
+    // =====================================================
+    // DATATABLE
+    // =====================================================
+
+    $('#tableRiwayatPegawai').DataTable({
+
+        responsive: true,
+
+        autoWidth: false,
+
+        pageLength: 10,
+
+        lengthMenu: [
+            10,
+            25,
+            50,
+            100
+        ],
+
+        columnDefs: [
+
+            {
+                targets: [
+                    0
+                ],
+                orderable: false
+            }
+
+        ],
+
+        order: [
+            [
+                1,
+                'desc'
+            ]
+        ],
+
+        language: {
+
+            emptyTable:
+                'Belum ada riwayat pegawai',
+
+            search:
+                'Cari:',
+
+            lengthMenu:
+                'Tampilkan _MENU_ data',
+
+            info:
+                'Menampilkan _START_–_END_ dari _TOTAL_ data',
+
+            infoEmpty:
+                'Belum ada data',
+
+            zeroRecords:
+                'Riwayat pegawai tidak ditemukan',
+
+            paginate: {
+
+                previous:
+                    'Sebelumnya',
+
+                next:
+                    'Berikutnya'
+
+            }
+
+        }
+
+    });
+
+});
+
+</script>
+
+{% endblock %}

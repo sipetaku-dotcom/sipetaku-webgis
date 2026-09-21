@@ -1,0 +1,488 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Prioritas Bantuan
+{% endblock %}
+
+{% block content %}
+
+<div class="mb-4">
+
+    <h4 class="mb-1">
+        <i class="bi bi-bar-chart-line text-primary me-2"></i>
+        Prioritas Bantuan Sekolah
+    </h4>
+
+    <div class="text-muted">
+        Peringkat kebutuhan pembangunan berdasarkan data aset dan rombel
+    </div>
+
+</div>
+
+
+<div class="row g-3 mb-4">
+
+    <div class="col-xl col-md-6">
+
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+
+                <div class="text-muted small">
+                    Total Sekolah
+                </div>
+
+                <div class="fs-3 fw-bold text-primary">
+                    {{ jumlah_sekolah }}
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <div class="col-xl col-md-6">
+
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+
+                <div class="text-muted small">
+                    Sudah Dinilai
+                </div>
+
+                <div class="fs-3 fw-bold text-success">
+                    {{ jumlah_sudah_dinilai }}
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <div class="col-xl col-md-6">
+
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+
+                <div class="text-muted small">
+                    Sangat Mendesak
+                </div>
+
+                <div class="fs-3 fw-bold text-danger">
+                    {{ jumlah_sangat_mendesak }}
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <div class="col-xl col-md-6">
+
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+
+                <div class="text-muted small">
+                    Mendesak
+                </div>
+
+                <div class="fs-3 fw-bold text-warning">
+                    {{ jumlah_mendesak }}
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <div class="col-xl col-md-6">
+
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+
+                <div class="text-muted small">
+                    Legalitas Belum Aman
+                </div>
+
+                <div class="fs-3 fw-bold text-warning">
+                    {{ jumlah_legalitas_belum_aman }}
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="card border-0 shadow-sm mb-4">
+
+    <div class="card-header bg-body">
+
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+            <h5 class="mb-0">
+                <i class="bi bi-trophy text-primary me-2"></i>
+                Peringkat Sekolah
+            </h5>
+
+            <span class="badge bg-success">
+                {{ jumlah_sudah_dinilai }} sekolah dinilai
+            </span>
+
+        </div>
+
+    </div>
+
+    <div class="card-body">
+
+        <div class="table-responsive">
+
+            <table
+                id="tablePrioritas"
+                class="table table-bordered table-striped align-middle w-100"
+            >
+
+                <thead>
+
+                    <tr>
+                        <th>Peringkat</th>
+                        <th>Sekolah</th>
+                        <th>Kecamatan</th>
+                        <th>Jenjang</th>
+                        <th>Skor Sarana</th>
+                        <th>Skor Kapasitas</th>
+                        <th>Skor Prioritas</th>
+                        <th>Status</th>
+                        <th>Legalitas</th>
+                        <th>Detail</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for data in hasil_final %}
+
+                        <tr>
+
+                            <td class="text-center">
+
+                                {% if forloop.counter == 1 %}
+
+                                    <span class="badge bg-danger fs-6">
+                                        1
+                                    </span>
+
+                                {% elif forloop.counter == 2 %}
+
+                                    <span class="badge bg-warning text-dark fs-6">
+                                        2
+                                    </span>
+
+                                {% elif forloop.counter == 3 %}
+
+                                    <span class="badge bg-info fs-6">
+                                        3
+                                    </span>
+
+                                {% else %}
+
+                                    {{ forloop.counter }}
+
+                                {% endif %}
+
+                            </td>
+
+                            <td>
+
+                                <div class="fw-bold">
+                                    {{ data.sekolah.nama }}
+                                </div>
+
+                                <small class="text-muted">
+                                    NPSN {{ data.sekolah.npsn }}
+                                </small>
+
+                            </td>
+
+                            <td>
+                                {{ data.sekolah.kecamatan }}
+                            </td>
+
+                            <td>
+                                {{ data.sekolah.kategori.nama }}
+                            </td>
+
+                            <td class="text-center">
+                                {{ data.penilaian.skor_aset }}
+                            </td>
+
+                            <td class="text-center">
+                                {{ data.penilaian.skor_kapasitas }}
+                            </td>
+
+                            <td class="text-center fw-bold text-danger">
+                                {{ data.penilaian.skor_prioritas }}
+                            </td>
+
+                            <td>
+
+                                <span
+                                    class="badge bg-{{ data.penilaian.status.warna }}"
+                                >
+
+                                    <i
+                                        class="bi {{ data.penilaian.status.ikon }} me-1"
+                                    ></i>
+
+                                    {{ data.penilaian.status.nama }}
+
+                                </span>
+
+                            </td>
+
+                            <td>
+
+                                {% if data.penilaian.legalitas_aman %}
+
+                                    <span class="badge bg-success">
+                                        Ada
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="badge bg-warning text-dark">
+                                        Belum Aman
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+                            <td>
+
+                                <a
+                                    href="{% url 'detail_prioritas_sekolah' data.sekolah.id %}"
+                                    class="btn btn-outline-primary btn-sm"
+                                >
+                                    <i class="bi bi-eye"></i>
+                                    Lihat
+                                </a>
+
+                            </td>
+
+                        </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="card border-0 shadow-sm">
+
+    <div class="card-header bg-body">
+
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+            <h5 class="mb-0">
+                <i class="bi bi-hourglass-split text-warning me-2"></i>
+                Pendataan Belum Lengkap
+            </h5>
+
+            <span class="badge bg-warning text-dark">
+                {{ jumlah_belum_lengkap }} sekolah
+            </span>
+
+        </div>
+
+    </div>
+
+    <div class="card-body">
+
+        <div class="table-responsive">
+
+            <table
+                id="tableBelumLengkap"
+                class="table table-bordered table-striped align-middle w-100"
+            >
+
+                <thead>
+
+                    <tr>
+                        <th>No</th>
+                        <th>Sekolah</th>
+                        <th>Kecamatan</th>
+                        <th>Jenjang</th>
+                        <th>Progres Aset</th>
+                        <th>Legalitas</th>
+                        <th>Catatan</th>
+                        <th>Detail</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for data in hasil_belum_lengkap %}
+
+                        <tr>
+
+                            <td>
+                                {{ forloop.counter }}
+                            </td>
+
+                            <td>
+
+                                <div class="fw-bold">
+                                    {{ data.sekolah.nama }}
+                                </div>
+
+                                <small class="text-muted">
+                                    NPSN {{ data.sekolah.npsn }}
+                                </small>
+
+                            </td>
+
+                            <td>
+                                {{ data.sekolah.kecamatan }}
+                            </td>
+
+                            <td>
+                                {{ data.sekolah.kategori.nama }}
+                            </td>
+
+                            <td style="min-width: 160px;">
+
+                                <div class="d-flex justify-content-between mb-1">
+
+                                    <small>
+                                        {{ data.penilaian.jumlah_terisi }}
+                                        /
+                                        {{ data.penilaian.jumlah_master }}
+                                    </small>
+
+                                    <small class="fw-bold">
+                                        {{ data.penilaian.progres }}%
+                                    </small>
+
+                                </div>
+
+                                <div
+                                    class="progress"
+                                    style="height: 7px;"
+                                >
+
+                                    <div
+                                        class="progress-bar"
+                                        style="width: {{ data.penilaian.progres }}%;"
+                                    ></div>
+
+                                </div>
+
+                            </td>
+
+                            <td>
+
+                                {% if data.penilaian.legalitas_aman %}
+
+                                    <span class="badge bg-success">
+                                        Ada
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="badge bg-warning text-dark">
+                                        Belum Aman
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+                            <td>
+
+                                {{ data.penilaian.alasan.0 }}
+
+                            </td>
+
+                            <td>
+
+                                <a
+                                    href="{% url 'detail_prioritas_sekolah' data.sekolah.id %}"
+                                    class="btn btn-outline-primary btn-sm"
+                                >
+                                    <i class="bi bi-eye"></i>
+                                    Lihat
+                                </a>
+
+                            </td>
+
+                        </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+{% block js %}
+
+<script>
+
+$(document).ready(function () {
+
+    const pengaturanBahasa = {
+        emptyTable: 'Belum ada sekolah yang selesai dinilai',
+        search: 'Cari:',
+        lengthMenu: 'Tampilkan _MENU_ data',
+        info: 'Menampilkan _START_–_END_ dari _TOTAL_ data',
+        infoEmpty: 'Belum ada data',
+        zeroRecords: 'Data tidak ditemukan',
+        paginate: {
+            previous: 'Sebelumnya',
+            next: 'Berikutnya'
+        }
+    };
+
+    $('#tablePrioritas').DataTable({
+        responsive: true,
+        autoWidth: false,
+        pageLength: 10,
+        order: [],
+        language: pengaturanBahasa
+    });
+
+    $('#tableBelumLengkap').DataTable({
+        responsive: true,
+        autoWidth: false,
+        pageLength: 10,
+        order: [],
+        language: {
+            ...pengaturanBahasa,
+            emptyTable: 'Semua sekolah telah melengkapi pendataan'
+        }
+    });
+
+});
+
+</script>
+
+{% endblock %}

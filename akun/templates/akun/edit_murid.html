@@ -2,93 +2,513 @@
 
 {% block title %}{% endblock %}
 
+
 {% block content %}
 
-<div class="card shadow-sm border-0">
+<div class="container-fluid">
 
-    <div class="card-header">
 
-        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
 
-            <h5 class="mb-0">
-                <i class="bi bi-pencil-square text-primary me-2"></i>
-                Edit Murid
-            </h5>
+    <div class="card shadow-sm border-0 mb-4">
 
-            <a
-                href="/data-murid/"
-                class="btn btn-secondary btn-sm ms-auto"
-            >
-                <i class="bi bi-arrow-left me-1"></i>
-                Kembali
-            </a>
+        <div class="card-header bg-body border-0">
+
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+                <div>
+
+                    <h5 class="mb-1">
+
+                        <i class="bi bi-pencil-square text-primary me-2"></i>
+
+                        Edit Murid
+
+                        {% if tahun_ajaran %}
+
+                            <span class="badge bg-success ms-2">
+
+                                {{ tahun_ajaran.nama }}
+
+                            </span>
+
+                        {% endif %}
+
+                    </h5>
+
+
+                    <small class="text-muted">
+
+                        {{ murid.nama }}
+
+                        {% if sekolah %}
+
+                            · {{ sekolah.nama }}
+
+                        {% endif %}
+
+                    </small>
+
+                </div>
+
+
+                <a
+                    href="{% url 'data_murid' %}"
+                    class="btn btn-outline-secondary btn-sm"
+                >
+
+                    <i class="bi bi-arrow-left me-1"></i>
+
+                    Kembali ke Data Murid
+
+                </a>
+
+            </div>
 
         </div>
 
     </div>
 
-    <div class="card-body">
 
-        <form method="POST">
 
-            {% csrf_token %}
+    <!-- =====================================================
+         INFORMASI AKADEMIK
+    ====================================================== -->
 
-            <div class="row">
+    <div class="card border-0 shadow-sm mb-4">
 
-                {% for field in form %}
+        <div class="card-body">
 
-                <div class="col-md-6 mb-3">
+            <div class="row g-3 align-items-center">
 
-                    <label class="form-label fw-semibold">
-                        {{ field.label }}
-                    </label>
 
-                    {{ field }}
+                <!-- =========================================
+                     MURID
+                ========================================== -->
 
-                    {% if field.errors %}
+                <div class="col-md-4">
 
-                    <div class="alert alert-danger py-2 mt-2 mb-0">
+                    <div class="text-muted small">
 
-                        {% for error in field.errors %}
-                        <div>
-                            <i class="bi bi-exclamation-triangle me-1"></i>
-                            {{ error }}
-                        </div>
-                        {% endfor %}
+                        Murid
 
                     </div>
 
-                    {% endif %}
+
+                    <div class="fw-semibold">
+
+                        <i class="bi bi-person text-primary me-1"></i>
+
+                        {{ murid.nama }}
+
+                    </div>
 
                 </div>
 
-                {% endfor %}
+
+
+                <!-- =========================================
+                     SEKOLAH
+                ========================================== -->
+
+                <div class="col-md-5">
+
+                    <div class="text-muted small">
+
+                        Sekolah
+
+                    </div>
+
+
+                    <div class="fw-semibold">
+
+                        <i class="bi bi-building text-primary me-1"></i>
+
+                        {% if sekolah %}
+
+                            {{ sekolah.nama }}
+
+                        {% else %}
+
+                            -
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =========================================
+                     TAHUN AJARAN
+                ========================================== -->
+
+                <div class="col-md-3">
+
+                    <div class="text-muted small">
+
+                        Tahun Ajaran
+
+                    </div>
+
+
+                    <div class="fw-semibold">
+
+                        <i class="bi bi-calendar-check text-success me-1"></i>
+
+                        {{ tahun_ajaran.nama }}
+
+                    </div>
+
+                </div>
 
             </div>
 
-            <div class="d-flex justify-content-end gap-2 mt-3">
 
-                <a
-                    href="/data-murid/"
-                    class="btn btn-secondary"
-                >
-                    Batal
-                </a>
+            <div class="border-top mt-3 pt-3">
 
-                <button
-                    type="submit"
-                    class="btn btn-primary"
-                >
-                    <i class="bi bi-save me-2"></i>
-                    Simpan Perubahan
-                </button>
+                <small class="text-muted">
+
+                    <i class="bi bi-info-circle text-primary me-1"></i>
+
+                    Halaman ini digunakan untuk memperbarui
+                    identitas dan data akademik aktif murid
+                    pada Tahun Ajaran
+
+                    <strong>
+                        {{ tahun_ajaran.nama }}
+                    </strong>.
+
+                </small>
 
             </div>
 
-        </form>
+        </div>
 
     </div>
 
+
+
+    <!-- =====================================================
+         FORM EDIT MURID
+    ====================================================== -->
+
+    <form
+        method="POST"
+        id="formEditMurid"
+    >
+
+        {% csrf_token %}
+
+
+        <div class="card shadow-sm border-0">
+
+            <div class="card-header bg-body">
+
+                <div>
+
+                    <h5 class="mb-1">
+
+                        <i class="bi bi-person-vcard text-primary me-2"></i>
+
+                        Data Murid
+
+                    </h5>
+
+
+                    <small class="text-muted">
+
+                        Perbarui identitas dan informasi
+                        akademik murid
+
+                    </small>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="card-body">
+
+
+                <!-- =================================================
+                     NON FIELD ERROR
+                ================================================== -->
+
+                {% if form.non_field_errors %}
+
+                    <div class="alert alert-danger mb-4">
+
+                        <div class="d-flex gap-3">
+
+                            <div>
+
+                                <i class="bi bi-exclamation-triangle-fill fs-4"></i>
+
+                            </div>
+
+
+                            <div>
+
+                                <div class="fw-bold mb-1">
+
+                                    Data belum dapat disimpan
+
+                                </div>
+
+
+                                {% for error in form.non_field_errors %}
+
+                                    <div>
+
+                                        {{ error }}
+
+                                    </div>
+
+                                {% endfor %}
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                {% endif %}
+
+
+
+                <!-- =================================================
+                     FIELD FORM
+                ================================================== -->
+
+                <div class="row g-3">
+
+                    {% for field in form %}
+
+                        <div class="col-md-6">
+
+
+                            <!-- =====================================
+                                 LABEL
+                            ====================================== -->
+
+                            <label
+                                for="{{ field.id_for_label }}"
+                                class="form-label fw-semibold"
+                            >
+
+                                {{ field.label }}
+
+
+                                {% if field.field.required %}
+
+                                    <span class="text-danger">
+
+                                        *
+
+                                    </span>
+
+                                {% endif %}
+
+                            </label>
+
+
+
+                            <!-- =====================================
+                                 FIELD
+                            ====================================== -->
+
+                            {{ field }}
+
+
+
+                            <!-- =====================================
+                                 HELP TEXT
+                            ====================================== -->
+
+                            {% if field.help_text %}
+
+                                <div class="form-text">
+
+                                    {{ field.help_text|safe }}
+
+                                </div>
+
+                            {% endif %}
+
+
+
+                            <!-- =====================================
+                                 ERROR
+                            ====================================== -->
+
+                            {% for error in field.errors %}
+
+                                <div class="text-danger small mt-1">
+
+                                    <i class="bi bi-exclamation-circle me-1"></i>
+
+                                    {{ error }}
+
+                                </div>
+
+                            {% endfor %}
+
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =====================================================
+             TOMBOL AKSI
+        ====================================================== -->
+
+        <div class="card border-0 shadow-sm mt-4">
+
+            <div class="card-body">
+
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+
+                    <!-- =========================================
+                         INFORMASI
+                    ========================================== -->
+
+                    <small class="text-muted">
+
+                        <span class="text-danger">
+                            *
+                        </span>
+
+                        Wajib diisi
+
+                    </small>
+
+
+
+                    <!-- =========================================
+                         TOMBOL
+                    ========================================== -->
+
+                    <div class="d-flex gap-2">
+
+                        <a
+                            href="{% url 'data_murid' %}"
+                            class="btn btn-outline-secondary"
+                        >
+
+                            <i class="bi bi-x-circle me-1"></i>
+
+                            Batal
+
+                        </a>
+
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary"
+                            id="btnSimpanMurid"
+                        >
+
+                            <i class="bi bi-save me-1"></i>
+
+                            Simpan Perubahan
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </form>
+
+
 </div>
+
+{% endblock %}
+
+
+
+{% block js %}
+
+<script>
+
+document.addEventListener(
+    'DOMContentLoaded',
+    function () {
+
+
+        // =====================================================
+        // FORM EDIT MURID
+        // =====================================================
+
+        const form = document.getElementById(
+            'formEditMurid'
+        );
+
+
+        // =====================================================
+        // TOMBOL SIMPAN
+        // =====================================================
+
+        const tombol = document.getElementById(
+            'btnSimpanMurid'
+        );
+
+
+        // =====================================================
+        // CEGAH DOUBLE SUBMIT
+        // =====================================================
+
+        if (
+            form
+            &&
+            tombol
+        ) {
+
+            form.addEventListener(
+                'submit',
+                function () {
+
+                    tombol.disabled = true;
+
+
+                    tombol.innerHTML = (
+                        '<span '
+                        + 'class="spinner-border '
+                        + 'spinner-border-sm me-2" '
+                        + 'role="status">'
+                        + '</span>'
+                        + 'Menyimpan...'
+                    );
+
+                }
+            );
+
+        }
+
+
+    }
+);
+
+</script>
 
 {% endblock %}

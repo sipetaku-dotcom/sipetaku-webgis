@@ -2,231 +2,1198 @@
 
 {% block title %}{% endblock %}
 
+
 {% block content %}
 
-<div class="card shadow-sm border-0">
+<div class="container-fluid">
 
-    <div class="card-header">
 
-        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
 
-            <div>
+    <div class="card shadow-sm border-0 mb-4">
 
-                <h5 class="mb-0">
-                    <i class="bi bi-people text-primary me-2"></i>
-                    Data Murid
+        <div class="card-header bg-body border-0">
 
-                    <span class="badge bg-primary ms-2">
-                        {{ murid|length }} Murid
-                    </span>
-                </h5>
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
 
-                <small class="text-muted">
-                    {{ sekolah.nama }}
-                </small>
+                <div>
+
+                    <h5 class="mb-1">
+
+                        <i class="bi bi-people text-primary me-2"></i>
+
+                        Data Murid
+
+                    </h5>
+
+
+                    <small class="text-muted">
+
+                        {{ sekolah.nama }}
+
+                        {% if tahun_ajaran %}
+                            · Tahun Ajaran {{ tahun_ajaran.nama }}
+                        {% endif %}
+
+                    </small>
+
+                </div>
+
+
+                <div class="d-flex gap-2 flex-wrap">
+
+                    <a
+                        href="{% url 'import_murid_excel' %}"
+                        class="btn btn-success btn-sm"
+                    >
+                        <i class="bi bi-file-earmark-excel me-1"></i>
+                        Import Excel
+                    </a>
+
+
+                    <a
+                        href="{% url 'tambah_murid' %}"
+                        class="btn btn-primary btn-sm"
+                    >
+                        <i class="bi bi-person-plus me-1"></i>
+                        Tambah Murid
+                    </a>
+
+                </div>
 
             </div>
-
-            <a
-                href="/tambah-murid/"
-                class="btn btn-primary btn-sm ms-auto"
-            >
-                <i class="bi bi-person-plus me-1"></i>
-                Tambah Murid
-            </a>
 
         </div>
 
     </div>
 
-    <div class="card-body">
 
-        <div class="table-responsive">
 
-            <table
-                id="tableMurid"
-                class="table table-bordered table-striped align-middle w-100"
+    <!-- =====================================================
+         FILTER
+    ====================================================== -->
+
+    <div class="card border-0 shadow-sm mb-4">
+
+        <div class="card-body">
+
+            <form
+                method="GET"
+                class="row g-3 align-items-end"
             >
 
-                <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Murid</th>
-                        <th>NISN</th>
-                        <th>Kelas</th>
-                        <th>Jenis Kelamin</th>
-                        <th>Prestasi</th>
-                        <th>Aksi</th>
-                    </tr>
-                </thead>
 
-                <tbody>
+                <!-- TAHUN AJARAN -->
 
-                    {% for m in murid %}
-                    <tr>
+                <div class="col-md-5">
 
-                        <td>{{ forloop.counter }}</td>
+                    <label class="form-label fw-semibold">
+                        Tahun Ajaran
+                    </label>
 
-                        <td>
+                    <select
+                        name="tahun"
+                        class="form-select"
+                    >
 
-                            <div class="d-flex align-items-center gap-3">
+                        {% for tahun in daftar_tahun_ajaran %}
 
-                                <div
-                                    class="rounded-circle bg-primary-subtle d-flex align-items-center justify-content-center flex-shrink-0"
-                                    style="width:50px; height:50px;"
+                            <option
+                                value="{{ tahun.id }}"
+                                {% if tahun.id == tahun_ajaran.id %}
+                                    selected
+                                {% endif %}
+                            >
+
+                                {{ tahun.nama }}
+
+                                {% if tahun.aktif %}
+                                    (Aktif)
+                                {% endif %}
+
+                            </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+
+                <!-- ROMBEL -->
+
+                <div class="col-md-5">
+
+                    <label class="form-label fw-semibold">
+                        Kelas / Rombel
+                    </label>
+
+                    <select
+                        name="rombel"
+                        class="form-select"
+                    >
+
+                        <option value="">
+                            Semua Kelas
+                        </option>
+
+                        {% for rombel in daftar_rombel %}
+
+                            <option
+                                value="{{ rombel.id }}"
+                                {% if rombel_terpilih == rombel.id|stringformat:"s" %}
+                                    selected
+                                {% endif %}
+                            >
+                                {{ rombel.nama_kelas }}
+                            </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+
+                <!-- TOMBOL FILTER -->
+
+                <div class="col-md-2">
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary w-100"
+                    >
+                        <i class="bi bi-funnel me-1"></i>
+                        Filter
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         RINGKASAN
+    ====================================================== -->
+
+    <div class="row g-3 mb-4">
+
+
+        <!-- SISWA AKTIF -->
+
+        <div class="col-6 col-xl">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-body">
+
+                    <div class="text-muted small">
+                        Siswa Aktif
+                    </div>
+
+                    <div class="fs-3 fw-bold text-primary">
+                        {{ total_siswa }}
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- LAKI-LAKI -->
+
+        <div class="col-6 col-xl">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-body">
+
+                    <div class="text-muted small">
+                        Laki-laki
+                    </div>
+
+                    <div class="fs-3 fw-bold text-primary">
+                        {{ total_laki_laki }}
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- PEREMPUAN -->
+
+        <div class="col-6 col-xl">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-body">
+
+                    <div class="text-muted small">
+                        Perempuan
+                    </div>
+
+                    <div class="fs-3 fw-bold text-danger">
+                        {{ total_perempuan }}
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- SISWA BARU -->
+
+        <div class="col-6 col-xl">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-body">
+
+                    <div class="text-muted small">
+                        Siswa Baru
+                    </div>
+
+                    <div class="fs-3 fw-bold text-success">
+                        {{ total_siswa_baru }}
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- PINDAHAN -->
+
+        <div class="col-6 col-xl">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-body">
+
+                    <div class="text-muted small">
+                        Pindahan
+                    </div>
+
+                    <div class="fs-3 fw-bold text-warning">
+                        {{ total_pindahan }}
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         TABEL MURID
+    ====================================================== -->
+
+    <div class="card shadow-sm border-0">
+
+        <div class="card-header bg-body">
+
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+                <div>
+
+                    <h5 class="mb-1">
+
+                        <i class="bi bi-table text-primary me-2"></i>
+
+                        Daftar Murid
+
+                    </h5>
+
+                    <small class="text-muted">
+                        Data akademik berdasarkan Tahun Ajaran yang dipilih
+                    </small>
+
+                </div>
+
+
+                {% if tahun_ajaran.aktif %}
+
+                    <span class="badge bg-success px-3 py-2">
+
+                        <i class="bi bi-check-circle me-1"></i>
+
+                        Tahun Ajaran Aktif
+
+                    </span>
+
+                {% else %}
+
+                    <span class="badge bg-secondary px-3 py-2">
+
+                        <i class="bi bi-clock-history me-1"></i>
+
+                        Riwayat Tahun Ajaran
+
+                    </span>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+
+
+        <div class="card-body">
+
+            <div class="table-responsive">
+
+                <table
+                    id="tableMurid"
+                    class="table table-bordered table-striped table-hover align-middle w-100"
+                >
+
+                    <thead>
+
+                        <tr>
+
+                            <th class="text-center">
+                                No
+                            </th>
+
+                            <th>
+                                Murid
+                            </th>
+
+                            <th>
+                                NISN
+                            </th>
+
+                            <th>
+                                Kelas
+                            </th>
+
+                            <th>
+                                Jenis Kelamin
+                            </th>
+
+                            <th>
+                                Status Masuk
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th class="text-center">
+                                Aksi
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+
+                    <tbody>
+
+                        {% for data in riwayat_murid %}
+
+                            <tr>
+
+
+                                <!-- =====================================
+                                     NO
+                                ====================================== -->
+
+                                <td class="text-center">
+
+                                    {{ forloop.counter }}
+
+                                </td>
+
+
+
+                                <!-- =====================================
+                                     MURID
+                                ====================================== -->
+
+                                <td>
+
+                                    <div class="d-flex align-items-center gap-3">
+
+                                        <div
+                                            class="rounded-circle bg-primary-subtle d-flex align-items-center justify-content-center flex-shrink-0"
+                                            style="
+                                                width: 46px;
+                                                height: 46px;
+                                            "
+                                        >
+
+                                            {% if data.murid.jenis_kelamin == 'L' %}
+
+                                                <i class="bi bi-person-fill text-primary fs-5"></i>
+
+                                            {% elif data.murid.jenis_kelamin == 'P' %}
+
+                                                <i class="bi bi-person-fill text-danger fs-5"></i>
+
+                                            {% else %}
+
+                                                <i class="bi bi-person-fill text-secondary fs-5"></i>
+
+                                            {% endif %}
+
+                                        </div>
+
+
+                                        <div>
+
+                                            <div class="fw-bold">
+                                                {{ data.murid.nama }}
+                                            </div>
+
+                                            <small class="text-muted">
+
+                                                {% if data.murid.nik %}
+
+                                                    NIK {{ data.murid.nik }}
+
+                                                {% else %}
+
+                                                    NIK -
+
+                                                {% endif %}
+
+                                            </small>
+
+                                        </div>
+
+                                    </div>
+
+                                </td>
+
+
+
+                                <!-- =====================================
+                                     NISN
+                                ====================================== -->
+
+                                <td>
+
+                                    {% if data.murid.nisn %}
+
+                                        <span class="badge bg-secondary">
+                                            {{ data.murid.nisn }}
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="text-muted">
+                                            -
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+
+                                <!-- =====================================
+                                     KELAS
+                                ====================================== -->
+
+                                <td>
+
+                                    <span class="fw-semibold">
+                                        {{ data.rombel.nama_kelas }}
+                                    </span>
+
+                                </td>
+
+
+
+                                <!-- =====================================
+                                     JENIS KELAMIN
+                                ====================================== -->
+
+                                <td>
+
+                                    {% if data.murid.jenis_kelamin == 'L' %}
+
+                                        <span class="badge bg-primary">
+
+                                            <i class="bi bi-gender-male me-1"></i>
+
+                                            Laki-laki
+
+                                        </span>
+
+                                    {% elif data.murid.jenis_kelamin == 'P' %}
+
+                                        <span class="badge bg-danger">
+
+                                            <i class="bi bi-gender-female me-1"></i>
+
+                                            Perempuan
+
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="badge bg-secondary">
+                                            -
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+
+                                <!-- =====================================
+                                     STATUS MASUK
+                                ====================================== -->
+
+                                <td>
+
+                                    {% if data.status_masuk == 'SISWA_BARU' %}
+
+                                        <span class="badge bg-success">
+                                            Siswa Baru
+                                        </span>
+
+                                    {% elif data.status_masuk == 'PINDAHAN' %}
+
+                                        <span class="badge bg-warning text-dark">
+                                            Pindahan
+                                        </span>
+
+                                    {% elif data.status_masuk == 'NAIK_KELAS' %}
+
+                                        <span class="badge bg-info text-dark">
+                                            Naik Kelas
+                                        </span>
+
+                                    {% elif data.status_masuk == 'TINGGAL_KELAS' %}
+
+                                        <span class="badge bg-danger">
+                                            Tinggal Kelas
+                                        </span>
+
+                                    {% elif data.status_masuk == 'LANJUT' %}
+
+                                        <span class="badge bg-primary">
+                                            Lanjutan
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="badge bg-secondary">
+                                            {{ data.get_status_masuk_display }}
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+
+                                <!-- =====================================
+                                     STATUS AKHIR
+                                ====================================== -->
+
+                                <td>
+
+                                    {% if data.status_akhir == 'AKTIF' %}
+
+                                        <span class="badge bg-success">
+
+                                            <i class="bi bi-check-circle me-1"></i>
+
+                                            Aktif
+
+                                        </span>
+
+
+                                    {% elif data.status_akhir == 'LULUS' %}
+
+                                        <span class="badge bg-primary">
+
+                                            <i class="bi bi-mortarboard me-1"></i>
+
+                                            Lulus
+
+                                        </span>
+
+
+                                    {% elif data.status_akhir == 'NAIK_KELAS' %}
+
+                                        <span class="badge bg-info text-dark">
+
+                                            <i class="bi bi-arrow-up-circle me-1"></i>
+
+                                            Naik Kelas
+
+                                        </span>
+
+
+                                    {% elif data.status_akhir == 'TINGGAL_KELAS' %}
+
+                                        <span class="badge bg-warning text-dark">
+
+                                            <i class="bi bi-arrow-repeat me-1"></i>
+
+                                            Tinggal Kelas
+
+                                        </span>
+
+
+                                    {% elif data.status_akhir == 'PINDAH' %}
+
+                                        <span class="badge bg-secondary">
+
+                                            <i class="bi bi-box-arrow-right me-1"></i>
+
+                                            Pindah
+
+                                        </span>
+
+
+                                    {% elif data.status_akhir == 'KELUAR' %}
+
+                                        <span class="badge bg-danger">
+
+                                            <i class="bi bi-person-x me-1"></i>
+
+                                            Keluar
+
+                                        </span>
+
+
+                                    {% else %}
+
+                                        <span class="badge bg-secondary">
+
+                                            {{ data.get_status_akhir_display }}
+
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+
+                                <!-- =====================================
+                                     AKSI
+                                ====================================== -->
+
+                                <td class="text-nowrap text-center">
+
+                                    <div class="d-inline-flex gap-1">
+
+
+                                        <!-- =====================================
+                                            RIWAYAT
+                                        ====================================== -->
+
+                                        <a
+                                            href="{% url 'riwayat_murid' data.murid.id %}"
+                                            class="btn btn-info btn-sm"
+                                            title="Riwayat Murid"
+                                        >
+
+                                            <i class="bi bi-clock-history"></i>
+
+                                        </a>
+
+
+
+                                        <!-- =====================================
+                                            AKSI HANYA TAHUN AJARAN AKTIF
+                                        ====================================== -->
+
+                                        {% if tahun_ajaran.aktif %}
+
+                                            {% if data.status_akhir == 'AKTIF' %}
+
+
+                                                <!-- EDIT -->
+
+                                                <a
+                                                    href="{% url 'edit_murid' data.murid.id %}"
+                                                    class="btn btn-warning btn-sm"
+                                                    title="Edit Murid"
+                                                >
+
+                                                    <i class="bi bi-pencil-square"></i>
+
+                                                </a>
+
+
+
+                                                <!-- PINDAH / KELUAR -->
+
+                                                <button
+                                                    type="button"
+                                                    class="btn btn-danger btn-sm"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#modalStatus{{ data.id }}"
+                                                    title="Pindah / Keluar"
+                                                >
+
+                                                    <i class="bi bi-arrow-left-right"></i>
+
+                                                </button>
+
+
+                                            {% elif data.status_akhir == 'PINDAH' or data.status_akhir == 'KELUAR' %}
+
+
+                                                <!-- PULIHKAN -->
+
+                                                <form
+                                                    method="POST"
+                                                    action="{% url 'pulihkan_status_murid' data.murid.id %}"
+                                                    class="d-inline form-pulihkan-status"
+                                                    data-nama="{{ data.murid.nama }}"
+                                                >
+
+                                                    {% csrf_token %}
+
+                                                    <button
+                                                        type="submit"
+                                                        class="btn btn-success btn-sm"
+                                                        title="Pulihkan Status"
+                                                    >
+
+                                                        <i class="bi bi-arrow-counterclockwise"></i>
+
+                                                    </button>
+
+                                                </form>
+
+                                            {% endif %}
+
+                                        {% endif %}
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         MODAL PINDAH / KELUAR
+    ====================================================== -->
+
+    {% for data in riwayat_murid %}
+
+        {% if tahun_ajaran.aktif and data.status_akhir == 'AKTIF' %}
+
+            <div
+                class="modal fade"
+                id="modalStatus{{ data.id }}"
+                tabindex="-1"
+                aria-labelledby="modalStatusLabel{{ data.id }}"
+                aria-hidden="true"
+            >
+
+                <div class="modal-dialog modal-dialog-centered">
+
+                    <div class="modal-content">
+
+
+                        <form
+                            method="POST"
+                            action="{% url 'ubah_status_murid' data.murid.id %}"
+                        >
+
+                            {% csrf_token %}
+
+
+
+                            <!-- =====================================
+                                 HEADER MODAL
+                            ====================================== -->
+
+                            <div class="modal-header">
+
+                                <h5
+                                    class="modal-title"
+                                    id="modalStatusLabel{{ data.id }}"
                                 >
 
-                                    {% if m.jenis_kelamin == 'L' %}
-                                        <i class="bi bi-person-fill text-primary"></i>
-                                    {% elif m.jenis_kelamin == 'P' %}
-                                        <i class="bi bi-person-fill text-danger"></i>
-                                    {% else %}
-                                        <i class="bi bi-person-fill text-secondary"></i>
-                                    {% endif %}
+                                    <i class="bi bi-person-x text-warning me-2"></i>
+
+                                    Pindah / Keluar Murid
+
+                                </h5>
+
+
+                                <button
+                                    type="button"
+                                    class="btn-close"
+                                    data-bs-dismiss="modal"
+                                    aria-label="Close"
+                                ></button>
+
+                            </div>
+
+
+
+                            <!-- =====================================
+                                 BODY MODAL
+                            ====================================== -->
+
+                            <div class="modal-body">
+
+
+                                <!-- IDENTITAS -->
+
+                                <div class="border rounded-3 p-3 mb-3">
+
+                                    <div class="mb-2">
+
+                                        <small class="text-muted">
+                                            Nama Murid
+                                        </small>
+
+                                        <div class="fw-bold">
+                                            {{ data.murid.nama }}
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="row g-2">
+
+                                        <div class="col-6">
+
+                                            <small class="text-muted">
+                                                Kelas
+                                            </small>
+
+                                            <div class="fw-semibold">
+                                                {{ data.rombel.nama_kelas }}
+                                            </div>
+
+                                        </div>
+
+
+                                        <div class="col-6">
+
+                                            <small class="text-muted">
+                                                Tahun Ajaran
+                                            </small>
+
+                                            <div class="fw-semibold">
+                                                {{ data.tahun_ajaran.nama }}
+                                            </div>
+
+                                        </div>
+
+                                    </div>
 
                                 </div>
 
-                                <div>
 
-                                    <div class="fw-bold">
-                                        {{ m.nama }}
+
+                                <!-- STATUS -->
+
+                                <div class="mb-3">
+
+                                    <label class="form-label fw-semibold">
+
+                                        Status Murid
+
+                                        <span class="text-danger">
+                                            *
+                                        </span>
+
+                                    </label>
+
+                                    <select
+                                        name="aksi"
+                                        class="form-select"
+                                        required
+                                    >
+
+                                        <option value="">
+                                            -- Pilih Status --
+                                        </option>
+
+                                        <option value="PINDAH">
+                                            Pindah Sekolah
+                                        </option>
+
+                                        <option value="KELUAR">
+                                            Keluar / Berhenti Sekolah
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+
+
+                                <!-- KETERANGAN -->
+
+                                <div class="mb-3">
+
+                                    <label class="form-label fw-semibold">
+                                        Keterangan
+                                    </label>
+
+                                    <textarea
+                                        name="keterangan"
+                                        class="form-control"
+                                        rows="3"
+                                        placeholder="Contoh: Pindah mengikuti orang tua ke sekolah lain."
+                                    ></textarea>
+
+                                    <div class="form-text">
+
+                                        Keterangan bersifat opsional,
+                                        tetapi disarankan untuk diisi.
+
                                     </div>
 
-                                    <small class="text-muted">
-                                        {{ m.kelas }}
-                                    </small>
+                                </div>
+
+
+
+                                <!-- INFORMASI -->
+
+                                <div class="alert alert-warning mb-0">
+
+                                    <div class="d-flex gap-2">
+
+                                        <i class="bi bi-exclamation-triangle-fill"></i>
+
+                                        <small>
+
+                                            Data murid tidak akan dihapus.
+                                            Riwayat akademik tetap tersimpan,
+                                            tetapi murid tidak lagi dihitung
+                                            sebagai siswa aktif pada
+                                            Tahun Ajaran {{ data.tahun_ajaran.nama }}.
+
+                                        </small>
+
+                                    </div>
 
                                 </div>
 
                             </div>
 
-                        </td>
 
-                        <td>
-                            <span class="badge bg-secondary">
-                                {{ m.nisn }}
-                            </span>
-                        </td>
 
-                        <td>
-                            {{ m.kelas }}
-                        </td>
+                            <!-- =====================================
+                                 FOOTER MODAL
+                            ====================================== -->
 
-                        <td>
-                            {% if m.jenis_kelamin == 'L' %}
-                                <span class="badge bg-primary">
-                                    Laki-laki
-                                </span>
-                            {% elif m.jenis_kelamin == 'P' %}
-                                <span class="badge bg-danger">
-                                    Perempuan
-                                </span>
-                            {% else %}
-                                <span class="badge bg-secondary">
-                                    {{ m.jenis_kelamin }}
-                                </span>
-                            {% endif %}
-                        </td>
+                            <div class="modal-footer">
 
-                        <td>
+                                <button
+                                    type="button"
+                                    class="btn btn-outline-secondary"
+                                    data-bs-dismiss="modal"
+                                >
+                                    <i class="bi bi-x-circle me-1"></i>
 
-                            {% if m.prestasi %}
-                                <span class="badge bg-success">
-                                    Ada Prestasi
-                                </span>
-                            {% else %}
-                                <span class="badge bg-secondary">
-                                    Belum Ada
-                                </span>
-                            {% endif %}
+                                    Batal
+                                </button>
 
-                        </td>
 
-                        <td class="text-nowrap">
+                                <button
+                                    type="submit"
+                                    class="btn btn-warning"
+                                >
+                                    <i class="bi bi-check-circle me-1"></i>
 
-                            <a
-                                href="/edit-murid/{{ m.id }}/"
-                                class="btn btn-warning btn-sm"
-                            >
-                                <i class="bi bi-pencil-square"></i>
-                                Edit
-                            </a>
+                                    Simpan Status
+                                </button>
 
-                            <a
-                                href="/hapus-murid/{{ m.id }}/"
-                                class="btn btn-danger btn-sm tombol-hapus"
-                            >
-                                <i class="bi bi-trash"></i>
-                                Hapus
-                            </a>
+                            </div>
 
-                        </td>
+                        </form>
 
-                    </tr>
+                    </div>
 
-                    {% empty %}
+                </div>
 
-                    <tr>
-                        <td class="text-center">-</td>
-                        <td class="text-center">Belum ada data murid</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
+            </div>
 
-                    {% endfor %}
+        {% endif %}
 
-                </tbody>
+    {% endfor %}
 
-            </table>
-
-        </div>
-
-    </div>
 
 </div>
 
 {% endblock %}
 
+
+
 {% block js %}
 
 <script>
 
-    $(document).ready(function () {
+$(document).ready(function () {
 
-        $('#tableMurid').DataTable({
-            responsive: true,
-            autoWidth: false,
-            pageLength: 10,
-            lengthMenu: [10, 25, 50, 100]
-        });
+    // =====================================================
+    // DATATABLE
+    // =====================================================
 
-        $('.tombol-hapus').on('click', function(e) {
+    $('#tableMurid').DataTable({
+
+        responsive: true,
+
+        autoWidth: false,
+
+        pageLength: 10,
+
+        lengthMenu: [
+            10,
+            25,
+            50,
+            100
+        ],
+
+        columnDefs: [
+
+            {
+                targets: [
+                    0,
+                    7
+                ],
+                orderable: false
+            }
+
+        ],
+
+        language: {
+
+            emptyTable:
+                'Belum ada data murid',
+
+            search:
+                'Cari:',
+
+            lengthMenu:
+                'Tampilkan _MENU_ data',
+
+            info:
+                'Menampilkan _START_–_END_ dari _TOTAL_ data',
+
+            infoEmpty:
+                'Belum ada data',
+
+            zeroRecords:
+                'Data tidak ditemukan',
+
+            paginate: {
+
+                previous:
+                    'Sebelumnya',
+
+                next:
+                    'Berikutnya'
+
+            }
+
+        }
+
+    });
+
+    $('.form-pulihkan-status').on(
+        'submit',
+        function(e) {
 
             e.preventDefault();
 
-            var href = $(this).attr('href');
+            const form = this;
+
+            const nama = $(this).data(
+                'nama'
+            );
+
 
             Swal.fire({
-                title: 'Yakin hapus murid?',
-                text: 'Data yang sudah dihapus tidak bisa dikembalikan.',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Ya, hapus',
-                cancelButtonText: 'Batal'
+
+                title:
+                    'Pulihkan status murid?',
+
+                text:
+                    nama
+                    + ' akan dikembalikan '
+                    + 'menjadi siswa aktif.',
+
+                icon:
+                    'question',
+
+                showCancelButton:
+                    true,
+
+                confirmButtonText:
+                    'Ya, pulihkan',
+
+                cancelButtonText:
+                    'Batal'
+
             }).then((result) => {
 
-                if (result.isConfirmed) {
-                    window.location.href = href;
+                if (
+                    result.isConfirmed
+                ) {
+
+                    form.submit();
+
                 }
 
             });
 
-        });
+        }
+    );
 
-    });
+});
 
 </script>
 

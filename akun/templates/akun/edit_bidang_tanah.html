@@ -1,0 +1,572 @@
+{% extends 'base.html' %}
+
+{% block title %}{% endblock %}
+
+
+{% block content %}
+
+<div class="container-fluid">
+
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <div class="card shadow-sm border-0 mb-4">
+
+        <div class="card-header bg-body border-0">
+
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+                <div>
+
+                    <h5 class="mb-1">
+
+                        <i class="bi bi-pencil-square text-primary me-2"></i>
+
+                        Edit Bidang Tanah {{ bidang.nomor_bidang }}
+
+                    </h5>
+
+
+                    <small class="text-muted">
+
+                        {{ sekolah.nama }}
+
+                        · Perbarui informasi bidang tanah
+
+                    </small>
+
+                </div>
+
+
+                <a
+                    href="{% url 'detail_bidang_tanah' bidang.id %}"
+                    class="btn btn-outline-secondary btn-sm"
+                >
+
+                    <i class="bi bi-arrow-left me-1"></i>
+
+                    Kembali ke Detail Bidang
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         INFORMASI
+    ====================================================== -->
+
+    <div class="card border-0 shadow-sm mb-4">
+
+        <div class="card-body">
+
+            <div class="d-flex align-items-start gap-3">
+
+                <div
+                    class="rounded-circle bg-primary-subtle d-flex align-items-center justify-content-center flex-shrink-0"
+                    style="
+                        width: 46px;
+                        height: 46px;
+                    "
+                >
+
+                    <i class="bi bi-info-circle text-primary fs-5"></i>
+
+                </div>
+
+
+                <div>
+
+                    <div class="fw-semibold mb-1">
+
+                        Perbarui Data Bidang
+
+                    </div>
+
+
+                    <div class="small text-muted">
+
+                        Perubahan luas bidang akan otomatis
+                        memengaruhi total luas tanah sekolah.
+                        Dokumen legalitas yang terkait dengan
+                        bidang ini tetap tersimpan dan tidak
+                        berubah.
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         FORM
+    ====================================================== -->
+
+    <form
+        method="POST"
+        id="formEditBidangTanah"
+    >
+
+        {% csrf_token %}
+
+
+        <div class="card shadow-sm border-0">
+
+            <div class="card-header bg-body">
+
+                <div>
+
+                    <h5 class="mb-1">
+
+                        <i class="bi bi-map text-primary me-2"></i>
+
+                        Informasi Bidang Tanah
+
+                    </h5>
+
+
+                    <small class="text-muted">
+
+                        Sesuaikan luas dan status kepemilikan bidang
+
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <div class="card-body">
+
+
+                {% if form.non_field_errors %}
+
+                    <div class="alert alert-danger mb-4">
+
+                        <div class="fw-semibold mb-1">
+
+                            <i class="bi bi-exclamation-triangle-fill me-1"></i>
+
+                            Data belum dapat diperbarui
+
+                        </div>
+
+
+                        {% for error in form.non_field_errors %}
+
+                            <div class="small">
+
+                                {{ error }}
+
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                {% endif %}
+
+
+
+                <div class="row g-3">
+
+
+                    <!-- =====================================
+                         LUAS BIDANG
+                    ====================================== -->
+
+                    <div class="col-md-6">
+
+                        <label
+                            for="{{ form.luas_bidang_m2.id_for_label }}"
+                            class="form-label fw-semibold"
+                        >
+
+                            Luas Bidang (m²)
+
+                            <span class="text-danger">
+                                *
+                            </span>
+
+                        </label>
+
+
+                        {{ form.luas_bidang_m2 }}
+
+
+                        <div class="form-text">
+
+                            Gunakan luas fisik bidang tanah,
+                            bukan jumlah luas seluruh dokumen legalitas.
+
+                        </div>
+
+
+                        {% for error in form.luas_bidang_m2.errors %}
+
+                            <div class="text-danger small mt-1">
+
+                                <i class="bi bi-exclamation-circle me-1"></i>
+
+                                {{ error }}
+
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+
+
+                    <!-- =====================================
+                         STATUS KEPEMILIKAN
+                    ====================================== -->
+
+                    <div class="col-md-6">
+
+                        <label
+                            for="{{ form.status_kepemilikan.id_for_label }}"
+                            class="form-label fw-semibold"
+                        >
+
+                            Status Kepemilikan
+
+                            <span class="text-danger">
+                                *
+                            </span>
+
+                        </label>
+
+
+                        {{ form.status_kepemilikan }}
+
+
+                        {% for error in form.status_kepemilikan.errors %}
+
+                            <div class="text-danger small mt-1">
+
+                                <i class="bi bi-exclamation-circle me-1"></i>
+
+                                {{ error }}
+
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+
+
+                    <!-- =====================================
+                         KETERANGAN
+                    ====================================== -->
+
+                    <div class="col-12">
+
+                        <label
+                            for="{{ form.keterangan.id_for_label }}"
+                            class="form-label fw-semibold"
+                        >
+
+                            Keterangan
+
+                        </label>
+
+
+                        {{ form.keterangan }}
+
+
+                        {% for error in form.keterangan.errors %}
+
+                            <div class="text-danger small mt-1">
+
+                                <i class="bi bi-exclamation-circle me-1"></i>
+
+                                {{ error }}
+
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =====================================================
+             AKSI
+        ====================================================== -->
+
+        <div class="card border-0 shadow-sm mt-4">
+
+            <div class="card-body">
+
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+                    <small class="text-muted">
+
+                        <span class="text-danger">
+                            *
+                        </span>
+
+                        Wajib diisi
+
+                    </small>
+
+
+                    <div class="d-flex gap-2">
+
+                        <a
+                            href="{% url 'detail_bidang_tanah' bidang.id %}"
+                            class="btn btn-outline-secondary"
+                        >
+
+                            <i class="bi bi-x-circle me-1"></i>
+
+                            Batal
+
+                        </a>
+
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary"
+                            id="btnUpdateBidang"
+                        >
+
+                            <i
+                                class="bi bi-arrow-repeat me-1"
+                                id="iconUpdateBidang"
+                            ></i>
+
+
+                            <span id="textUpdateBidang">
+
+                                Perbarui Data
+
+                            </span>
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </form>
+
+
+</div>
+
+{% endblock %}
+
+
+{% block js %}
+
+<script>
+
+document.addEventListener(
+    'DOMContentLoaded',
+    function () {
+
+        const form =
+            document.getElementById(
+                'formEditBidangTanah'
+            );
+
+        const luas =
+            document.getElementById(
+                'id_luas_bidang_m2'
+            );
+
+        const button =
+            document.getElementById(
+                'btnUpdateBidang'
+            );
+
+        const icon =
+            document.getElementById(
+                'iconUpdateBidang'
+            );
+
+        const text =
+            document.getElementById(
+                'textUpdateBidang'
+            );
+
+
+        // =====================================================
+        // FORMAT RIBUAN INDONESIA
+        // =====================================================
+
+        function formatRibuan(angka) {
+
+            if (
+                angka === null
+                ||
+                angka === undefined
+                ||
+                angka === ''
+            ) {
+
+                return '';
+
+            }
+
+            angka =
+                String(angka)
+                .replace(/\./g, '');
+
+            angka =
+                angka.replace(
+                    /\D/g,
+                    ''
+                );
+
+            return angka.replace(
+                /\B(?=(\d{3})+(?!\d))/g,
+                '.'
+            );
+
+        }
+
+
+        // =====================================================
+        // NILAI AWAL DARI DJANGO
+        //
+        // Contoh:
+        // 10000.00 -> ambil 10000 -> tampil 10.000
+        // =====================================================
+
+        if (
+            luas
+            &&
+            luas.value
+        ) {
+
+            let nilaiAwal =
+                String(luas.value).trim();
+
+
+            // Django DecimalField dapat menghasilkan:
+            // 10000.00
+            //
+            // Bagian .00 adalah desimal database,
+            // bukan separator ribuan.
+
+            if (
+                /^\d+\.\d{1,2}$/.test(
+                    nilaiAwal
+                )
+            ) {
+
+                nilaiAwal =
+                    nilaiAwal.split('.')[0];
+
+            }
+
+
+            luas.value =
+                formatRibuan(
+                    nilaiAwal
+                );
+
+        }
+
+
+        // =====================================================
+        // FORMAT SAAT DIKETIK
+        // =====================================================
+
+        if (luas) {
+
+            luas.addEventListener(
+                'input',
+                function () {
+
+                    this.value =
+                        formatRibuan(
+                            this.value
+                        );
+
+                }
+            );
+
+        }
+
+
+        // =====================================================
+        // SEBELUM SUBMIT
+        //
+        // 10.000 -> 10000
+        // =====================================================
+
+        if (form) {
+
+            form.addEventListener(
+                'submit',
+                function () {
+
+                    if (luas) {
+
+                        luas.value =
+                            luas.value
+                            .replace(/\./g, '');
+
+                    }
+
+
+                    if (
+                        button
+                        &&
+                        icon
+                        &&
+                        text
+                    ) {
+
+                        button.disabled =
+                            true;
+
+                        icon.className =
+                            'spinner-border '
+                            + 'spinner-border-sm me-2';
+
+                        text.textContent =
+                            'Memperbarui...';
+
+                    }
+
+                }
+            );
+
+        }
+
+    }
+);
+
+</script>
+
+{% endblock %}

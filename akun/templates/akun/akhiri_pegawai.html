@@ -1,0 +1,320 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Status Akhir Pegawai
+{% endblock %}
+
+
+{% block content %}
+
+<div class="container-fluid py-3">
+
+
+    <div class="card border-0 shadow-sm mb-4">
+
+        <div class="card-body">
+
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+
+                <div>
+
+                    <h4 class="mb-1">
+
+                        <i class="bi bi-person-x-fill text-danger me-2"></i>
+
+                        Status Akhir Pegawai
+
+                    </h4>
+
+                    <div class="text-muted">
+
+                        {{ pegawai.nama }}
+
+                    </div>
+
+                </div>
+
+
+                <a
+                    href="{% url 'data_pegawai' %}"
+                    class="btn btn-outline-secondary"
+                >
+
+                    <i class="bi bi-arrow-left me-1"></i>
+
+                    Kembali
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-8">
+
+
+            <div class="alert alert-danger border-0 shadow-sm">
+
+                <div class="d-flex align-items-start gap-3">
+
+                    <i class="bi bi-exclamation-triangle-fill fs-4"></i>
+
+                    <div>
+
+                        <div class="fw-bold mb-1">
+                            Perhatian
+                        </div>
+
+                        <div class="small">
+
+                            Proses ini akan menutup status aktif
+                            pegawai pada sekolah saat ini.
+
+                            Riwayat tidak akan dihapus dan tetap
+                            tersimpan di SIPETAKU.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="card border-0 shadow-sm mb-4">
+
+                <div class="card-header bg-body">
+
+                    <h5 class="mb-0 fw-bold">
+                        Penempatan Saat Ini
+                    </h5>
+
+                </div>
+
+
+                <div class="card-body">
+
+                    <div class="row g-3">
+
+                        <div class="col-md-6">
+
+                            <div class="text-muted small">
+                                Sekolah
+                            </div>
+
+                            <div class="fw-semibold">
+                                {{ riwayat.sekolah.nama }}
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <div class="text-muted small">
+                                Tahun Ajaran
+                            </div>
+
+                            <div class="fw-semibold">
+                                {{ riwayat.tahun_ajaran.nama }}
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <div class="text-muted small">
+                                Jabatan
+                            </div>
+
+                            <div class="fw-semibold">
+                                {{ riwayat.jabatan }}
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <div class="text-muted small">
+                                Status Kepegawaian
+                            </div>
+
+                            <div class="fw-semibold">
+                                {{ riwayat.get_status_pegawai_display }}
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="card border-0 shadow-sm">
+
+                <div class="card-header bg-body">
+
+                    <h5 class="mb-0 fw-bold">
+
+                        <i class="bi bi-clipboard-check text-danger me-2"></i>
+
+                        Proses Status Akhir
+
+                    </h5>
+
+                </div>
+
+
+                <div class="card-body">
+
+                    <form method="POST">
+
+                        {% csrf_token %}
+
+
+                        <div class="mb-3">
+
+                            <label class="form-label fw-semibold">
+
+                                Status Akhir
+
+                                <span class="text-danger">*</span>
+
+                            </label>
+
+                            {{ form.status_akhir }}
+
+                            {% for error in form.status_akhir.errors %}
+
+                                <div class="text-danger small mt-1">
+                                    {{ error }}
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+
+
+                        <div class="mb-3">
+
+                            <label class="form-label fw-semibold">
+
+                                Tanggal Efektif
+
+                                <span class="text-danger">*</span>
+
+                            </label>
+
+                            {{ form.tanggal_selesai }}
+
+                            {% for error in form.tanggal_selesai.errors %}
+
+                                <div class="text-danger small mt-1">
+                                    {{ error }}
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+
+
+                        <div class="mb-3">
+
+                            <label class="form-label fw-semibold">
+                                Keterangan
+                            </label>
+
+                            {{ form.keterangan }}
+
+                            {% for error in form.keterangan.errors %}
+
+                                <div class="text-danger small mt-1">
+                                    {{ error }}
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+
+
+                        {% if form.non_field_errors %}
+
+                            <div class="alert alert-danger">
+
+                                {% for error in form.non_field_errors %}
+
+                                    {{ error }}
+
+                                {% endfor %}
+
+                            </div>
+
+                        {% endif %}
+
+
+
+                        <div class="border-top pt-3 mt-4">
+
+                            <div class="d-flex justify-content-end gap-2">
+
+                                <a
+                                    href="{% url 'data_pegawai' %}"
+                                    class="btn btn-outline-secondary"
+                                >
+                                    Batal
+                                </a>
+
+
+                                <button
+                                    type="submit"
+                                    class="btn btn-danger"
+                                    onclick="
+                                        return confirm(
+                                            'Yakin ingin mengakhiri '
+                                            + 'status aktif pegawai ini?'
+                                        );
+                                    "
+                                >
+
+                                    <i class="bi bi-check-circle me-1"></i>
+
+                                    Proses Status Akhir
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+
+                    </form>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+</div>
+
+{% endblock %}

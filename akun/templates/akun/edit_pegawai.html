@@ -1,0 +1,1243 @@
+{% extends 'base.html' %}
+
+{% block title %}{% endblock %}
+
+
+{% block content %}
+
+<div class="container-fluid">
+
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <div class="card shadow-sm border-0 mb-4">
+
+        <div class="card-header bg-body border-0">
+
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+                <div>
+
+                    <h5 class="mb-1">
+
+                        <i class="bi bi-pencil-square text-primary me-2"></i>
+
+                        Edit Pegawai
+
+                    </h5>
+
+
+                    <small class="text-muted">
+
+                        {{ pegawai.nama }}
+
+                        · {{ sekolah.nama }}
+
+                    </small>
+
+                </div>
+
+
+                <a
+                    href="{% url 'data_pegawai' %}"
+                    class="btn btn-outline-secondary btn-sm"
+                >
+
+                    <i class="bi bi-arrow-left me-1"></i>
+
+                    Kembali ke Data Pegawai
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         INFORMASI PENEMPATAN
+    ====================================================== -->
+
+    <div class="card border-0 shadow-sm mb-4">
+
+        <div class="card-body">
+
+            <div class="row g-3 align-items-center">
+
+
+                <!-- SEKOLAH -->
+
+                <div class="col-md-5">
+
+                    <div class="text-muted small">
+
+                        Sekolah Penempatan
+
+                    </div>
+
+
+                    <div class="fw-semibold">
+
+                        <i class="bi bi-building text-primary me-1"></i>
+
+                        {{ sekolah.nama }}
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- TAHUN AJARAN -->
+
+                <div class="col-md-4">
+
+                    <div class="text-muted small">
+
+                        Tahun Ajaran
+
+                    </div>
+
+
+                    <div class="fw-semibold">
+
+                        <i class="bi bi-calendar-check text-success me-1"></i>
+
+                        {{ tahun_ajaran.nama }}
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- STATUS -->
+
+                <div class="col-md-3">
+
+                    <div class="text-muted small">
+
+                        Status Penempatan
+
+                    </div>
+
+
+                    <div>
+
+                        <span class="badge bg-success">
+
+                            <i class="bi bi-check-circle me-1"></i>
+
+                            Aktif
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="border-top mt-3 pt-3">
+
+                <small class="text-muted">
+
+                    <i class="bi bi-info-circle text-primary me-1"></i>
+
+                    Halaman ini hanya digunakan untuk memperbarui
+                    identitas dan data penempatan aktif pegawai.
+                    Perpindahan pegawai ke sekolah lain tidak dapat
+                    dilakukan oleh Operator Sekolah. Proses mutasi
+                    hanya dapat dilakukan oleh
+                    <strong>Admin Kabupaten</strong>
+                    melalui fitur Mutasi Pegawai agar seluruh riwayat
+                    penempatan pegawai tetap tercatat di SIPETAKU.
+
+                </small>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         FORM
+    ====================================================== -->
+
+    <form
+        method="POST"
+        id="formEditPegawai"
+    >
+
+        {% csrf_token %}
+
+
+        <div class="row g-4">
+
+
+            <!-- =================================================
+                 IDENTITAS PEGAWAI
+            ================================================== -->
+
+            <div class="col-lg-6">
+
+                <div class="card border-0 shadow-sm h-100">
+
+                    <div class="card-header bg-body">
+
+                        <div>
+
+                            <h5 class="mb-1">
+
+                                <i class="bi bi-person-vcard text-primary me-2"></i>
+
+                                Identitas Pegawai
+
+                            </h5>
+
+
+                            <small class="text-muted">
+
+                                Data identitas pribadi pegawai
+
+                            </small>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="card-body">
+
+
+                        <!-- =====================================
+                             NAMA
+                        ====================================== -->
+
+                        <div class="mb-3">
+
+                            <label class="form-label fw-semibold">
+
+                                Nama Lengkap
+
+                                <span class="text-danger">
+                                    *
+                                </span>
+
+                            </label>
+
+
+                            {{ form_pegawai.nama }}
+
+
+                            {% for error in form_pegawai.nama.errors %}
+
+                                <div class="text-danger small mt-1">
+
+                                    <i class="bi bi-exclamation-circle me-1"></i>
+
+                                    {{ error }}
+
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+
+
+                        <!-- =====================================
+                             NIP
+                        ====================================== -->
+
+                        <div class="mb-3">
+
+                            <label class="form-label fw-semibold">
+
+                                NIP
+
+                            </label>
+
+
+                            {{ form_pegawai.nip }}
+
+
+                            <div class="form-text">
+
+                                Kosongkan jika pegawai tidak
+                                memiliki NIP.
+
+                            </div>
+
+
+                            {% for error in form_pegawai.nip.errors %}
+
+                                <div class="text-danger small mt-1">
+
+                                    <i class="bi bi-exclamation-circle me-1"></i>
+
+                                    {{ error }}
+
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+
+
+                        <!-- =====================================
+                             NIK
+                        ====================================== -->
+
+                        <div class="mb-3">
+
+                            <label class="form-label fw-semibold">
+
+                                NIK
+
+                            </label>
+
+
+                            {{ form_pegawai.nik }}
+
+
+                            <div class="form-text">
+
+                                Nomor Induk Kependudukan pegawai.
+
+                            </div>
+
+
+                            {% for error in form_pegawai.nik.errors %}
+
+                                <div class="text-danger small mt-1">
+
+                                    <i class="bi bi-exclamation-circle me-1"></i>
+
+                                    {{ error }}
+
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+
+
+                        <!-- =====================================
+                             NUPTK
+                        ====================================== -->
+
+                        <div class="mb-3">
+
+                            <label class="form-label fw-semibold">
+
+                                NUPTK
+
+                            </label>
+
+
+                            {{ form_pegawai.nuptk }}
+
+
+                            <div class="form-text">
+
+                                Kosongkan jika pegawai belum
+                                memiliki NUPTK.
+
+                            </div>
+
+
+                            {% for error in form_pegawai.nuptk.errors %}
+
+                                <div class="text-danger small mt-1">
+
+                                    <i class="bi bi-exclamation-circle me-1"></i>
+
+                                    {{ error }}
+
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+
+
+                        <!-- =====================================
+                             JENIS KELAMIN + TEMPAT LAHIR
+                        ====================================== -->
+
+                        <div class="row">
+
+
+                            <!-- JENIS KELAMIN -->
+
+                            <div class="col-md-6">
+
+                                <div class="mb-3">
+
+                                    <label class="form-label fw-semibold">
+
+                                        Jenis Kelamin
+
+                                        <span class="text-danger">
+                                            *
+                                        </span>
+
+                                    </label>
+
+
+                                    {{ form_pegawai.jenis_kelamin }}
+
+
+                                    {% for error in form_pegawai.jenis_kelamin.errors %}
+
+                                        <div class="text-danger small mt-1">
+
+                                            <i class="bi bi-exclamation-circle me-1"></i>
+
+                                            {{ error }}
+
+                                        </div>
+
+                                    {% endfor %}
+
+                                </div>
+
+                            </div>
+
+
+
+                            <!-- TEMPAT LAHIR -->
+
+                            <div class="col-md-6">
+
+                                <div class="mb-3">
+
+                                    <label class="form-label fw-semibold">
+
+                                        Tempat Lahir
+
+                                        <span class="text-danger">
+                                            *
+                                        </span>
+
+                                    </label>
+
+
+                                    {{ form_pegawai.tempat_lahir }}
+
+
+                                    {% for error in form_pegawai.tempat_lahir.errors %}
+
+                                        <div class="text-danger small mt-1">
+
+                                            <i class="bi bi-exclamation-circle me-1"></i>
+
+                                            {{ error }}
+
+                                        </div>
+
+                                    {% endfor %}
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- =====================================
+                             TANGGAL LAHIR
+                        ====================================== -->
+
+                        <div class="mb-3">
+
+                            <label class="form-label fw-semibold">
+
+                                Tanggal Lahir
+
+                                <span class="text-danger">
+                                    *
+                                </span>
+
+                            </label>
+
+
+                            {{ form_pegawai.tanggal_lahir }}
+
+
+                            {% for error in form_pegawai.tanggal_lahir.errors %}
+
+                                <div class="text-danger small mt-1">
+
+                                    <i class="bi bi-exclamation-circle me-1"></i>
+
+                                    {{ error }}
+
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+
+
+                        <!-- =====================================
+                             NOMOR HP
+                        ====================================== -->
+
+                        <div class="mb-3">
+
+                            <label class="form-label fw-semibold">
+
+                                Nomor HP / WhatsApp
+
+                            </label>
+
+
+                            {{ form_pegawai.no_hp }}
+
+
+                            {% for error in form_pegawai.no_hp.errors %}
+
+                                <div class="text-danger small mt-1">
+
+                                    <i class="bi bi-exclamation-circle me-1"></i>
+
+                                    {{ error }}
+
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+
+
+                        <!-- =====================================
+                             ALAMAT
+                        ====================================== -->
+
+                        <div class="mb-0">
+
+                            <label class="form-label fw-semibold">
+
+                                Alamat
+
+                            </label>
+
+
+                            {{ form_pegawai.alamat }}
+
+
+                            {% for error in form_pegawai.alamat.errors %}
+
+                                <div class="text-danger small mt-1">
+
+                                    <i class="bi bi-exclamation-circle me-1"></i>
+
+                                    {{ error }}
+
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 DATA PENEMPATAN AKTIF
+            ================================================== -->
+
+            <div class="col-lg-6">
+
+                <div class="card border-0 shadow-sm h-100">
+
+                    <div class="card-header bg-body">
+
+                        <div>
+
+                            <h5 class="mb-1">
+
+                                <i class="bi bi-building text-primary me-2"></i>
+
+                                Data Penempatan
+
+                            </h5>
+
+
+                            <small class="text-muted">
+
+                                Informasi tugas dan status
+                                kepegawaian aktif
+
+                            </small>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="card-body">
+
+
+                        <!-- =====================================
+                             SEKOLAH
+                        ====================================== -->
+
+                        <div class="mb-3">
+
+                            <label class="form-label fw-semibold">
+
+                                Sekolah
+
+                            </label>
+
+
+                            <input
+                                type="text"
+                                class="form-control"
+                                value="{{ sekolah.nama }}"
+                                disabled
+                            >
+
+
+                            <div class="form-text">
+
+                                Sekolah tidak dapat diubah
+                                dari halaman Edit Pegawai.
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- =====================================
+                             TAHUN AJARAN
+                        ====================================== -->
+
+                        <div class="mb-3">
+
+                            <label class="form-label fw-semibold">
+
+                                Tahun Ajaran
+
+                            </label>
+
+
+                            <input
+                                type="text"
+                                class="form-control"
+                                value="{{ tahun_ajaran.nama }}"
+                                disabled
+                            >
+
+
+                            <div class="form-text">
+
+                                Tahun Ajaran mengikuti
+                                penempatan aktif pegawai.
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- =====================================
+                             JENIS PEGAWAI
+                        ====================================== -->
+
+                        <div class="mb-3">
+
+                            <label class="form-label fw-semibold">
+
+                                Jenis Pegawai
+
+                                <span class="text-danger">
+                                    *
+                                </span>
+
+                            </label>
+
+
+                            {{ form_riwayat.jenis_pegawai }}
+
+
+                            {% for error in form_riwayat.jenis_pegawai.errors %}
+
+                                <div class="text-danger small mt-1">
+
+                                    <i class="bi bi-exclamation-circle me-1"></i>
+
+                                    {{ error }}
+
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+
+
+                        <!-- =====================================
+                             JABATAN
+                        ====================================== -->
+
+                        <div class="mb-3">
+
+                            <label class="form-label fw-semibold">
+
+                                Jabatan
+
+                                <span class="text-danger">
+                                    *
+                                </span>
+
+                            </label>
+
+
+                            {{ form_riwayat.jabatan }}
+
+
+                            <div class="form-text">
+
+                                Contoh: Kepala Sekolah,
+                                Guru Kelas, Guru Matematika,
+                                Kepala TU, atau Operator Sekolah.
+
+                            </div>
+
+
+                            {% for error in form_riwayat.jabatan.errors %}
+
+                                <div class="text-danger small mt-1">
+
+                                    <i class="bi bi-exclamation-circle me-1"></i>
+
+                                    {{ error }}
+
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+
+
+                        <!-- =====================================
+                             MATA PELAJARAN
+                        ====================================== -->
+
+                        <div
+                            class="mb-3"
+                            id="wrapperMataPelajaran"
+                        >
+
+                            <label class="form-label fw-semibold">
+
+                                Mata Pelajaran
+
+                            </label>
+
+
+                            {{ form_riwayat.mata_pelajaran }}
+
+
+                            <div class="form-text">
+
+                                Diisi untuk Guru / Pendidik.
+                                Tenaga Kependidikan tidak perlu
+                                mengisi mata pelajaran.
+
+                            </div>
+
+
+                            {% for error in form_riwayat.mata_pelajaran.errors %}
+
+                                <div class="text-danger small mt-1">
+
+                                    <i class="bi bi-exclamation-circle me-1"></i>
+
+                                    {{ error }}
+
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+
+
+                        <!-- =====================================
+                             STATUS KEPEGAWAIAN
+                        ====================================== -->
+
+                        <div class="mb-3">
+
+                            <label class="form-label fw-semibold">
+
+                                Status Kepegawaian
+
+                                <span class="text-danger">
+                                    *
+                                </span>
+
+                            </label>
+
+
+                            {{ form_riwayat.status_pegawai }}
+
+
+                            {% for error in form_riwayat.status_pegawai.errors %}
+
+                                <div class="text-danger small mt-1">
+
+                                    <i class="bi bi-exclamation-circle me-1"></i>
+
+                                    {{ error }}
+
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+
+
+                        <!-- =====================================
+                             TANGGAL MULAI
+                        ====================================== -->
+
+                        <div class="mb-3">
+
+                            <label class="form-label fw-semibold">
+
+                                Tanggal Mulai
+
+                            </label>
+
+
+                            {{ form_riwayat.tanggal_mulai }}
+
+
+                            <div class="form-text">
+
+                                Tanggal mulai bekerja atau
+                                mulai ditempatkan di sekolah ini.
+
+                            </div>
+
+
+                            {% for error in form_riwayat.tanggal_mulai.errors %}
+
+                                <div class="text-danger small mt-1">
+
+                                    <i class="bi bi-exclamation-circle me-1"></i>
+
+                                    {{ error }}
+
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+
+
+                        <!-- =====================================
+                             TANGGAL PENSIUN
+                        ====================================== -->
+
+                        <div class="mb-3">
+
+                            <label class="form-label fw-semibold">
+
+                                Tanggal Pensiun
+
+                            </label>
+
+
+                            {{ form_riwayat.tanggal_pensiun }}
+
+
+                            <div class="form-text">
+
+                                Isi jika tanggal pensiun
+                                sudah diketahui.
+
+                            </div>
+
+
+                            {% for error in form_riwayat.tanggal_pensiun.errors %}
+
+                                <div class="text-danger small mt-1">
+
+                                    <i class="bi bi-exclamation-circle me-1"></i>
+
+                                    {{ error }}
+
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+
+
+                        <!-- =====================================
+                             KETERANGAN
+                        ====================================== -->
+
+                        <div class="mb-0">
+
+                            <label class="form-label fw-semibold">
+
+                                Keterangan
+
+                            </label>
+
+
+                            {{ form_riwayat.keterangan }}
+
+
+                            {% for error in form_riwayat.keterangan.errors %}
+
+                                <div class="text-danger small mt-1">
+
+                                    <i class="bi bi-exclamation-circle me-1"></i>
+
+                                    {{ error }}
+
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =====================================================
+             NON FIELD ERROR
+        ====================================================== -->
+
+        {% if form_pegawai.non_field_errors or form_riwayat.non_field_errors %}
+
+            <div class="alert alert-danger shadow-sm mt-4 mb-0">
+
+                <div class="d-flex gap-3">
+
+                    <div>
+
+                        <i class="bi bi-exclamation-triangle-fill fs-4"></i>
+
+                    </div>
+
+
+                    <div>
+
+                        <div class="fw-bold mb-1">
+
+                            Data belum dapat disimpan
+
+                        </div>
+
+
+                        {% for error in form_pegawai.non_field_errors %}
+
+                            <div>
+
+                                {{ error }}
+
+                            </div>
+
+                        {% endfor %}
+
+
+                        {% for error in form_riwayat.non_field_errors %}
+
+                            <div>
+
+                                {{ error }}
+
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        {% endif %}
+
+
+
+        <!-- =====================================================
+             TOMBOL
+        ====================================================== -->
+
+        <div class="card border-0 shadow-sm mt-4">
+
+            <div class="card-body">
+
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+
+                    <!-- INFORMASI -->
+
+                    <small class="text-muted">
+
+                        <span class="text-danger">
+                            *
+                        </span>
+
+                        Wajib diisi
+
+                        {% if riwayat.jabatan %}
+
+                            · Penempatan aktif:
+                            {{ riwayat.jabatan }}
+
+                        {% endif %}
+
+                    </small>
+
+
+
+                    <!-- TOMBOL AKSI -->
+
+                    <div class="d-flex gap-2">
+
+                        <a
+                            href="{% url 'data_pegawai' %}"
+                            class="btn btn-outline-secondary"
+                        >
+
+                            <i class="bi bi-x-circle me-1"></i>
+
+                            Batal
+
+                        </a>
+
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary"
+                            id="btnSimpanPegawai"
+                        >
+
+                            <i class="bi bi-save me-1"></i>
+
+                            Simpan Perubahan
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </form>
+
+
+</div>
+
+{% endblock %}
+
+
+
+{% block js %}
+
+<script>
+
+document.addEventListener(
+    'DOMContentLoaded',
+    function () {
+
+
+        // =====================================================
+        // FIELD JENIS PEGAWAI
+        // =====================================================
+
+        const jenisPegawai = (
+            document.getElementById(
+                'id_jenis_pegawai'
+            )
+        );
+
+
+        // =====================================================
+        // WRAPPER MATA PELAJARAN
+        // =====================================================
+
+        const wrapperMapel = (
+            document.getElementById(
+                'wrapperMataPelajaran'
+            )
+        );
+
+
+        // =====================================================
+        // INPUT MATA PELAJARAN
+        // =====================================================
+
+        const inputMapel = (
+            document.getElementById(
+                'id_mata_pelajaran'
+            )
+        );
+
+
+
+        // =====================================================
+        // ATUR TAMPILAN MATA PELAJARAN
+        // =====================================================
+
+        function aturMataPelajaran() {
+
+            if (
+                !jenisPegawai
+                ||
+                !wrapperMapel
+            ) {
+
+                return;
+
+            }
+
+
+            if (
+                jenisPegawai.value
+                === 'TENAGA_KEPENDIDIKAN'
+            ) {
+
+                wrapperMapel.style.display =
+                    'none';
+
+
+                if (inputMapel) {
+
+                    inputMapel.value = '';
+
+                }
+
+            }
+
+            else {
+
+                wrapperMapel.style.display =
+                    '';
+
+            }
+
+        }
+
+
+
+        // =====================================================
+        // JALANKAN SAAT HALAMAN DIBUKA
+        // =====================================================
+
+        aturMataPelajaran();
+
+
+
+        // =====================================================
+        // JALANKAN SAAT JENIS PEGAWAI BERUBAH
+        // =====================================================
+
+        if (jenisPegawai) {
+
+            jenisPegawai.addEventListener(
+                'change',
+                aturMataPelajaran
+            );
+
+        }
+
+
+
+        // =====================================================
+        // CEGAH DOUBLE SUBMIT
+        // =====================================================
+
+        const form = document.getElementById(
+            'formEditPegawai'
+        );
+
+        const tombol = document.getElementById(
+            'btnSimpanPegawai'
+        );
+
+
+        if (
+            form
+            &&
+            tombol
+        ) {
+
+            form.addEventListener(
+                'submit',
+                function () {
+
+                    tombol.disabled = true;
+
+                    tombol.innerHTML = (
+                        '<span '
+                        + 'class="spinner-border '
+                        + 'spinner-border-sm me-2" '
+                        + 'role="status">'
+                        + '</span>'
+                        + 'Menyimpan...'
+                    );
+
+                }
+            );
+
+        }
+
+
+    }
+);
+
+</script>
+
+{% endblock %}

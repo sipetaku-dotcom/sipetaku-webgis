@@ -1,0 +1,2052 @@
+{% extends 'base.html' %}
+
+{% block title %}{% endblock %}
+
+
+{% block css %}
+
+<style>
+
+    /* =========================================================
+       DASHBOARD OPERATOR
+    ========================================================= */
+
+    .dashboard-stat-card {
+        transition:
+            transform 0.2s ease,
+            box-shadow 0.2s ease;
+    }
+
+    .dashboard-stat-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 .5rem 1rem rgba(0,0,0,.10) !important;
+    }
+
+    .dashboard-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        flex-shrink: 0;
+    }
+
+    .dashboard-mini-card {
+        border: 1px solid var(--bs-border-color);
+        border-radius: 10px;
+        padding: 16px;
+        height: 100%;
+    }
+
+    .dashboard-number {
+        font-size: 1.75rem;
+        font-weight: 700;
+        line-height: 1.1;
+    }
+
+    .dashboard-score {
+        font-size: 3.5rem;
+        font-weight: 700;
+        line-height: 1;
+    }
+
+</style>
+
+{% endblock %}
+
+
+
+{% block content %}
+
+<div class="container-fluid">
+
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <div class="card shadow-sm border-0 mb-4">
+
+        <div class="card-header bg-body border-0">
+
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+
+                <div>
+
+                    <h5 class="mb-1">
+
+                        <i class="bi bi-speedometer2 text-primary me-2"></i>
+
+                        Dashboard Sekolah
+
+                        {% if tahun_ajaran %}
+
+                            <span class="badge bg-success ms-2">
+
+                                <i class="bi bi-calendar-check me-1"></i>
+
+                                {{ tahun_ajaran.nama }}
+
+                            </span>
+
+                        {% endif %}
+
+                    </h5>
+
+
+                    <small class="text-muted">
+
+                        {{ sekolah.nama }}
+
+                        {% if sekolah.kategori %}
+
+                            · {{ sekolah.kategori.nama }}
+
+                        {% endif %}
+
+                        {% if sekolah.status %}
+
+                            · {{ sekolah.status }}
+
+                        {% endif %}
+
+                        {% if sekolah.kecamatan %}
+
+                            · {{ sekolah.kecamatan }}
+
+                        {% endif %}
+
+                    </small>
+
+                </div>
+
+
+                <a
+                    href="{% url 'profil_sekolah' %}"
+                    class="btn btn-primary btn-sm"
+                >
+
+                    <i class="bi bi-building-gear me-1"></i>
+
+                    Profil Sekolah
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         RINGKASAN UTAMA
+    ====================================================== -->
+
+    <div class="row g-3 mb-4">
+
+
+        <!-- =================================================
+             MURID
+        ================================================== -->
+
+        <div class="col-6 col-xl-3">
+
+            <a
+                href="{% url 'data_murid' %}"
+                class="text-decoration-none text-reset"
+            >
+
+                <div class="card border-0 shadow-sm h-100 dashboard-stat-card">
+
+                    <div class="card-body">
+
+                        <div class="d-flex align-items-center gap-3">
+
+
+                            <div class="dashboard-icon bg-primary-subtle">
+
+                                <i class="bi bi-people-fill fs-4 text-primary"></i>
+
+                            </div>
+
+
+                            <div>
+
+                                <div class="small text-muted mb-1">
+
+                                    Total Murid
+
+                                </div>
+
+
+                                <div class="dashboard-number">
+
+                                    {{ total_murid }}
+
+                                </div>
+
+
+                                <div class="small text-muted mt-1">
+
+                                    Siswa aktif
+
+                                </div>
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </a>
+
+        </div>
+
+
+
+        <!-- =================================================
+             GURU
+        ================================================== -->
+
+        <div class="col-6 col-xl-3">
+
+            <a
+                href="{% url 'data_pegawai' %}"
+                class="text-decoration-none text-reset"
+            >
+
+                <div class="card border-0 shadow-sm h-100 dashboard-stat-card">
+
+                    <div class="card-body">
+
+                        <div class="d-flex align-items-center gap-3">
+
+
+                            <div class="dashboard-icon bg-success-subtle">
+
+                                <i class="bi bi-person-badge-fill fs-4 text-success"></i>
+
+                            </div>
+
+
+                            <div>
+
+                                <div class="small text-muted mb-1">
+
+                                    Total Guru
+
+                                </div>
+
+
+                                <div class="dashboard-number">
+
+                                    {{ total_guru }}
+
+                                </div>
+
+
+                                <div class="small text-muted mt-1">
+
+                                    Pendidik aktif
+
+                                </div>
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </a>
+
+        </div>
+
+
+
+        <!-- =================================================
+             PRESTASI
+        ================================================== -->
+
+        <div class="col-6 col-xl-3">
+
+            <a
+                href="{% url 'data_prestasi' %}"
+                class="text-decoration-none text-reset"
+            >
+
+                <div class="card border-0 shadow-sm h-100 dashboard-stat-card">
+
+                    <div class="card-body">
+
+                        <div class="d-flex align-items-center gap-3">
+
+
+                            <div class="dashboard-icon bg-warning-subtle">
+
+                                <i class="bi bi-trophy-fill fs-4 text-warning"></i>
+
+                            </div>
+
+
+                            <div>
+
+                                <div class="small text-muted mb-1">
+
+                                    Prestasi
+
+                                </div>
+
+
+                                <div class="dashboard-number">
+
+                                    {{ total_prestasi }}
+
+                                </div>
+
+
+                                <div class="small text-muted mt-1">
+
+                                    Prestasi tercatat
+
+                                </div>
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </a>
+
+        </div>
+
+
+
+        <!-- =================================================
+             ROMBEL
+        ================================================== -->
+
+        <div class="col-6 col-xl-3">
+
+            <a
+                href="{% url 'data_rombel_sekolah' %}"
+                class="text-decoration-none text-reset"
+            >
+
+                <div class="card border-0 shadow-sm h-100 dashboard-stat-card">
+
+                    <div class="card-body">
+
+                        <div class="d-flex align-items-center gap-3">
+
+
+                            <div class="dashboard-icon bg-info-subtle">
+
+                                <i class="bi bi-door-open-fill fs-4 text-info"></i>
+
+                            </div>
+
+
+                            <div>
+
+                                <div class="small text-muted mb-1">
+
+                                    Rombel
+
+                                </div>
+
+
+                                <div class="dashboard-number">
+
+                                    {{ total_rombel }}
+
+                                </div>
+
+
+                                <div class="small text-muted mt-1">
+
+                                    Rombongan belajar
+
+                                </div>
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </a>
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =====================================================
+         KESIAPAN TAHUN AJARAN
+    ====================================================== -->
+
+    {% if kesiapan_tahun_ajaran and tahun_tujuan_kesiapan %}
+
+        <div class="card border-0 shadow-sm mb-4">
+
+            <div class="card-header bg-body">
+
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+                    <div>
+
+                        <h5 class="mb-1">
+
+                            <i class="bi bi-calendar2-check text-primary me-2"></i>
+
+                            Kesiapan Tahun Ajaran
+
+                        </h5>
+
+
+                        <small class="text-muted">
+
+                            {{ tahun_asal_kesiapan.nama }}
+
+                            <i class="bi bi-arrow-right mx-1"></i>
+
+                            {{ tahun_tujuan_kesiapan.nama }}
+
+                        </small>
+
+                    </div>
+
+
+                    <span
+                        class="
+                            badge
+                            bg-{{ kesiapan_tahun_ajaran.warna }}
+                            px-3
+                            py-2
+                        "
+                    >
+
+                        {% if kesiapan_tahun_ajaran.siap %}
+
+                            <i class="bi bi-check-circle-fill me-1"></i>
+
+                        {% else %}
+
+                            <i class="bi bi-exclamation-circle-fill me-1"></i>
+
+                        {% endif %}
+
+                        {{ kesiapan_tahun_ajaran.status }}
+
+                    </span>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="card-body">
+
+
+                <!-- =============================================
+                     PROGRESS
+                ============================================== -->
+
+                <div class="mb-4">
+
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+
+                        <span class="fw-semibold">
+
+                            Progres Penyelesaian Siswa
+
+                        </span>
+
+
+                        <span class="fw-bold">
+
+                            {{ kesiapan_tahun_ajaran.persentase }}%
+
+                        </span>
+
+                    </div>
+
+
+                    <div
+                        class="progress"
+                        style="
+                            height: 12px;
+                        "
+                    >
+
+                        <div
+                            class="
+                                progress-bar
+                                bg-{{ kesiapan_tahun_ajaran.warna }}
+                            "
+                            role="progressbar"
+                            style="
+                                width:
+                                {{ kesiapan_tahun_ajaran.persentase }}%;
+                            "
+                        ></div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =============================================
+                     DETAIL
+                ============================================== -->
+
+                <div class="row g-3">
+
+
+                    <div class="col-6 col-lg-3">
+
+                        <div class="dashboard-mini-card">
+
+                            <div class="small text-muted mb-1">
+
+                                Siswa Tahun Asal
+
+                            </div>
+
+
+                            <div class="dashboard-number">
+
+                                {{ kesiapan_tahun_ajaran.total_siswa }}
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-6 col-lg-3">
+
+                        <div class="dashboard-mini-card">
+
+                            <div class="small text-muted mb-1">
+
+                                Sudah Diproses
+
+                            </div>
+
+
+                            <div class="dashboard-number text-success">
+
+                                {{ kesiapan_tahun_ajaran.sudah_diproses }}
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-6 col-lg-3">
+
+                        <div class="dashboard-mini-card">
+
+                            <div class="small text-muted mb-1">
+
+                                Belum Diproses
+
+                            </div>
+
+
+                            <div class="dashboard-number text-danger">
+
+                                {{ kesiapan_tahun_ajaran.belum_diproses }}
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-6 col-lg-3">
+
+                        <div class="dashboard-mini-card">
+
+                            <div class="small text-muted mb-1">
+
+                                Rombel Tahun Tujuan
+
+                            </div>
+
+
+                            <div class="dashboard-number text-primary">
+
+                                {{ kesiapan_tahun_ajaran.jumlah_rombel_tujuan }}
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- =============================================
+                     INFORMASI
+                ============================================== -->
+
+                <div class="border-top mt-4 pt-3">
+
+                    <div class="small">
+
+
+                        {% if kesiapan_tahun_ajaran.siap %}
+
+                            <span class="text-success">
+
+                                <i class="bi bi-check-circle-fill me-1"></i>
+
+                            </span>
+
+                            Seluruh siswa telah diproses dan
+                            rombel Tahun Ajaran
+
+                            <strong>
+                                {{ tahun_tujuan_kesiapan.nama }}
+                            </strong>
+
+                            telah tersedia.
+
+
+                        {% elif kesiapan_tahun_ajaran.status == 'ROMBEL BELUM SIAP' %}
+
+                            <span class="text-warning">
+
+                                <i class="bi bi-exclamation-triangle-fill me-1"></i>
+
+                            </span>
+
+                            Proses siswa telah selesai, tetapi
+                            rombel Tahun Ajaran
+
+                            <strong>
+                                {{ tahun_tujuan_kesiapan.nama }}
+                            </strong>
+
+                            belum tersedia.
+
+
+                        {% elif kesiapan_tahun_ajaran.status == 'BELUM SIAP' %}
+
+                            <span class="text-danger">
+
+                                <i class="bi bi-exclamation-circle-fill me-1"></i>
+
+                            </span>
+
+                            Masih terdapat
+
+                            <strong>
+                                {{ kesiapan_tahun_ajaran.belum_diproses }}
+                                siswa
+                            </strong>
+
+                            yang belum diproses.
+
+
+                        {% else %}
+
+                            <span class="text-primary">
+
+                                <i class="bi bi-info-circle-fill me-1"></i>
+
+                            </span>
+
+                            Kesiapan Tahun Ajaran belum dapat
+                            ditentukan sepenuhnya.
+
+                        {% endif %}
+
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    {% endif %}
+
+
+
+    <!-- =====================================================
+         RINGKASAN AKADEMIK
+    ====================================================== -->
+
+    <div class="card border-0 shadow-sm mb-4">
+
+        <div class="card-header bg-body">
+
+            <div>
+
+                <h5 class="mb-1">
+
+                    <i class="bi bi-mortarboard text-primary me-2"></i>
+
+                    Ringkasan Akademik
+
+                </h5>
+
+
+                <small class="text-muted">
+
+                    Komposisi siswa aktif Tahun Ajaran
+                    {{ tahun_ajaran.nama }}
+
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <div class="card-body">
+
+            <div class="row g-3">
+
+
+                <div class="col-6 col-md-3">
+
+                    <div class="dashboard-mini-card">
+
+                        <div class="d-flex justify-content-between align-items-center">
+
+                            <div>
+
+                                <div class="small text-muted mb-1">
+
+                                    Laki-laki
+
+                                </div>
+
+
+                                <div class="dashboard-number">
+
+                                    {{ total_laki_laki }}
+
+                                </div>
+
+                            </div>
+
+
+                            <i class="bi bi-gender-male fs-3 text-primary"></i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="col-6 col-md-3">
+
+                    <div class="dashboard-mini-card">
+
+                        <div class="d-flex justify-content-between align-items-center">
+
+                            <div>
+
+                                <div class="small text-muted mb-1">
+
+                                    Perempuan
+
+                                </div>
+
+
+                                <div class="dashboard-number">
+
+                                    {{ total_perempuan }}
+
+                                </div>
+
+                            </div>
+
+
+                            <i class="bi bi-gender-female fs-3 text-danger"></i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="col-6 col-md-3">
+
+                    <div class="dashboard-mini-card">
+
+                        <div class="d-flex justify-content-between align-items-center">
+
+                            <div>
+
+                                <div class="small text-muted mb-1">
+
+                                    Siswa Baru
+
+                                </div>
+
+
+                                <div class="dashboard-number">
+
+                                    {{ total_siswa_baru }}
+
+                                </div>
+
+                            </div>
+
+
+                            <i class="bi bi-person-plus fs-3 text-success"></i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="col-6 col-md-3">
+
+                    <div class="dashboard-mini-card">
+
+                        <div class="d-flex justify-content-between align-items-center">
+
+                            <div>
+
+                                <div class="small text-muted mb-1">
+
+                                    Pindahan
+
+                                </div>
+
+
+                                <div class="dashboard-number">
+
+                                    {{ total_pindahan }}
+
+                                </div>
+
+                            </div>
+
+
+                            <i class="bi bi-arrow-left-right fs-3 text-warning"></i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         ROMBEL DAN GURU
+    ====================================================== -->
+
+    <div class="row g-3 mb-4">
+
+
+        <!-- =================================================
+             SISWA PER ROMBEL
+        ================================================== -->
+
+        <div class="col-xl-8">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-header bg-body">
+
+                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+                        <div>
+
+                            <h5 class="mb-1">
+
+                                <i class="bi bi-door-open text-primary me-2"></i>
+
+                                Siswa per Rombel
+
+                            </h5>
+
+
+                            <small class="text-muted">
+
+                                Kapasitas dan jumlah siswa aktif
+                                setiap kelas
+
+                            </small>
+
+                        </div>
+
+
+                        <a
+                            href="{% url 'data_rombel_sekolah' %}"
+                            class="btn btn-primary btn-sm"
+                        >
+
+                            Kelola Rombel
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card-body">
+
+                    <div class="table-responsive">
+
+                        <table class="table table-bordered table-striped table-hover align-middle mb-0">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+                                        Kelas
+                                    </th>
+
+                                    <th class="text-center">
+                                        Siswa Aktif
+                                    </th>
+
+                                    <th class="text-center">
+                                        Kapasitas
+                                    </th>
+
+                                    <th class="text-center">
+                                        Kekurangan
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody>
+
+                                {% for data in data_siswa_per_rombel %}
+
+                                    <tr>
+
+                                        <td>
+
+                                            <span class="fw-semibold">
+
+                                                {{ data.nama_kelas }}
+
+                                            </span>
+
+                                        </td>
+
+
+                                        <td class="text-center">
+
+                                            {{ data.jumlah_siswa }}
+
+                                        </td>
+
+
+                                        <td class="text-center">
+
+                                            {{ data.kapasitas }}
+
+                                        </td>
+
+
+                                        <td class="text-center">
+
+                                            {% if data.kekurangan > 0 %}
+
+                                                <span class="badge bg-danger">
+
+                                                    {{ data.kekurangan }}
+
+                                                </span>
+
+                                            {% else %}
+
+                                                <span class="badge bg-success">
+
+                                                    0
+
+                                                </span>
+
+                                            {% endif %}
+
+                                        </td>
+
+                                    </tr>
+
+
+                                {% empty %}
+
+                                    <tr>
+
+                                        <td
+                                            colspan="4"
+                                            class="text-center text-muted py-4"
+                                        >
+
+                                            <i class="bi bi-inbox fs-4 d-block mb-1"></i>
+
+                                            Belum ada data rombel.
+
+                                        </td>
+
+                                    </tr>
+
+                                {% endfor %}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             KOMPOSISI GURU
+        ================================================== -->
+
+        <div class="col-xl-4">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-header bg-body">
+
+                    <div>
+
+                        <h5 class="mb-1">
+
+                            <i class="bi bi-person-badge text-success me-2"></i>
+
+                            Komposisi Guru
+
+                        </h5>
+
+
+                        <small class="text-muted">
+
+                            Pendidik aktif berdasarkan jenis kelamin
+
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card-body">
+
+                    <div class="row g-3">
+
+
+                        <div class="col-12">
+
+                            <div class="dashboard-mini-card">
+
+                                <div class="d-flex justify-content-between align-items-center">
+
+                                    <div>
+
+                                        <div class="small text-muted mb-1">
+
+                                            Laki-laki
+
+                                        </div>
+
+
+                                        <div class="dashboard-number">
+
+                                            {{ total_guru_laki_laki }}
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <i class="bi bi-gender-male fs-3 text-primary"></i>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-12">
+
+                            <div class="dashboard-mini-card">
+
+                                <div class="d-flex justify-content-between align-items-center">
+
+                                    <div>
+
+                                        <div class="small text-muted mb-1">
+
+                                            Perempuan
+
+                                        </div>
+
+
+                                        <div class="dashboard-number">
+
+                                            {{ total_guru_perempuan }}
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <i class="bi bi-gender-female fs-3 text-danger"></i>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =====================================================
+         PRESTASI TERBARU
+    ====================================================== -->
+
+    <div class="card border-0 shadow-sm mb-4">
+
+        <div class="card-header bg-body">
+
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+                <div>
+
+                    <h5 class="mb-1">
+
+                        <i class="bi bi-trophy text-warning me-2"></i>
+
+                        Prestasi Terbaru
+
+                    </h5>
+
+
+                    <small class="text-muted">
+
+                        Lima prestasi siswa terbaru yang tercatat
+
+                    </small>
+
+                </div>
+
+
+                <a
+                    href="{% url 'data_prestasi' %}"
+                    class="btn btn-primary btn-sm"
+                >
+
+                    Lihat Semua
+
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <div class="card-body">
+
+            <div class="table-responsive">
+
+                <table class="table table-bordered table-striped table-hover align-middle mb-0">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Murid
+                            </th>
+
+                            <th>
+                                Lomba
+                            </th>
+
+                            <th>
+                                Tingkat
+                            </th>
+
+                            <th>
+                                Juara
+                            </th>
+
+                            <th class="text-center">
+                                Tahun
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for data in prestasi_terbaru %}
+
+                            <tr>
+
+                                <td class="fw-semibold">
+
+                                    {{ data.murid.nama }}
+
+                                </td>
+
+
+                                <td>
+
+                                    {{ data.nama_lomba }}
+
+                                </td>
+
+
+                                <td>
+
+                                    {% if data.tingkat == 'Internasional' %}
+
+                                        <span class="badge bg-dark">
+                                            {{ data.tingkat }}
+                                        </span>
+
+                                    {% elif data.tingkat == 'Nasional' %}
+
+                                        <span class="badge bg-danger">
+                                            {{ data.tingkat }}
+                                        </span>
+
+                                    {% elif data.tingkat == 'Provinsi' %}
+
+                                        <span class="badge bg-warning text-dark">
+                                            {{ data.tingkat }}
+                                        </span>
+
+                                    {% elif data.tingkat == 'Kabupaten' %}
+
+                                        <span class="badge bg-success">
+                                            {{ data.tingkat }}
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="badge bg-primary">
+                                            {{ data.tingkat }}
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <td>
+
+                                    {{ data.juara }}
+
+                                </td>
+
+
+                                <td class="text-center">
+
+                                    {{ data.tahun }}
+
+                                </td>
+
+                            </tr>
+
+
+                        {% empty %}
+
+                            <tr>
+
+                                <td
+                                    colspan="5"
+                                    class="text-center text-muted py-4"
+                                >
+
+                                    <i class="bi bi-trophy fs-4 d-block mb-1"></i>
+
+                                    Belum ada data prestasi.
+
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         PENILAIAN SEKOLAH
+    ====================================================== -->
+
+    <div class="card border-0 shadow-sm mb-4">
+
+        <div class="card-header bg-body">
+
+            <div>
+
+                <h5 class="mb-1">
+
+                    <i class="bi bi-bar-chart-line text-primary me-2"></i>
+
+                    Penilaian Prioritas Sekolah
+
+                </h5>
+
+
+                <small class="text-muted">
+
+                    Ringkasan penilaian berdasarkan aset,
+                    kapasitas dan kelayakan
+
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <div class="card-body">
+
+            <div class="row g-3">
+
+
+                <!-- =============================================
+                     SKOR UTAMA
+                ============================================== -->
+
+                <div class="col-xl-4">
+
+                    <div class="dashboard-mini-card text-center">
+
+                        <div class="small text-muted mb-3">
+
+                            Skor Prioritas
+
+                        </div>
+
+
+                        {% if penilaian.skor_prioritas is not None %}
+
+                            <div
+                                class="
+                                    dashboard-score
+                                    text-{{ penilaian.status.warna }}
+                                "
+                            >
+
+                                {{ penilaian.skor_prioritas }}
+
+                            </div>
+
+
+                            <div class="mt-3">
+
+                                <span
+                                    class="
+                                        badge
+                                        bg-{{ penilaian.status.warna }}
+                                        px-3
+                                        py-2
+                                    "
+                                >
+
+                                    <i
+                                        class="
+                                            bi
+                                            {{ penilaian.status.ikon }}
+                                            me-1
+                                        "
+                                    ></i>
+
+                                    {{ penilaian.status.nama }}
+
+                                </span>
+
+                            </div>
+
+                        {% else %}
+
+                            <div class="dashboard-score text-muted">
+
+                                -
+
+                            </div>
+
+
+                            <span class="badge bg-secondary mt-3">
+
+                                Belum Dinilai
+
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =============================================
+                     SKOR DETAIL
+                ============================================== -->
+
+                <div class="col-xl-8">
+
+                    <div class="row g-3 h-100">
+
+
+                        <div class="col-md-4">
+
+                            <div class="dashboard-mini-card text-center">
+
+                                <div class="dashboard-icon bg-primary-subtle mx-auto mb-3">
+
+                                    <i class="bi bi-building-gear fs-4 text-primary"></i>
+
+                                </div>
+
+
+                                <div class="small text-muted">
+
+                                    Skor Aset
+
+                                </div>
+
+
+                                <div class="dashboard-number mt-1">
+
+                                    {% if penilaian.skor_aset is not None %}
+
+                                        {{ penilaian.skor_aset }}
+
+                                    {% else %}
+
+                                        -
+
+                                    {% endif %}
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="col-md-4">
+
+                            <div class="dashboard-mini-card text-center">
+
+                                <div class="dashboard-icon bg-warning-subtle mx-auto mb-3">
+
+                                    <i class="bi bi-people fs-4 text-warning"></i>
+
+                                </div>
+
+
+                                <div class="small text-muted">
+
+                                    Skor Kapasitas
+
+                                </div>
+
+
+                                <div class="dashboard-number mt-1">
+
+                                    {% if penilaian.skor_kapasitas is not None %}
+
+                                        {{ penilaian.skor_kapasitas }}
+
+                                    {% else %}
+
+                                        -
+
+                                    {% endif %}
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="col-md-4">
+
+                            <div class="dashboard-mini-card text-center">
+
+                                <div class="dashboard-icon bg-success-subtle mx-auto mb-3">
+
+                                    <i class="bi bi-clipboard2-check fs-4 text-success"></i>
+
+                                </div>
+
+
+                                <div class="small text-muted">
+
+                                    Skor Kelayakan
+
+                                </div>
+
+
+                                <div class="dashboard-number mt-1">
+
+                                    {% if penilaian.skor_kelayakan is not None %}
+
+                                        {{ penilaian.skor_kelayakan }}
+
+                                    {% else %}
+
+                                        -
+
+                                    {% endif %}
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+            {% if not penilaian.penilaian_final %}
+
+                <div class="border-top mt-4 pt-3">
+
+                    <small class="text-muted">
+
+                        <i class="bi bi-info-circle text-primary me-1"></i>
+
+                        Penilaian belum final karena data
+                        pendukung sekolah belum lengkap.
+
+                    </small>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         KELENGKAPAN DATA ASET
+    ====================================================== -->
+
+    <div class="card border-0 shadow-sm mb-4">
+
+        <div class="card-header bg-body">
+
+            <div class="d-flex justify-content-between align-items-center">
+
+                <div>
+
+                    <h5 class="mb-1">
+
+                        <i class="bi bi-clipboard-data text-primary me-2"></i>
+
+                        Kelengkapan Data Aset
+
+                    </h5>
+
+
+                    <small class="text-muted">
+
+                        {{ jumlah_terisi }} dari
+                        {{ jumlah_master }}
+                        indikator telah diisi
+
+                    </small>
+
+                </div>
+
+
+                <strong>
+
+                    {{ persentase_pengisian }}%
+
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="card-body">
+
+            <div
+                class="progress"
+                style="
+                    height: 12px;
+                "
+            >
+
+                <div
+                    class="progress-bar"
+                    role="progressbar"
+                    style="
+                        width:
+                        {{ persentase_pengisian }}%;
+                    "
+                ></div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         KONDISI ASET + CATATAN
+    ====================================================== -->
+
+    <div class="row g-3 mb-4">
+
+
+        <!-- =================================================
+             KONDISI ASET
+        ================================================== -->
+
+        <div class="col-xl-6">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-header bg-body">
+
+                    <div>
+
+                        <h5 class="mb-1">
+
+                            <i class="bi bi-tools text-primary me-2"></i>
+
+                            Kondisi Aset
+
+                        </h5>
+
+
+                        <small class="text-muted">
+
+                            Ringkasan kondisi sarana dan prasarana
+
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card-body">
+
+                    <div class="row g-3">
+
+
+                        <div class="col-6">
+
+                            <div class="dashboard-mini-card">
+
+                                <div class="small text-success">
+
+                                    <i class="bi bi-check-circle me-1"></i>
+
+                                    Tersedia
+
+                                </div>
+
+
+                                <div class="dashboard-number mt-2">
+
+                                    {{ jumlah_ada }}
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="col-6">
+
+                            <div class="dashboard-mini-card">
+
+                                <div class="small text-danger">
+
+                                    <i class="bi bi-x-circle me-1"></i>
+
+                                    Tidak Ada
+
+                                </div>
+
+
+                                <div class="dashboard-number mt-2">
+
+                                    {{ jumlah_tidak_ada }}
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="col-6">
+
+                            <div class="dashboard-mini-card">
+
+                                <div class="small text-warning">
+
+                                    <i class="bi bi-exclamation-triangle me-1"></i>
+
+                                    Rusak Ringan
+
+                                </div>
+
+
+                                <div class="dashboard-number mt-2">
+
+                                    {{ jumlah_rusak_ringan }}
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="col-6">
+
+                            <div class="dashboard-mini-card">
+
+                                <div class="small text-danger">
+
+                                    <i class="bi bi-exclamation-octagon me-1"></i>
+
+                                    Rusak Berat
+
+                                </div>
+
+
+                                <div class="dashboard-number mt-2">
+
+                                    {{ jumlah_rusak_berat }}
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             CATATAN PENILAIAN
+        ================================================== -->
+
+        <div class="col-xl-6">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-header bg-body">
+
+                    <div>
+
+                        <h5 class="mb-1">
+
+                            <i class="bi bi-exclamation-circle text-warning me-2"></i>
+
+                            Catatan Penilaian
+
+                        </h5>
+
+
+                        <small class="text-muted">
+
+                            Faktor yang memengaruhi hasil penilaian
+
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card-body">
+
+                    {% if penilaian.alasan %}
+
+                        <div class="list-group list-group-flush">
+
+                            {% for alasan in penilaian.alasan %}
+
+                                <div class="list-group-item px-0 bg-transparent">
+
+                                    <div class="d-flex gap-2">
+
+                                        <i class="bi bi-chevron-right text-primary"></i>
+
+                                        <div>
+
+                                            {{ alasan }}
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+                    {% else %}
+
+                        <div class="text-center text-muted py-4">
+
+                            <i class="bi bi-check-circle fs-3 d-block mb-2"></i>
+
+                            Belum ada catatan penilaian.
+
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =====================================================
+         LEGALITAS TANAH
+    ====================================================== -->
+
+    <div class="card border-0 shadow-sm">
+
+        <div class="card-header bg-body">
+
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+                <div>
+
+                    <h5 class="mb-1">
+
+                        <i class="bi bi-file-earmark-check text-primary me-2"></i>
+
+                        Legalitas Tanah
+
+                    </h5>
+
+
+                    <small class="text-muted">
+
+                        Status kelengkapan legalitas tanah sekolah
+
+                    </small>
+
+                </div>
+
+
+                <a
+                    href="{% url 'tanah_legalitas_sekolah' %}"
+                    class="btn btn-primary btn-sm"
+                >
+
+                    <i class="bi bi-pencil-square me-1"></i>
+
+                    Kelola Legalitas
+
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <div class="card-body">
+
+            {% if penilaian.legalitas_aman %}
+
+                <div class="d-flex align-items-center gap-3">
+
+                    <div class="dashboard-icon bg-success-subtle">
+
+                        <i class="bi bi-check-circle-fill fs-4 text-success"></i>
+
+                    </div>
+
+
+                    <div>
+
+                        <div class="fw-semibold">
+
+                            Legalitas Tersedia
+
+                        </div>
+
+
+                        <div class="small text-muted">
+
+                            Data legalitas tanah sekolah telah tersedia.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+            {% else %}
+
+                <div class="d-flex align-items-center gap-3">
+
+                    <div class="dashboard-icon bg-warning-subtle">
+
+                        <i class="bi bi-exclamation-triangle-fill fs-4 text-warning"></i>
+
+                    </div>
+
+
+                    <div>
+
+                        <div class="fw-semibold">
+
+                            {{ penilaian.status_legalitas }}
+
+                        </div>
+
+
+                        <div class="small text-muted">
+
+                            Lengkapi data legalitas tanah sekolah
+                            untuk mendukung penilaian.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+</div>
+
+{% endblock %}

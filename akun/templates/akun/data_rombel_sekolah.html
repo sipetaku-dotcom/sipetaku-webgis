@@ -1,0 +1,634 @@
+{% extends 'base.html' %}
+
+{% block title %}{% endblock %}
+
+
+{% block content %}
+
+<div class="container-fluid">
+
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <div class="card shadow-sm border-0 mb-4">
+
+        <div class="card-header bg-body border-0">
+
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+                <div>
+
+                    <h5 class="mb-1">
+
+                        <i class="bi bi-people text-primary me-2"></i>
+
+                        Data Rombongan Belajar
+
+                    </h5>
+
+
+                    <small class="text-muted">
+
+                        {{ sekolah.nama }}
+
+                        {% if tahun_ajaran %}
+
+                            · Tahun Ajaran {{ tahun_ajaran.nama }}
+
+                        {% endif %}
+
+                    </small>
+
+                </div>
+
+
+                <div class="d-flex gap-2 flex-wrap">
+
+                    <a
+                        href="{% url 'tambah_rombel_sekolah' %}"
+                        class="btn btn-primary btn-sm"
+                    >
+
+                        <i class="bi bi-plus-circle me-1"></i>
+
+                        Tambah Rombel
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         RINGKASAN
+    ====================================================== -->
+
+    <div class="row g-3 mb-4">
+
+
+        <!-- JUMLAH ROMBEL -->
+
+        <div class="col-6 col-xl-3">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-body">
+
+                    <div class="text-muted small">
+
+                        Jumlah Rombel
+
+                    </div>
+
+
+                    <div class="fs-3 fw-bold text-primary">
+
+                        {{ total_rombel }}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- JUMLAH SISWA -->
+
+        <div class="col-6 col-xl-3">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-body">
+
+                    <div class="text-muted small">
+
+                        Jumlah Siswa
+
+                    </div>
+
+
+                    <div class="fs-3 fw-bold text-success">
+
+                        {{ total_siswa }}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- KAPASITAS IDEAL -->
+
+        <div class="col-6 col-xl-3">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-body">
+
+                    <div class="text-muted small">
+
+                        Kapasitas Ideal
+
+                    </div>
+
+
+                    <div class="fs-3 fw-bold text-info">
+
+                        {{ total_kapasitas }}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- KELEBIHAN SISWA -->
+
+        <div class="col-6 col-xl-3">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-body">
+
+                    <div class="text-muted small">
+
+                        Kelebihan Siswa
+
+                    </div>
+
+
+                    <div class="fs-3 fw-bold text-danger">
+
+                        {{ total_kekurangan }}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =====================================================
+         TABEL ROMBEL
+    ====================================================== -->
+
+    <div class="card shadow-sm border-0">
+
+        <div class="card-header bg-body">
+
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+                <div>
+
+                    <h5 class="mb-1">
+
+                        <i class="bi bi-table text-primary me-2"></i>
+
+                        Daftar Rombel
+
+                    </h5>
+
+
+                    <small class="text-muted">
+
+                        Data rombongan belajar dan kapasitas siswa sekolah
+
+                    </small>
+
+                </div>
+
+
+                <span class="badge bg-secondary px-3 py-2">
+
+                    <i class="bi bi-collection me-1"></i>
+
+                    {{ total_rombel }} Rombel
+
+                </span>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="card-body">
+
+            <div class="table-responsive">
+
+                <table
+                    id="tableRombel"
+                    class="table table-bordered table-striped table-hover align-middle w-100"
+                >
+
+                    <thead>
+
+                        <tr>
+
+                            <th class="text-center">
+                                No
+                            </th>
+
+                            <th>
+                                Kelas
+                            </th>
+
+                            <th class="text-center">
+                                Rombel
+                            </th>
+
+                            <th class="text-center">
+                                Siswa
+                            </th>
+
+                            <th class="text-center">
+                                Kapasitas
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th class="text-center">
+                                Aksi
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+
+                    <tbody>
+
+                        {% for data in daftar_rombel %}
+
+                            <tr>
+
+
+                                <!-- =====================================
+                                     NO
+                                ====================================== -->
+
+                                <td class="text-center">
+
+                                    {{ forloop.counter }}
+
+                                </td>
+
+
+
+                                <!-- =====================================
+                                     KELAS
+                                ====================================== -->
+
+                                <td>
+
+                                    <div class="fw-bold">
+
+                                        {{ data.nama_kelas }}
+
+                                    </div>
+
+                                </td>
+
+
+
+                                <!-- =====================================
+                                     JUMLAH ROMBEL
+                                ====================================== -->
+
+                                <td class="text-center">
+
+                                    <span class="fw-semibold">
+
+                                        {{ data.jumlah_rombel }}
+
+                                    </span>
+
+                                </td>
+
+
+
+                                <!-- =====================================
+                                     JUMLAH SISWA
+                                ====================================== -->
+
+                                <td class="text-center">
+
+                                    <span class="fw-semibold">
+
+                                        {{ data.jumlah_siswa_aktif }}
+
+                                    </span>
+
+                                </td>
+
+
+
+                                <!-- =====================================
+                                     KAPASITAS
+                                ====================================== -->
+
+                                <td class="text-center">
+
+                                    <span class="fw-semibold">
+
+                                        {{ data.kapasitas_total }}
+
+                                    </span>
+
+                                </td>
+
+
+
+                                <!-- =====================================
+                                     STATUS
+                                ====================================== -->
+
+                                <td>
+
+                                    {% if data.melebihi_kapasitas %}
+
+                                        <span class="badge bg-danger">
+
+                                            <i class="bi bi-exclamation-triangle me-1"></i>
+
+                                            Lebih {{ data.kekurangan_kapasitas }} Siswa
+
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="badge bg-success">
+
+                                            <i class="bi bi-check-circle me-1"></i>
+
+                                            Sesuai
+
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+
+                                <!-- =====================================
+                                    AKSI
+                                ====================================== -->
+
+                                <td class="text-nowrap text-center">
+
+                                    <div class="d-inline-flex gap-1">
+
+
+                                        <!-- EDIT -->
+
+                                        <a
+                                            href="{% url 'edit_rombel_sekolah' data.id %}"
+                                            class="btn btn-warning btn-sm"
+                                        >
+
+                                            <i class="bi bi-pencil-square me-1"></i>
+
+                                            Edit
+
+                                        </a>
+
+
+
+                                        <!-- HAPUS -->
+
+                                        <form
+                                            method="POST"
+                                            action="{% url 'hapus_rombel_sekolah' data.id %}"
+                                            class="d-inline form-hapus-rombel"
+                                            data-nama="{{ data.nama_kelas }}"
+                                            data-manual-loading="true"
+                                        >
+
+                                            {% csrf_token %}
+
+
+                                            <button
+                                                type="submit"
+                                                class="btn btn-danger btn-sm"
+                                            >
+
+                                                <i class="bi bi-trash me-1"></i>
+
+                                                Hapus
+
+                                            </button>
+
+                                        </form>
+
+
+                                    </div>
+
+                                </td>
+
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+{% endblock %}
+
+
+
+{% block js %}
+
+<script>
+
+$(document).ready(function () {
+
+
+    // =====================================================
+    // DATATABLE
+    // =====================================================
+
+    $('#tableRombel').DataTable({
+
+        responsive: true,
+
+        autoWidth: false,
+
+        pageLength: 10,
+
+        lengthMenu: [
+            10,
+            25,
+            50,
+            100
+        ],
+
+        columnDefs: [
+
+            {
+                targets: [
+                    0,
+                    6
+                ],
+                orderable: false
+            }
+
+        ],
+
+        language: {
+
+            emptyTable:
+                'Belum ada data rombel',
+
+            search:
+                'Cari:',
+
+            lengthMenu:
+                'Tampilkan _MENU_ data',
+
+            info:
+                'Menampilkan _START_–_END_ dari _TOTAL_ data',
+
+            infoEmpty:
+                'Belum ada data',
+
+            zeroRecords:
+                'Data rombel tidak ditemukan',
+
+            paginate: {
+
+                previous:
+                    'Sebelumnya',
+
+                next:
+                    'Berikutnya'
+
+            }
+
+        }
+
+    });
+
+
+
+    // =====================================================
+    // KONFIRMASI HAPUS ROMBEL
+    // =====================================================
+
+    $('.form-hapus-rombel').on(
+        'submit',
+        function (event) {
+
+            event.preventDefault();
+
+
+            const form = this;
+
+
+            const nama = $(this).data(
+                'nama'
+            );
+
+
+            Swal.fire({
+
+                title:
+                    'Hapus rombel?',
+
+                text:
+                    nama
+                    + ' akan dihapus dari data rombongan belajar.',
+
+                icon:
+                    'warning',
+
+                showCancelButton:
+                    true,
+
+                confirmButtonText:
+                    'Ya, hapus',
+
+                cancelButtonText:
+                    'Batal',
+
+                confirmButtonColor:
+                    '#dc3545'
+
+            }).then(function (hasil) {
+
+                if (hasil.isConfirmed) {
+
+                    const tombol =
+                        form.querySelector(
+                            'button[type="submit"]'
+                        );
+
+                    if (tombol) {
+
+                        tombol.disabled = true;
+
+                        tombol.innerHTML = `
+                            <span
+                                class="spinner-border spinner-border-sm me-2"
+                                role="status"
+                                aria-hidden="true">
+                            </span>
+                            Menghapus...
+                        `;
+
+                    }
+
+                    form.submit();
+
+                }
+
+            });
+
+        }
+    );
+
+
+});
+
+</script>
+
+{% endblock %}

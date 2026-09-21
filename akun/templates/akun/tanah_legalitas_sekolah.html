@@ -1,0 +1,996 @@
+{% extends 'base.html' %}
+
+{% load l10n %}
+{% load format_angka %}
+{% block title %}{% endblock %}
+
+
+{% block content %}
+
+<div class="container-fluid">
+
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <div class="card shadow-sm border-0 mb-4">
+
+        <div class="card-header bg-body border-0">
+
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+                <div>
+
+                    <h5 class="mb-1">
+
+                        <i class="bi bi-geo-alt text-primary me-2"></i>
+
+                        Data Legalitas Tanah
+
+                    </h5>
+
+
+                    <small class="text-muted">
+
+                        {{ sekolah.nama }}
+
+                        · Total Luas
+
+                        <strong>
+
+                            {{ total_luas|format_ribuan }}
+
+                            m²
+
+                        </strong>
+
+                    </small>
+
+                </div>
+
+
+                <a
+                    href="{% url 'tambah_bidang_tanah' %}"
+                    class="btn btn-primary btn-sm"
+                >
+
+                    <i class="bi bi-plus-circle me-1"></i>
+
+                    Tambah Bidang
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    
+
+
+
+    <!-- =====================================================
+         RINGKASAN
+    ====================================================== -->
+
+    <div class="row g-3 mb-4">
+
+
+        <!-- =================================================
+             JUMLAH BIDANG
+        ================================================== -->
+
+        <div class="col-6 col-xl-3">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-body">
+
+                    <div class="text-muted small">
+
+                        Jumlah Bidang
+
+                    </div>
+
+
+                    <div class="fs-3 fw-bold text-primary">
+
+                        {{ jumlah_bidang }}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             TOTAL LUAS
+        ================================================== -->
+
+        <div class="col-6 col-xl-3">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-body">
+
+                    <div class="text-muted small">
+
+                        Total Luas
+
+                    </div>
+
+
+                    <div class="fs-3 fw-bold text-success">
+
+                        {{ total_luas|format_ribuan }}
+
+                        <span class="fs-6">
+                            m²
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             BERLEGALITAS
+        ================================================== -->
+
+        <div class="col-6 col-xl-3">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-body">
+
+                    <div class="text-muted small">
+
+                        Berlegalitas
+
+                    </div>
+
+
+                    <div class="fs-3 fw-bold text-info">
+
+                        {{ jumlah_berlegalitas }}
+
+                    </div>
+
+
+                    <small class="text-muted">
+
+                        dari {{ jumlah_bidang }} bidang
+
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             STATUS
+        ================================================== -->
+
+        <div class="col-6 col-xl-3">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-body">
+
+                    <div class="text-muted small">
+
+                        Status Legalitas
+
+                    </div>
+
+
+                    <div class="mt-2">
+
+                        <span
+                            class="
+                                badge
+                                bg-{{ status_warna }}
+                                px-3
+                                py-2
+                            "
+                        >
+
+                            {{ status_legalitas }}
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =====================================================
+         DAFTAR BIDANG TANAH
+    ====================================================== -->
+
+    <div class="card shadow-sm border-0">
+
+        <div class="card-header bg-body">
+
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+                <div>
+
+                    <h5 class="mb-1">
+
+                        <i class="bi bi-table text-primary me-2"></i>
+
+                        Daftar Bidang Tanah
+
+                    </h5>
+
+
+                    <small class="text-muted">
+
+                        Daftar bidang tanah dan status
+                        legalitas yang dimiliki sekolah
+
+                    </small>
+
+                </div>
+
+
+                <span class="badge bg-secondary px-3 py-2">
+
+                    <i class="bi bi-map me-1"></i>
+
+                    {{ jumlah_bidang }} Bidang
+
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="card-body">
+
+            <div class="table-responsive">
+
+                <table
+                    id="tableBidangTanah"
+                    class="table table-bordered table-striped table-hover align-middle w-100"
+                >
+
+                    <thead>
+
+                        <tr>
+
+                            <th class="text-center">
+                                No
+                            </th>
+
+                            <th>
+                                Bidang
+                            </th>
+
+                            <th>
+                                Luas
+                            </th>
+
+                            <th>
+                                Kepemilikan
+                            </th>
+
+                            <th>
+                                Legalitas
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th class="text-center">
+                                Aksi
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for bidang in daftar_bidang %}
+
+                            <tr>
+
+
+                                <!-- =====================================
+                                     NO
+                                ====================================== -->
+
+                                <td class="text-center">
+
+                                    {{ forloop.counter }}
+
+                                </td>
+
+
+
+                                <!-- =====================================
+                                     BIDANG
+                                ====================================== -->
+
+                                <td>
+
+                                    <div class="fw-bold">
+
+                                        Bidang Tanah
+                                        {{ bidang.nomor_bidang }}
+
+                                    </div>
+
+
+                                    {% if bidang.keterangan %}
+
+                                        <small class="text-muted">
+
+                                            {{ bidang.keterangan|truncatechars:60 }}
+
+                                        </small>
+
+                                    {% endif %}
+
+                                </td>
+
+
+
+                                <!-- =====================================
+                                     LUAS
+                                ====================================== -->
+
+                                <td class="text-nowrap">
+
+                                    <strong>
+
+                                        {{ bidang.luas_bidang_m2|format_ribuan }}
+
+                                    </strong>
+
+                                    m²
+
+                                </td>
+
+
+
+                                <!-- =====================================
+                                     STATUS KEPEMILIKAN
+                                ====================================== -->
+
+                                <td>
+
+                                    {{ bidang.get_status_kepemilikan_display }}
+
+                                </td>
+
+
+
+                                <!-- =====================================
+                                     LEGALITAS
+                                ====================================== -->
+
+                                <td>
+
+                                    {% with jumlah=bidang.legalitas.count %}
+
+                                        {% if jumlah > 0 %}
+
+                                            <span class="badge bg-primary">
+
+                                                <i class="bi bi-file-earmark-check me-1"></i>
+
+                                                {{ jumlah }} Dokumen
+
+                                            </span>
+
+                                        {% else %}
+
+                                            <span class="text-muted">
+
+                                                Belum ada
+
+                                            </span>
+
+                                        {% endif %}
+
+                                    {% endwith %}
+
+                                </td>
+
+
+
+                                <!-- =====================================
+                                     STATUS
+                                ====================================== -->
+
+                                <td>
+
+                                    {% if bidang.legalitas.count > 0 %}
+
+                                        <span class="badge bg-success">
+
+                                            <i class="bi bi-check-circle me-1"></i>
+
+                                            Berlegalitas
+
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="badge bg-warning text-dark">
+
+                                            <i class="bi bi-exclamation-circle me-1"></i>
+
+                                            Belum Lengkap
+
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+
+                                <!-- =====================================
+                                     AKSI
+                                ====================================== -->
+
+                                <td class="text-nowrap text-center">
+
+                                    <div class="d-inline-flex gap-1">
+
+                                       <!-- EDIT -->
+
+                                        <a
+                                            href="{% url 'edit_bidang_tanah' bidang.id %}"
+                                            class="btn btn-warning btn-sm"
+                                        >
+
+                                            <i class="bi bi-pencil-square me-1"></i>
+
+                                            Edit
+
+                                        </a>
+
+
+                                        <!-- DETAIL -->
+
+                                        <a
+                                            href="{% url 'detail_bidang_tanah' bidang.id %}"
+                                            class="btn btn-info btn-sm"
+                                        >
+
+                                            <i class="bi bi-eye me-1"></i>
+
+                                            Detail
+
+                                        </a>
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                        {% empty %}
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            {% if not daftar_bidang %}
+
+                <div class="text-center py-5">
+
+                    <i class="bi bi-map fs-1 text-muted"></i>
+
+
+                    <div class="fw-semibold mt-2">
+
+                        Belum Ada Bidang Tanah
+
+                    </div>
+
+
+                    <div class="small text-muted mb-3">
+
+                        Tambahkan bidang tanah terlebih dahulu
+                        sebelum mencatat dokumen legalitas.
+
+                    </div>
+
+
+                    <a
+                        href="{% url 'tambah_bidang_tanah' %}"
+                        class="btn btn-primary btn-sm"
+                    >
+
+                        <i class="bi bi-plus-circle me-1"></i>
+
+                        Tambah Bidang
+
+                    </a>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+        KOORDINAT SEKOLAH
+    ====================================================== -->
+
+    <div class="card shadow-sm border-0 mt-4">
+
+        <div class="card-header bg-body">
+
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+                <div>
+
+                    <h5 class="mb-1">
+
+                        <i class="bi bi-crosshair text-primary me-2"></i>
+
+                        Koordinat Sekolah
+
+                    </h5>
+
+
+                    <small class="text-muted">
+
+                        Informasi posisi geografis sekolah
+
+                    </small>
+
+                </div>
+
+
+                {% if sekolah.latitude != None and sekolah.longitude != None %}
+
+                    <a
+                        href="https://www.google.com/maps?q={{ sekolah.latitude|unlocalize }},{{ sekolah.longitude|unlocalize }}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="btn btn-outline-success btn-sm"
+                    >
+
+                        <i class="bi bi-map me-1"></i>
+
+                        Lihat di Google Maps
+
+                    </a>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+
+        <div class="card-body">
+
+            <div class="row g-3">
+
+
+                <!-- =====================================
+                    X UTM
+                ====================================== -->
+
+                <div class="col-xl col-lg-4 col-md-6">
+
+                    <label class="form-label fw-semibold">
+
+                        Koordinat X UTM
+
+                    </label>
+
+
+                    <input
+                        type="text"
+                        class="form-control"
+                        value="{% if sekolah.x_utm != None %}{{ sekolah.x_utm|floatformat:3|unlocalize }}{% endif %}"
+                        readonly
+                    >
+
+                </div>
+
+
+
+                <!-- =====================================
+                    Y UTM
+                ====================================== -->
+
+                <div class="col-xl col-lg-4 col-md-6">
+
+                    <label class="form-label fw-semibold">
+
+                        Koordinat Y UTM
+
+                    </label>
+
+
+                    <input
+                        type="text"
+                        class="form-control"
+                        value="{% if sekolah.y_utm != None %}{{ sekolah.y_utm|floatformat:3|unlocalize }}{% endif %}"
+                        readonly
+                    >
+
+                </div>
+
+
+
+                <!-- =====================================
+                    ZONA UTM
+                ====================================== -->
+
+                <div class="col-xl col-lg-4 col-md-6">
+
+                    <label class="form-label fw-semibold">
+
+                        Zona UTM
+
+                    </label>
+
+
+                    <input
+                        type="text"
+                        class="form-control"
+                        value="{{ sekolah.zona_utm }}"
+                        readonly
+                    >
+
+                </div>
+
+
+
+                <!-- =====================================
+                    LATITUDE
+                ====================================== -->
+
+                <div class="col-xl col-lg-6 col-md-6">
+
+                    <label class="form-label fw-semibold">
+
+                        Latitude
+
+                    </label>
+
+
+                    <input
+                        type="text"
+                        class="form-control"
+                        value="{% if sekolah.latitude != None %}{{ sekolah.latitude|floatformat:5|unlocalize }}{% endif %}"
+                        readonly
+                    >
+
+                </div>
+
+
+
+                <!-- =====================================
+                    LONGITUDE
+                ====================================== -->
+
+                <div class="col-xl col-lg-6 col-md-6">
+
+                    <label class="form-label fw-semibold">
+
+                        Longitude
+
+                    </label>
+
+
+                    <input
+                        type="text"
+                        class="form-control"
+                        value="{% if sekolah.longitude != None %}{{ sekolah.longitude|floatformat:5|unlocalize }}{% endif %}"
+                        readonly
+                    >
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div> 
+
+
+
+    <!-- =====================================================
+         INFORMASI
+    ====================================================== -->
+
+    <div class="card shadow-sm border-0 mt-4">
+
+        <div class="card-header bg-body border-0">
+
+            <div class="d-flex align-items-start gap-3">
+
+                <div
+                    class="rounded-circle bg-primary-subtle d-flex align-items-center justify-content-center flex-shrink-0"
+                    style="
+                        width: 46px;
+                        height: 46px;
+                    "
+                >
+
+                    <i class="bi bi-info-circle text-primary fs-5"></i>
+
+                </div>
+
+
+                <div>
+
+                    <div class="fw-semibold mb-1">
+
+                        Tentang Data Legalitas Tanah
+
+                    </div>
+
+
+                    <div class="small text-muted">
+
+                        Setiap bidang tanah dicatat sebagai satu
+                        bidang tersendiri. Satu bidang dapat memiliki
+                        lebih dari satu dokumen legalitas tanpa
+                        menambah luas tanah berulang kali.
+
+                        Data ini digunakan sebagai bagian dari
+                        penilaian kondisi dan prioritas sarana
+                        prasarana sekolah di SIPETAKU.
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div> 
+
+
+</div>
+
+{% endblock %}
+
+
+
+{% block js %}
+
+<script>
+
+$(document).ready(function () {
+
+
+    // =====================================================
+    // DATATABLE
+    // =====================================================
+
+    $('#tableBidangTanah').DataTable({
+
+        responsive: true,
+
+        autoWidth: false,
+
+        pageLength: 10,
+
+        lengthMenu: [
+            10,
+            25,
+            50,
+            100
+        ],
+
+        columnDefs: [
+
+            {
+                targets: [
+                    0,
+                    6
+                ],
+                orderable: false
+            }
+
+        ],
+
+        language: {
+
+            emptyTable:
+                'Belum ada data bidang tanah',
+
+            search:
+                'Cari:',
+
+            lengthMenu:
+                'Tampilkan _MENU_ data',
+
+            info:
+                'Menampilkan _START_–_END_ dari _TOTAL_ data',
+
+            infoEmpty:
+                'Belum ada data',
+
+            zeroRecords:
+                'Data bidang tanah tidak ditemukan',
+
+            paginate: {
+
+                previous:
+                    'Sebelumnya',
+
+                next:
+                    'Berikutnya'
+
+            }
+
+        }
+
+    });
+
+
+
+    // =====================================================
+    // KONFIRMASI HAPUS BIDANG
+    // =====================================================
+
+    $('.form-hapus-bidang').on(
+        'submit',
+        function (event) {
+
+            event.preventDefault();
+
+
+            const form = this;
+
+
+            const nomorBidang = (
+                $(this).data(
+                    'bidang'
+                )
+            );
+
+
+            const jumlahLegalitas = (
+                $(this).data(
+                    'legalitas'
+                )
+            );
+
+
+            let pesan = (
+                'Bidang Tanah '
+                + nomorBidang
+                + ' akan dihapus.'
+            );
+
+
+            if (
+                jumlahLegalitas > 0
+            ) {
+
+                pesan = (
+                    'Bidang Tanah '
+                    + nomorBidang
+                    + ' memiliki '
+                    + jumlahLegalitas
+                    + ' dokumen legalitas. '
+                    + 'Seluruh legalitas dan lampiran '
+                    + 'yang terkait juga akan dihapus.'
+                );
+
+            }
+
+
+            Swal.fire({
+
+                title:
+                    'Hapus bidang tanah?',
+
+                text:
+                    pesan,
+
+                icon:
+                    'warning',
+
+                showCancelButton:
+                    true,
+
+                confirmButtonText:
+                    'Ya, hapus',
+
+                cancelButtonText:
+                    'Batal',
+
+                confirmButtonColor:
+                    '#dc3545'
+
+            }).then(function (hasil) {
+
+                if (
+                    hasil.isConfirmed
+                ) {
+
+                    const tombol =
+                        form.querySelector(
+                            'button[type="submit"]'
+                        );
+
+
+                    if (tombol) {
+
+                        tombol.disabled =
+                            true;
+
+
+                        tombol.innerHTML = `
+                            <span
+                                class="spinner-border spinner-border-sm me-2"
+                                role="status"
+                                aria-hidden="true">
+                            </span>
+                            Menghapus...
+                        `;
+
+                    }
+
+
+                    form.submit();
+
+                }
+
+            });
+
+        }
+    );
+
+
+});
+
+</script>
+
+{% endblock %}

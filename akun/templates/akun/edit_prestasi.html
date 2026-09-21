@@ -2,93 +2,402 @@
 
 {% block title %}{% endblock %}
 
+
 {% block content %}
 
-<div class="card shadow-sm border-0">
+<div class="container-fluid">
 
-    <div class="card-header">
 
-        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
 
-            <h5 class="mb-0">
-                <i class="bi bi-pencil-square text-warning me-2"></i>
-                Edit Prestasi
-            </h5>
+    <div class="card shadow-sm border-0 mb-4">
 
-            <a
-                href="/data-prestasi/"
-                class="btn btn-secondary btn-sm ms-auto"
-            >
-                <i class="bi bi-arrow-left me-1"></i>
-                Kembali
-            </a>
+        <div class="card-header bg-body">
+
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+                <div>
+
+                    <h5 class="mb-1">
+
+                        <i class="bi bi-pencil-square text-warning me-2"></i>
+
+                        Edit Prestasi
+
+                    </h5>
+
+
+                    <small class="text-muted">
+
+                        Perbarui data prestasi siswa sekolah
+
+                    </small>
+
+                </div>
+
+
+                <a
+                    href="{% url 'data_prestasi' %}"
+                    class="btn btn-secondary btn-sm"
+                >
+
+                    <i class="bi bi-arrow-left me-1"></i>
+
+                    Kembali
+
+                </a>
+
+            </div>
 
         </div>
 
     </div>
 
-    <div class="card-body">
 
-        <form method="POST" enctype="multipart/form-data">
 
-            {% csrf_token %}
+    <!-- =====================================================
+         INFORMASI
+    ====================================================== -->
 
-            <div class="row">
+    <div class="card border-0 shadow-sm mb-4">
 
-                {% for field in form %}
+        <div class="card-body">
 
-                <div class="col-md-6 mb-3">
+            <div class="d-flex align-items-start gap-3">
 
-                    <label class="form-label fw-semibold">
-                        {{ field.label }}
-                    </label>
+                <div
+                    class="rounded-circle bg-warning-subtle d-flex align-items-center justify-content-center flex-shrink-0"
+                    style="
+                        width: 46px;
+                        height: 46px;
+                    "
+                >
 
-                    {{ field }}
+                    <i class="bi bi-award text-warning fs-5"></i>
 
-                    {% if field.errors %}
+                </div>
 
-                    <div class="alert alert-danger py-2 mt-2 mb-0">
 
-                        {% for error in field.errors %}
-                        <div>
-                            <i class="bi bi-exclamation-triangle me-1"></i>
-                            {{ error }}
-                        </div>
+                <div>
+
+                    <div class="fw-semibold mb-1">
+
+                        Informasi Prestasi
+
+                    </div>
+
+
+                    <div class="small text-muted">
+
+                        Periksa kembali data siswa, kegiatan lomba,
+                        bidang, tingkat kompetisi, peringkat,
+                        dan tahun prestasi sebelum menyimpan perubahan.
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         FORM PRESTASI
+    ====================================================== -->
+
+    <div class="card border-0 shadow-sm">
+
+        <div class="card-header bg-body">
+
+            <div>
+
+                <h5 class="mb-1">
+
+                    <i class="bi bi-card-checklist text-primary me-2"></i>
+
+                    Data Prestasi
+
+                </h5>
+
+
+                <small class="text-muted">
+
+                    Perbarui informasi prestasi yang diperlukan
+
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <div class="card-body">
+
+            <form
+                method="POST"
+                enctype="multipart/form-data"
+                id="formEditPrestasi"
+            >
+
+                {% csrf_token %}
+
+
+
+                <!-- =============================================
+                     ERROR FORM
+                ============================================== -->
+
+                {% if form.non_field_errors %}
+
+                    <div class="alert alert-danger">
+
+                        {% for error in form.non_field_errors %}
+
+                            <div>
+
+                                <i class="bi bi-exclamation-triangle me-1"></i>
+
+                                {{ error }}
+
+                            </div>
+
                         {% endfor %}
 
                     </div>
 
-                    {% endif %}
+                {% endif %}
+
+
+
+                <!-- =============================================
+                     FIELD FORM
+                ============================================== -->
+
+                <div class="row">
+
+                    {% for field in form %}
+
+                        <div class="col-md-6 mb-3">
+
+                            <label
+                                for="{{ field.id_for_label }}"
+                                class="form-label fw-semibold"
+                            >
+
+                                {{ field.label }}
+
+                                {% if field.field.required %}
+
+                                    <span class="text-danger">
+                                        *
+                                    </span>
+
+                                {% endif %}
+
+                            </label>
+
+
+                            {{ field }}
+
+
+                            {% if field.help_text %}
+
+                                <div class="form-text">
+
+                                    {{ field.help_text }}
+
+                                </div>
+
+                            {% endif %}
+
+
+                            {% if field.errors %}
+
+                                <div class="text-danger small mt-1">
+
+                                    {% for error in field.errors %}
+
+                                        <div>
+
+                                            <i class="bi bi-exclamation-circle me-1"></i>
+
+                                            {{ error }}
+
+                                        </div>
+
+                                    {% endfor %}
+
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+                    {% endfor %}
 
                 </div>
 
-                {% endfor %}
 
-            </div>
 
-            <div class="d-flex justify-content-end gap-2 mt-3">
+                <!-- =============================================
+                     AKSI
+                ============================================== -->
 
-                <a
-                    href="/data-prestasi/"
-                    class="btn btn-secondary"
-                >
-                    Batal
-                </a>
+                <div class="border-top pt-3 mt-2">
 
-                <button
-                    type="submit"
-                    class="btn btn-primary"
-                >
-                    <i class="bi bi-save me-2"></i>
-                    Simpan Perubahan
-                </button>
+                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
 
-            </div>
 
-        </form>
+                        <small class="text-muted">
+
+                            <span class="text-danger">
+                                *
+                            </span>
+
+                            Wajib diisi
+
+                        </small>
+
+
+                        <div class="d-flex gap-2">
+
+                            <a
+                                href="{% url 'data_prestasi' %}"
+                                class="btn btn-secondary"
+                            >
+
+                                <i class="bi bi-x-circle me-1"></i>
+
+                                Batal
+
+                            </a>
+
+
+                            <button
+                                type="submit"
+                                class="btn btn-primary"
+                                id="btnSimpanPerubahan"
+                            >
+
+                                <i
+                                    class="bi bi-save me-1"
+                                    id="iconSimpanPerubahan"
+                                ></i>
+
+
+                                <span id="textSimpanPerubahan">
+
+                                    Simpan Perubahan
+
+                                </span>
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+            </form>
+
+        </div>
 
     </div>
 
+
 </div>
+
+{% endblock %}
+
+
+
+{% block js %}
+
+<script>
+
+document.addEventListener(
+    'DOMContentLoaded',
+    function () {
+
+
+        // =====================================================
+        // ELEMENT
+        // =====================================================
+
+        const form =
+            document.getElementById(
+                'formEditPrestasi'
+            );
+
+
+        const button =
+            document.getElementById(
+                'btnSimpanPerubahan'
+            );
+
+
+        const icon =
+            document.getElementById(
+                'iconSimpanPerubahan'
+            );
+
+
+        const text =
+            document.getElementById(
+                'textSimpanPerubahan'
+            );
+
+
+
+        // =====================================================
+        // LOADING SAAT SIMPAN
+        // =====================================================
+
+        if (form) {
+
+            form.addEventListener(
+                'submit',
+                function () {
+
+                    if (
+                        button
+                        &&
+                        icon
+                        &&
+                        text
+                    ) {
+
+                        button.disabled =
+                            true;
+
+
+                        icon.className =
+                            'spinner-border '
+                            + 'spinner-border-sm me-2';
+
+
+                        text.textContent =
+                            'Menyimpan...';
+
+                    }
+
+                }
+            );
+
+        }
+
+
+    }
+);
+
+</script>
 
 {% endblock %}

@@ -1,0 +1,214 @@
+{% extends 'base.html' %}
+
+{% block title %}{% endblock %}
+
+
+{% block content %}
+
+<div class="container-fluid py-4">
+
+    <div class="row justify-content-center">
+
+        <div class="col-xl-7 col-lg-8">
+
+            <div class="card border-0 shadow-sm">
+
+                <div class="card-body p-4">
+
+                    <div class="text-center mb-4">
+
+                        <div class="mb-3">
+
+                            <i class="bi bi-exclamation-triangle-fill text-warning display-4"></i>
+
+                        </div>
+
+                        <h4 class="fw-bold mb-2">
+                            Kapasitas Rombel Akan Terlampaui
+                        </h4>
+
+                        <div class="text-muted">
+
+                            Proses tetap dapat dilanjutkan,
+                            tetapi jumlah siswa akan melebihi
+                            kapasitas ideal rombel.
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="border rounded-3 p-3 mb-4">
+
+                        <div class="row g-3">
+
+                            <div class="col-md-6">
+
+                                <div class="text-muted small">
+                                    Rombel Tujuan
+                                </div>
+
+                                <div class="fw-bold">
+                                    {{ rombel_tujuan.nama_kelas }}
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-md-6">
+
+                                <div class="text-muted small">
+                                    Tahun Ajaran
+                                </div>
+
+                                <div class="fw-bold">
+                                    {{ tahun_tujuan.nama }}
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-md-3">
+
+                                <div class="text-muted small">
+                                    Kapasitas
+                                </div>
+
+                                <div class="fs-4 fw-bold">
+                                    {{ kapasitas_total }}
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-md-3">
+
+                                <div class="text-muted small">
+                                    Saat Ini
+                                </div>
+
+                                <div class="fs-4 fw-bold">
+                                    {{ jumlah_siswa_saat_ini }}
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-md-3">
+
+                                <div class="text-muted small">
+                                    Akan Masuk
+                                </div>
+
+                                <div class="fs-4 fw-bold text-primary">
+                                    {{ jumlah_siswa_masuk }}
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-md-3">
+
+                                <div class="text-muted small">
+                                    Setelah Proses
+                                </div>
+
+                                <div class="fs-4 fw-bold text-danger">
+                                    {{ jumlah_setelah_proses }}
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="alert alert-warning">
+
+                        <i class="bi bi-exclamation-triangle me-2"></i>
+
+                        Rombel akan melebihi kapasitas ideal sebanyak
+
+                        <strong>
+                            {{ kelebihan }} siswa.
+                        </strong>
+
+                    </div>
+
+
+                    <form
+                        method="POST"
+                        action="{% url 'proses_akhir_tahun' %}{% if rombel_asal_id %}?rombel={{ rombel_asal_id }}{% endif %}"
+                    >
+
+                        {% csrf_token %}
+
+
+                        {% for id in daftar_id %}
+
+                            <input
+                                type="hidden"
+                                name="riwayat_ids"
+                                value="{{ id }}"
+                            >
+
+                        {% endfor %}
+
+
+                        <input
+                            type="hidden"
+                            name="aksi_massal"
+                            value="{{ aksi }}"
+                        >
+
+
+                        <input
+                            type="hidden"
+                            name="rombel_tujuan"
+                            value="{{ rombel_tujuan.id }}"
+                        >
+
+
+                        <input
+                            type="hidden"
+                            name="lanjut_kapasitas"
+                            value="YA"
+                        >
+
+
+                        <div class="d-flex justify-content-between gap-2">
+
+                            <a
+                                href="{% url 'proses_akhir_tahun' %}{% if rombel_asal_id %}?rombel={{ rombel_asal_id }}{% endif %}"
+                                class="btn btn-outline-secondary"
+                            >
+                                <i class="bi bi-x-circle me-1"></i>
+                                Batal
+                            </a>
+
+
+                            <button
+                                type="submit"
+                                class="btn btn-warning"
+                            >
+                                <i class="bi bi-check-circle me-1"></i>
+
+                                Tetap Lanjutkan
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

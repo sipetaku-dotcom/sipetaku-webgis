@@ -1,0 +1,1045 @@
+{% extends 'base.html' %}
+
+{% block title %}{% endblock %}
+
+
+{% block content %}
+
+<div class="container-fluid">
+
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <div class="card shadow-sm border-0 mb-4">
+
+        <div class="card-header bg-body border-0">
+
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+                <div>
+
+                    <h5 class="mb-1">
+
+                        <i class="bi bi-calendar-event text-primary me-2"></i>
+
+                        Persiapan Tahun Ajaran
+
+                    </h5>
+
+
+                    <small class="text-muted">
+
+                        {{ sekolah.nama }}
+
+                        {% if tahun_tujuan %}
+
+                            · Persiapan Tahun Ajaran
+                            {{ tahun_tujuan.nama }}
+
+                        {% endif %}
+
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    
+    <!-- =====================================================
+         STATUS TAHUN AJARAN
+    ====================================================== -->
+
+    <div class="row g-3 mb-4">
+
+
+        <!-- =================================================
+             TAHUN AKTIF
+        ================================================== -->
+
+        <div class="col-md-6">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-body">
+
+                    <div class="d-flex align-items-start gap-3">
+
+                        <div
+                            class="rounded-circle bg-success-subtle d-flex align-items-center justify-content-center flex-shrink-0"
+                            style="
+                                width: 46px;
+                                height: 46px;
+                            "
+                        >
+
+                            <i class="bi bi-calendar-check text-success fs-5"></i>
+
+                        </div>
+
+
+                        <div>
+
+                            <div class="text-muted small mb-1">
+
+                                Tahun Ajaran Aktif
+
+                            </div>
+
+
+                            <div class="fs-4 fw-bold text-success">
+
+                                {{ tahun_aktif.nama }}
+
+                            </div>
+
+
+                            <div class="small text-muted mt-2">
+
+                                Seluruh data siswa aktif, dashboard sekolah,
+                                dan proses akademik saat ini masih menggunakan
+                                Tahun Ajaran ini.
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             TAHUN PERSIAPAN
+        ================================================== -->
+
+        <div class="col-md-6">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-body">
+
+                    <div class="d-flex align-items-start gap-3">
+
+                        <div
+                            class="rounded-circle bg-primary-subtle d-flex align-items-center justify-content-center flex-shrink-0"
+                            style="
+                                width: 46px;
+                                height: 46px;
+                            "
+                        >
+
+                            <i class="bi bi-calendar-plus text-primary fs-5"></i>
+
+                        </div>
+
+
+                        <div>
+
+                            <div class="text-muted small mb-1">
+
+                                Tahun Ajaran Persiapan
+
+                            </div>
+
+
+                            {% if tahun_tujuan %}
+
+                                <div class="fs-4 fw-bold text-primary">
+
+                                    {{ tahun_tujuan.nama }}
+
+                                </div>
+
+
+                                <div class="small text-muted mt-2">
+
+                                    Belum aktif dan digunakan untuk
+                                    menyiapkan rombel serta proses
+                                    perpindahan siswa dari Tahun Ajaran aktif.
+
+                                </div>
+
+
+                            {% else %}
+
+                                <div class="fw-semibold text-danger">
+
+                                    <i class="bi bi-exclamation-circle me-1"></i>
+
+                                    Belum tersedia
+
+                                </div>
+
+
+                                <div class="small text-muted mt-2">
+
+                                    Tahun Ajaran berikutnya harus dibuat
+                                    terlebih dahulu oleh Admin Kabupaten.
+
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =====================================================
+         ALUR PERSIAPAN
+    ====================================================== -->
+
+    {% if tahun_tujuan %}
+
+        <div class="card border-0 shadow-sm mb-4">
+
+            <div class="card-header bg-body">
+
+                <div>
+
+                    <h5 class="mb-1">
+
+                        <i class="bi bi-diagram-3 text-primary me-2"></i>
+
+                        Alur Persiapan
+
+                    </h5>
+
+
+                    <small class="text-muted">
+
+                        Tahapan yang dilakukan sebelum Tahun Ajaran
+                        {{ tahun_tujuan.nama }} diaktifkan
+
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <div class="card-body">
+
+                <div class="row g-3">
+
+
+                    <!-- STEP 1 -->
+
+                    <div class="col-md-4">
+
+                        <div class="border rounded-3 p-3 h-100">
+
+                            <div class="d-flex align-items-start gap-3">
+
+                                <span
+                                    class="badge bg-primary rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
+                                    style="
+                                        width: 30px;
+                                        height: 30px;
+                                    "
+                                >
+
+                                    1
+
+                                </span>
+
+
+                                <div>
+
+                                    <div class="fw-semibold">
+
+                                        Siapkan Rombel
+
+                                    </div>
+
+
+                                    <div class="small text-muted mt-1">
+
+                                        Buat rombongan belajar untuk
+                                        Tahun Ajaran {{ tahun_tujuan.nama }}.
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- STEP 2 -->
+
+                    <div class="col-md-4">
+
+                        <div class="border rounded-3 p-3 h-100">
+
+                            <div class="d-flex align-items-start gap-3">
+
+                                <span
+                                    class="badge bg-warning text-dark rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
+                                    style="
+                                        width: 30px;
+                                        height: 30px;
+                                    "
+                                >
+
+                                    2
+
+                                </span>
+
+
+                                <div>
+
+                                    <div class="fw-semibold">
+
+                                        Proses Siswa
+
+                                    </div>
+
+
+                                    <div class="small text-muted mt-1">
+
+                                        Tentukan Naik Kelas, Tinggal Kelas,
+                                        Lulus, Pindah, atau status akademik
+                                        lainnya.
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- STEP 3 -->
+
+                    <div class="col-md-4">
+
+                        <div class="border rounded-3 p-3 h-100">
+
+                            <div class="d-flex align-items-start gap-3">
+
+                                <span
+                                    class="badge bg-success rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
+                                    style="
+                                        width: 30px;
+                                        height: 30px;
+                                    "
+                                >
+
+                                    3
+
+                                </span>
+
+
+                                <div>
+
+                                    <div class="fw-semibold">
+
+                                        Menunggu Aktivasi
+
+                                    </div>
+
+
+                                    <div class="small text-muted mt-1">
+
+                                        Setelah sekolah siap, aktivasi
+                                        dilakukan secara global oleh
+                                        Admin Kabupaten.
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+    {% endif %}
+
+
+    <!-- =====================================================
+         PERBANDINGAN ROMBEL
+    ====================================================== -->
+
+    <div class="row g-3 mb-4">
+
+
+        <!-- =================================================
+             ROMBEL TAHUN AKTIF
+        ================================================== -->
+
+        <div class="col-xl-6">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-header bg-body">
+
+                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+                        <div>
+
+                            <h5 class="mb-1">
+
+                                <i class="bi bi-door-open text-success me-2"></i>
+
+                                Rombel {{ tahun_aktif.nama }}
+
+                            </h5>
+
+
+                            <small class="text-muted">
+
+                                Rombongan belajar Tahun Ajaran aktif
+
+                            </small>
+
+                        </div>
+
+
+                        <span class="badge bg-success">
+
+                            Aktif
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card-body">
+
+                    <div class="table-responsive">
+
+                        <table class="table table-bordered table-hover align-middle mb-0">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+                                        Kelas
+                                    </th>
+
+                                    <th class="text-center">
+                                        Rombel
+                                    </th>
+
+                                    <th class="text-center">
+                                        Siswa
+                                    </th>
+
+                                    <th class="text-center">
+                                        Kapasitas
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody>
+
+                                {% for data in rombel_tahun_aktif %}
+
+                                    <tr>
+
+                                        <td class="fw-semibold">
+
+                                            {{ data.nama_kelas }}
+
+                                        </td>
+
+
+                                        <td class="text-center">
+
+                                            {{ data.jumlah_rombel }}
+
+                                        </td>
+
+
+                                        <td class="text-center">
+
+                                            {{ data.jumlah_siswa_aktif }}
+
+                                        </td>
+
+
+                                        <td class="text-center">
+
+                                            {{ data.kapasitas_total }}
+
+                                        </td>
+
+                                    </tr>
+
+
+                                {% empty %}
+
+                                    <tr>
+
+                                        <td
+                                            colspan="4"
+                                            class="text-center py-5"
+                                        >
+
+                                            <i class="bi bi-door-closed fs-1 text-muted"></i>
+
+
+                                            <div class="fw-semibold mt-2">
+
+                                                Belum Ada Rombel
+
+                                            </div>
+
+
+                                            <div class="small text-muted">
+
+                                                Belum terdapat rombel untuk
+                                                Tahun Ajaran {{ tahun_aktif.nama }}.
+
+                                            </div>
+
+                                        </td>
+
+                                    </tr>
+
+                                {% endfor %}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             ROMBEL TAHUN PERSIAPAN
+        ================================================== -->
+
+        <div class="col-xl-6">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-header bg-body">
+
+                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+                        <div>
+
+                            <h5 class="mb-1">
+
+                                <i class="bi bi-door-open-fill text-primary me-2"></i>
+
+                                {% if tahun_tujuan %}
+
+                                    Rombel {{ tahun_tujuan.nama }}
+
+                                {% else %}
+
+                                    Tahun Ajaran Berikutnya
+
+                                {% endif %}
+
+                            </h5>
+
+
+                            {% if tahun_tujuan %}
+
+                                <small class="text-muted">
+
+                                    Rombongan belajar Tahun Ajaran persiapan
+
+                                </small>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        {% if tahun_tujuan %}
+
+                            <span class="badge bg-primary">
+
+                                Persiapan
+
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+                <div class="card-body">
+
+                    {% if tahun_tujuan %}
+
+                        <div class="table-responsive">
+
+                            <table class="table table-bordered table-hover align-middle mb-0">
+
+                                <thead>
+
+                                    <tr>
+
+                                        <th>
+                                            Kelas
+                                        </th>
+
+                                        <th class="text-center">
+                                            Rombel
+                                        </th>
+
+                                        <th class="text-center">
+                                            Siswa
+                                        </th>
+
+                                        <th class="text-center">
+                                            Kapasitas
+                                        </th>
+
+                                        <th class="text-center">
+                                            Aksi
+                                        </th>
+
+                                    </tr>
+
+                                </thead>
+
+
+                                <tbody>
+
+                                    {% for data in rombel_tahun_tujuan %}
+
+                                        <tr>
+
+                                            <td class="fw-semibold">
+
+                                                {{ data.nama_kelas }}
+
+                                            </td>
+
+
+                                            <td class="text-center">
+
+                                                {{ data.jumlah_rombel }}
+
+                                            </td>
+
+
+                                            <td class="text-center">
+
+                                                {{ data.jumlah_siswa_aktif }}
+
+                                            </td>
+
+
+                                            <td class="text-center">
+
+                                                {{ data.kapasitas_total }}
+
+                                            </td>
+
+
+                                            <td class="text-center text-nowrap">
+
+                                                <div class="d-inline-flex gap-1">
+
+
+                                                    <!-- EDIT -->
+
+                                                    <a
+                                                        href="{% url 'edit_rombel_tahun_berikutnya' data.id %}"
+                                                        class="btn btn-warning btn-sm"
+                                                    >
+
+                                                        <i class="bi bi-pencil-square me-1"></i>
+
+                                                        Edit
+
+                                                    </a>
+
+
+
+                                                    <!-- HAPUS -->
+
+                                                    {% if data.jumlah_siswa_aktif == 0 %}
+
+                                                        <form
+                                                            method="POST"
+                                                            action="{% url 'hapus_rombel_tahun_berikutnya' data.id %}"
+                                                            class="d-inline form-hapus-rombel-persiapan"
+                                                            data-nama="{{ data.nama_kelas }}"
+                                                            data-manual-loading="true"
+                                                        >
+
+                                                            {% csrf_token %}
+
+
+                                                            <button
+                                                                type="submit"
+                                                                class="btn btn-danger btn-sm"
+                                                            >
+
+                                                                <i class="bi bi-trash me-1"></i>
+
+                                                                Hapus
+
+                                                            </button>
+
+                                                        </form>
+
+
+                                                    {% else %}
+
+                                                        <button
+                                                            type="button"
+                                                            class="btn btn-secondary btn-sm"
+                                                            disabled
+                                                            title="Rombel sudah memiliki siswa"
+                                                        >
+
+                                                            <i class="bi bi-lock-fill me-1"></i>
+
+                                                            Hapus
+
+                                                        </button>
+
+                                                    {% endif %}
+
+
+                                                </div>
+
+                                            </td>
+
+                                        </tr>
+
+
+                                    {% empty %}
+
+                                        <tr>
+
+                                            <td
+                                                colspan="5"
+                                                class="text-center py-5"
+                                            >
+
+                                                <i class="bi bi-door-closed fs-1 text-muted"></i>
+
+
+                                                <div class="fw-semibold mt-2">
+
+                                                    Belum Ada Rombel
+
+                                                </div>
+
+
+                                                <div class="small text-muted mb-3">
+
+                                                    Belum terdapat rombel untuk
+                                                    Tahun Ajaran {{ tahun_tujuan.nama }}.
+
+                                                </div>
+
+
+                                                <a
+                                                    href="{% url 'tambah_rombel_tahun_berikutnya' tahun_tujuan.id %}"
+                                                    class="btn btn-primary btn-sm"
+                                                >
+
+                                                    <i class="bi bi-plus-circle me-1"></i>
+
+                                                    Tambah Rombel
+
+                                                </a>
+
+                                            </td>
+
+                                        </tr>
+
+                                    {% endfor %}
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+
+
+                        <!-- =====================================
+                             TOMBOL TAMBAH
+                        ====================================== -->
+
+                        {% if rombel_tahun_tujuan %}
+
+                            <div class="mt-3">
+
+                                <a
+                                    href="{% url 'tambah_rombel_tahun_berikutnya' tahun_tujuan.id %}"
+                                    class="btn btn-primary btn-sm"
+                                >
+
+                                    <i class="bi bi-plus-circle me-1"></i>
+
+                                    Tambah Rombel
+
+                                </a>
+
+                            </div>
+
+                        {% endif %}
+
+
+                    {% else %}
+
+                        <div class="text-center py-5">
+
+                            <i class="bi bi-calendar-x fs-1 text-muted"></i>
+
+
+                            <div class="fw-semibold mt-2">
+
+                                Belum Ada Tahun Ajaran Persiapan
+
+                            </div>
+
+
+                            <div class="small text-muted">
+
+                                Tahun Ajaran berikutnya belum tersedia.
+
+                            </div>
+
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =====================================================
+         KEWENANGAN
+    ====================================================== -->
+
+    {% if tahun_tujuan %}
+
+        <div class="card border-0 shadow-sm">
+
+            <div class="card-body">
+
+                <div class="d-flex align-items-start gap-3">
+
+                    <div
+                        class="rounded-circle bg-success-subtle d-flex align-items-center justify-content-center flex-shrink-0"
+                        style="
+                            width: 46px;
+                            height: 46px;
+                        "
+                    >
+
+                        <i class="bi bi-shield-check text-success fs-5"></i>
+
+                    </div>
+
+
+                    <div>
+
+                        <div class="fw-semibold mb-1">
+
+                            Pembagian Kewenangan
+
+                        </div>
+
+
+                        <div class="small text-muted">
+
+                            Operator sekolah menyiapkan rombel dan menyelesaikan
+                            proses akademik pada sekolah masing-masing.
+                            SIPETAKU menghitung kesiapan secara otomatis.
+                            Aktivasi Tahun Ajaran {{ tahun_tujuan.nama }}
+                            dilakukan oleh Admin Kabupaten dan berlaku untuk
+                            seluruh sekolah dalam sistem.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    {% endif %}
+
+
+</div>
+
+{% endblock %}
+
+
+
+{% block js %}
+
+<script>
+
+document.addEventListener(
+    'DOMContentLoaded',
+    function () {
+
+
+        const daftarForm =
+            document.querySelectorAll(
+                '.form-hapus-rombel-persiapan'
+            );
+
+
+        daftarForm.forEach(
+            function (form) {
+
+                form.addEventListener(
+                    'submit',
+                    function (event) {
+
+                        event.preventDefault();
+
+
+                        const nama =
+                            form.dataset.nama;
+
+
+                        Swal.fire({
+
+                            title:
+                                'Hapus rombel?',
+
+                            text:
+                                (
+                                    'Rombel '
+                                    + nama
+                                    + ' akan dihapus dari '
+                                    + 'Tahun Ajaran persiapan.'
+                                ),
+
+                            icon:
+                                'warning',
+
+                            showCancelButton:
+                                true,
+
+                            confirmButtonText:
+                                'Ya, hapus',
+
+                            cancelButtonText:
+                                'Batal',
+
+                            confirmButtonColor:
+                                '#dc3545'
+
+                        }).then(
+                            function (result) {
+
+                                if (
+                                    result.isConfirmed
+                                ) {
+
+                                    const tombol =
+                                        form.querySelector(
+                                            'button[type="submit"]'
+                                        );
+
+
+                                    if (tombol) {
+
+                                        tombol.disabled =
+                                            true;
+
+
+                                        tombol.innerHTML = `
+                                            <span
+                                                class="spinner-border spinner-border-sm me-2"
+                                                role="status"
+                                                aria-hidden="true">
+                                            </span>
+                                            Menghapus...
+                                        `;
+
+                                    }
+
+
+                                    form.submit();
+
+                                }
+
+                            }
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+
+    }
+);
+
+</script>
+
+{% endblock %}

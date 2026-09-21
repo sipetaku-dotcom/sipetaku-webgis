@@ -1,0 +1,662 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Mutasi Pegawai
+{% endblock %}
+
+
+{% block content %}
+
+<div class="container-fluid py-3">
+
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <div class="card border-0 shadow-sm mb-4">
+
+        <div class="card-body">
+
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+
+                <div>
+
+                    <h4 class="mb-1">
+
+                        <i class="bi bi-arrow-left-right text-warning me-2"></i>
+
+                        Mutasi Pegawai
+
+                    </h4>
+
+                    <div class="text-muted">
+
+                        {{ pegawai.nama }}
+
+                        · Tahun Ajaran
+
+                        <strong>
+                            {{ tahun_ajaran.nama }}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <a
+                    href="{% url 'data_pegawai' %}"
+                    class="btn btn-outline-secondary"
+                >
+
+                    <i class="bi bi-arrow-left me-1"></i>
+
+                    Kembali
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         PERINGATAN
+    ====================================================== -->
+
+    <div class="alert alert-warning border-0 shadow-sm mb-4">
+
+        <div class="d-flex align-items-start gap-3">
+
+            <i class="bi bi-exclamation-triangle-fill fs-4"></i>
+
+            <div>
+
+                <div class="fw-bold mb-1">
+                    Proses Mutasi Pegawai
+                </div>
+
+                <div class="small">
+
+                    Mutasi akan menutup riwayat aktif pegawai
+                    pada sekolah asal dan membuat riwayat
+                    penempatan baru pada sekolah tujuan.
+
+                    Riwayat lama tidak akan dihapus.
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <div class="row g-4">
+
+
+        <!-- =================================================
+             DATA PENEMPATAN SAAT INI
+        ================================================== -->
+
+        <div class="col-lg-5">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-header bg-body">
+
+                    <h5 class="mb-0 fw-bold">
+
+                        <i class="bi bi-building text-primary me-2"></i>
+
+                        Penempatan Saat Ini
+
+                    </h5>
+
+                </div>
+
+
+                <div class="card-body">
+
+
+                    <div class="mb-3">
+
+                        <div class="text-muted small">
+                            Nama Pegawai
+                        </div>
+
+                        <div class="fw-bold fs-5">
+                            {{ pegawai.nama }}
+                        </div>
+
+                    </div>
+
+
+                    <div class="mb-3">
+
+                        <div class="text-muted small">
+                            Sekolah Asal
+                        </div>
+
+                        <div class="fw-semibold">
+                            {{ riwayat_lama.sekolah.nama }}
+                        </div>
+
+                        <div class="small text-muted">
+                            {{ riwayat_lama.sekolah.kecamatan }}
+                        </div>
+
+                    </div>
+
+
+                    <div class="mb-3">
+
+                        <div class="text-muted small">
+                            Tahun Ajaran
+                        </div>
+
+                        <div class="fw-semibold">
+                            {{ riwayat_lama.tahun_ajaran.nama }}
+                        </div>
+
+                    </div>
+
+
+                    <div class="mb-3">
+
+                        <div class="text-muted small">
+                            Jenis Pegawai
+                        </div>
+
+                        <div>
+
+                            {% if riwayat_lama.jenis_pegawai == 'PENDIDIK' %}
+
+                                <span class="badge bg-success">
+                                    Guru / Pendidik
+                                </span>
+
+                            {% else %}
+
+                                <span class="badge bg-warning text-dark">
+                                    Tenaga Kependidikan
+                                </span>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="mb-3">
+
+                        <div class="text-muted small">
+                            Jabatan
+                        </div>
+
+                        <div class="fw-semibold">
+                            {{ riwayat_lama.jabatan }}
+                        </div>
+
+                    </div>
+
+
+                    <div class="mb-3">
+
+                        <div class="text-muted small">
+                            Status Kepegawaian
+                        </div>
+
+                        <div>
+                            {{ riwayat_lama.get_status_pegawai_display }}
+                        </div>
+
+                    </div>
+
+
+                    {% if riwayat_lama.mata_pelajaran %}
+
+                        <div class="mb-3">
+
+                            <div class="text-muted small">
+                                Mata Pelajaran
+                            </div>
+
+                            <div>
+                                {{ riwayat_lama.mata_pelajaran }}
+                            </div>
+
+                        </div>
+
+                    {% endif %}
+
+
+                    <div>
+
+                        <div class="text-muted small">
+                            Tanggal Mulai
+                        </div>
+
+                        <div>
+
+                            {% if riwayat_lama.tanggal_mulai %}
+
+                                {{ riwayat_lama.tanggal_mulai|date:"d M Y" }}
+
+                            {% else %}
+
+                                -
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             FORM MUTASI
+        ================================================== -->
+
+        <div class="col-lg-7">
+
+            <div class="card border-0 shadow-sm">
+
+                <div class="card-header bg-body">
+
+                    <h5 class="mb-0 fw-bold">
+
+                        <i class="bi bi-signpost-split text-warning me-2"></i>
+
+                        Penempatan Tujuan
+
+                    </h5>
+
+                </div>
+
+
+                <div class="card-body">
+
+                    <form method="POST">
+
+                        {% csrf_token %}
+
+
+                        <!-- SEKOLAH TUJUAN -->
+
+                        <div class="mb-3">
+
+                            <label class="form-label fw-semibold">
+
+                                Sekolah Tujuan
+
+                                <span class="text-danger">*</span>
+
+                            </label>
+
+                            {{ form.sekolah_tujuan }}
+
+                            {% for error in form.sekolah_tujuan.errors %}
+
+                                <div class="text-danger small mt-1">
+                                    {{ error }}
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+
+
+                        <!-- TANGGAL MUTASI -->
+
+                        <div class="mb-3">
+
+                            <label class="form-label fw-semibold">
+
+                                Tanggal Mutasi
+
+                                <span class="text-danger">*</span>
+
+                            </label>
+
+                            {{ form.tanggal_mutasi }}
+
+                            <div class="form-text">
+
+                                Tanggal ini akan menjadi
+                                tanggal selesai penempatan lama
+                                sekaligus tanggal mulai
+                                penempatan baru.
+
+                            </div>
+
+                            {% for error in form.tanggal_mutasi.errors %}
+
+                                <div class="text-danger small mt-1">
+                                    {{ error }}
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+
+
+                        <!-- JENIS PEGAWAI -->
+
+                        <div class="mb-3">
+
+                            <label class="form-label fw-semibold">
+
+                                Jenis Pegawai
+
+                                <span class="text-danger">*</span>
+
+                            </label>
+
+                            {{ form.jenis_pegawai }}
+
+                            {% for error in form.jenis_pegawai.errors %}
+
+                                <div class="text-danger small mt-1">
+                                    {{ error }}
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+
+
+                        <!-- JABATAN -->
+
+                        <div class="mb-3">
+
+                            <label class="form-label fw-semibold">
+
+                                Jabatan di Sekolah Tujuan
+
+                                <span class="text-danger">*</span>
+
+                            </label>
+
+                            {{ form.jabatan }}
+
+                            {% for error in form.jabatan.errors %}
+
+                                <div class="text-danger small mt-1">
+                                    {{ error }}
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+
+
+                        <!-- MAPEL -->
+
+                        <div
+                            class="mb-3"
+                            id="wrapperMataPelajaran"
+                        >
+
+                            <label class="form-label fw-semibold">
+
+                                Mata Pelajaran
+
+                            </label>
+
+                            {{ form.mata_pelajaran }}
+
+                            <div class="form-text">
+
+                                Digunakan jika pegawai
+                                merupakan Guru / Pendidik.
+
+                            </div>
+
+                            {% for error in form.mata_pelajaran.errors %}
+
+                                <div class="text-danger small mt-1">
+                                    {{ error }}
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+
+
+                        <!-- STATUS PEGAWAI -->
+
+                        <div class="mb-3">
+
+                            <label class="form-label fw-semibold">
+
+                                Status Kepegawaian
+
+                                <span class="text-danger">*</span>
+
+                            </label>
+
+                            {{ form.status_pegawai }}
+
+                            {% for error in form.status_pegawai.errors %}
+
+                                <div class="text-danger small mt-1">
+                                    {{ error }}
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+
+
+                        <!-- KETERANGAN -->
+
+                        <div class="mb-3">
+
+                            <label class="form-label fw-semibold">
+                                Keterangan
+                            </label>
+
+                            {{ form.keterangan }}
+
+                            <div class="form-text">
+
+                                Contoh:
+                                Mutasi berdasarkan SK,
+                                perpindahan tugas,
+                                promosi jabatan, dan sebagainya.
+
+                            </div>
+
+                            {% for error in form.keterangan.errors %}
+
+                                <div class="text-danger small mt-1">
+                                    {{ error }}
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+
+
+                        <!-- NON FIELD ERROR -->
+
+                        {% if form.non_field_errors %}
+
+                            <div class="alert alert-danger">
+
+                                {% for error in form.non_field_errors %}
+
+                                    <div>
+                                        {{ error }}
+                                    </div>
+
+                                {% endfor %}
+
+                            </div>
+
+                        {% endif %}
+
+
+
+                        <!-- TOMBOL -->
+
+                        <div class="border-top pt-3 mt-4">
+
+                            <div class="d-flex justify-content-end gap-2">
+
+                                <a
+                                    href="{% url 'data_pegawai' %}"
+                                    class="btn btn-outline-secondary"
+                                >
+                                    Batal
+                                </a>
+
+
+                                <button
+                                    type="submit"
+                                    class="btn btn-warning"
+                                    onclick="
+                                        return confirm(
+                                            'Yakin ingin memutasi pegawai ini? '
+                                            + 'Riwayat penempatan lama akan ditutup.'
+                                        );
+                                    "
+                                >
+
+                                    <i class="bi bi-arrow-left-right me-1"></i>
+
+                                    Proses Mutasi
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+{% endblock %}
+
+
+
+{% block js %}
+
+<script>
+
+document.addEventListener(
+    'DOMContentLoaded',
+    function () {
+
+        const jenisPegawai = (
+            document.getElementById(
+                'id_jenis_pegawai'
+            )
+        );
+
+        const wrapperMapel = (
+            document.getElementById(
+                'wrapperMataPelajaran'
+            )
+        );
+
+        const inputMapel = (
+            document.getElementById(
+                'id_mata_pelajaran'
+            )
+        );
+
+
+        function aturMataPelajaran() {
+
+            if (
+                !jenisPegawai
+                ||
+                !wrapperMapel
+            ) {
+
+                return;
+
+            }
+
+
+            if (
+                jenisPegawai.value
+                === 'TENAGA_KEPENDIDIKAN'
+            ) {
+
+                wrapperMapel.style.display =
+                    'none';
+
+
+                if (inputMapel) {
+
+                    inputMapel.value = '';
+
+                }
+
+            }
+
+            else {
+
+                wrapperMapel.style.display =
+                    '';
+
+            }
+
+        }
+
+
+        aturMataPelajaran();
+
+
+        if (jenisPegawai) {
+
+            jenisPegawai.addEventListener(
+                'change',
+                aturMataPelajaran
+            );
+
+        }
+
+    }
+);
+
+</script>
+
+{% endblock %}

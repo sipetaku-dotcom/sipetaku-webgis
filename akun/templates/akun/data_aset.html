@@ -2,240 +2,908 @@
 
 {% block title %}{% endblock %}
 
+
 {% block content %}
 
-<div class="card shadow-sm border-0">
+{% block css %}
 
-    <div class="card-header">
+<style>
 
-        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+    /* =========================================================
+    LIGHT MODE
+    DAFTAR ASET
+    ========================================================= */
 
-            <div>
+    /* =========================================================
+    CARD BODY
+    ========================================================= */
 
-                <h5 class="mb-0">
-                    <i class="bi bi-box-seam text-primary me-2"></i>
-                    Data Aset
+    html:not([data-bs-theme="dark"])
+    .card-body-tema {
+        background-color: #c3c7cf !important;
+    }
 
-                    <span class="badge bg-primary ms-2">
-                        {{ aset|length }} Aset
-                    </span>
-                </h5>
 
-                <small class="text-muted">
-                    {{ sekolah.nama }}
-                </small>
+    /* =========================================================
+    NAV TABS
+    ========================================================= */
+
+    html:not([data-bs-theme="dark"])
+    .nav-tabs {
+        border: 0 !important;
+    }
+
+
+    /* =========================================================
+    TAB - DEFAULT
+    Belum terpilih = hitam
+    ========================================================= */
+
+    html:not([data-bs-theme="dark"])
+    .nav-tabs .nav-link {
+
+        color: #212529 !important;
+
+        background-color: transparent !important;
+
+        border-color: transparent !important;
+
+        box-shadow: none !important;
+
+        transition:
+            background-color 0.2s ease,
+            color 0.2s ease;
+    }
+
+
+    /* Icon default = hitam */
+
+    html:not([data-bs-theme="dark"])
+    .nav-tabs .nav-link i {
+
+        color: #212529 !important;
+
+        transition:
+            color 0.2s ease;
+    }
+
+
+    /* =========================================================
+    BADGE - DEFAULT
+    ========================================================= */
+
+    html:not([data-bs-theme="dark"])
+    .nav-tabs .nav-link .badge {
+
+        background-color: #6c757d !important;
+
+        color: #ffffff !important;
+
+        transition:
+            background-color 0.2s ease,
+            color 0.2s ease;
+    }
+
+
+    /* =========================================================
+    TAB - HOVER
+    Berubah menjadi biru
+    ========================================================= */
+
+    html:not([data-bs-theme="dark"])
+    .nav-tabs .nav-link:hover {
+
+        color: #0d6efd !important;
+
+        background-color: #c3c7cf !important;
+
+        border-color: transparent !important;
+
+        box-shadow: none !important;
+    }
+
+
+    /* Icon hover = biru */
+
+    html:not([data-bs-theme="dark"])
+    .nav-tabs .nav-link:hover i {
+
+        color: #0d6efd !important;
+    }
+
+
+    /* Badge hover = biru */
+
+    html:not([data-bs-theme="dark"])
+    .nav-tabs .nav-link:hover .badge {
+
+        background-color: #0d6efd !important;
+
+        color: #ffffff !important;
+    }
+
+
+    /* =========================================================
+    TAB - ACTIVE
+    Terpilih = biru
+    ========================================================= */
+
+    html:not([data-bs-theme="dark"])
+    .nav-tabs .nav-link.active {
+
+        color: #0d6efd !important;
+
+        background-color: #c3c7cf !important;
+
+        border-color: transparent !important;
+
+        box-shadow: none !important;
+    }
+
+
+    /* Icon active = biru */
+
+    html:not([data-bs-theme="dark"])
+    .nav-tabs .nav-link.active i {
+
+        color: #0d6efd !important;
+    }
+
+
+    /* Badge active = biru */
+
+    html:not([data-bs-theme="dark"])
+    .nav-tabs .nav-link.active .badge {
+
+        background-color: #0d6efd !important;
+
+        color: #ffffff !important;
+    }
+
+
+    /* =========================================================
+    FOCUS
+    ========================================================= */
+
+    html:not([data-bs-theme="dark"])
+    .nav-tabs .nav-link:focus,
+
+    html:not([data-bs-theme="dark"])
+    .nav-tabs .nav-link:focus-visible {
+
+        outline: none !important;
+
+        box-shadow: none !important;
+
+        border-color: transparent !important;
+    }
+
+
+
+
+    /* =========================================================
+    DARK MODE
+    DAFTAR ASET
+    ========================================================= */
+
+
+    /* =========================================================
+    CARD BODY
+    ========================================================= */
+
+    [data-bs-theme="dark"]
+    .card-body-tema {
+        background-color: #333539 !important;
+    }
+
+
+    /* =========================================================
+    NAV TABS
+    ========================================================= */
+
+    [data-bs-theme="dark"]
+    .nav-tabs {
+        border: 0 !important;
+    }
+
+
+    /* =========================================================
+    TAB - DEFAULT
+    Tidak terpilih = putih
+    ========================================================= */
+
+    [data-bs-theme="dark"]
+    .nav-tabs .nav-link {
+
+        color: #ffffff !important;
+
+        background-color: transparent !important;
+
+        border-color: transparent !important;
+
+        box-shadow: none !important;
+
+        transition:
+            background-color 0.2s ease,
+            color 0.2s ease;
+    }
+
+
+    /* Icon default = putih */
+
+    [data-bs-theme="dark"]
+    .nav-tabs .nav-link i {
+
+        color: #ffffff !important;
+
+        transition:
+            color 0.2s ease;
+    }
+
+
+    /* =========================================================
+    BADGE - DEFAULT
+    ========================================================= */
+
+    [data-bs-theme="dark"]
+    .nav-tabs .nav-link .badge {
+
+        background-color: #6c757d !important;
+
+        color: #ffffff !important;
+
+        transition:
+            background-color 0.2s ease,
+            color 0.2s ease;
+    }
+
+
+    /* =========================================================
+    TAB - HOVER
+    Berubah menjadi biru
+    ========================================================= */
+
+    [data-bs-theme="dark"]
+    .nav-tabs .nav-link:hover {
+
+        color: #0d6efd !important;
+
+        background-color: #333539 !important;
+
+        border-color: transparent !important;
+
+        box-shadow: none !important;
+    }
+
+
+    /* Icon hover = biru */
+
+    [data-bs-theme="dark"]
+    .nav-tabs .nav-link:hover i {
+
+        color: #0d6efd !important;
+    }
+
+
+    /* Badge hover = biru */
+
+    [data-bs-theme="dark"]
+    .nav-tabs .nav-link:hover .badge {
+
+        background-color: #0d6efd !important;
+
+        color: #ffffff !important;
+    }
+
+
+    /* =========================================================
+    TAB - ACTIVE
+    Terpilih = biru
+    ========================================================= */
+
+    [data-bs-theme="dark"]
+    .nav-tabs .nav-link.active {
+
+        color: #0d6efd !important;
+
+        background-color: #333539 !important;
+
+        border-color: transparent !important;
+
+        box-shadow: none !important;
+    }
+
+
+    /* Icon active = biru */
+
+    [data-bs-theme="dark"]
+    .nav-tabs .nav-link.active i {
+
+        color: #0d6efd !important;
+    }
+
+
+    /* Badge active = biru */
+
+    [data-bs-theme="dark"]
+    .nav-tabs .nav-link.active .badge {
+
+        background-color: #0d6efd !important;
+
+        color: #ffffff !important;
+    }
+
+
+    /* =========================================================
+    FOCUS
+    ========================================================= */
+
+    [data-bs-theme="dark"]
+    .nav-tabs .nav-link:focus,
+
+    [data-bs-theme="dark"]
+    .nav-tabs .nav-link:focus-visible {
+
+        outline: none !important;
+
+        box-shadow: none !important;
+
+        border-color: transparent !important;
+    }
+
+</style>
+{% endblock %}
+
+
+<div class="container-fluid">
+
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <div class="card shadow-sm border-0 mb-4">
+
+        <div class="card-header bg-body border-0">
+
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+                <div>
+
+                    <h5 class="mb-1">
+
+                        <i class="bi bi-buildings text-primary me-2"></i>
+
+                        Data Aset Sekolah
+
+                    </h5>
+
+
+                    <small class="text-muted">
+
+                        {{ sekolah.nama }}
+
+                        · Pengelolaan sarana dan prasarana sekolah
+
+                    </small>
+
+                </div>
 
             </div>
 
-            <a
-                href="/tambah-aset/"
-                class="btn btn-primary btn-sm ms-auto"
-            >
-                <i class="bi bi-plus-circle me-1"></i>
-                Tambah Aset
-            </a>
-
         </div>
 
     </div>
 
-    <div class="card-body">
 
-        <div class="table-responsive">
 
-            <table
-                id="tableAset"
-                class="table table-bordered table-striped align-middle w-100"
-            >
+    <!-- =====================================================
+         RINGKASAN
+    ====================================================== -->
 
-                <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Aset</th>
-                        <th>Kategori</th>
-                        <th>Jumlah</th>
-                        <th>Kondisi</th>
-                        <th>Aksi</th>
-                    </tr>
-                </thead>
+    <div class="row g-3 mb-4">
 
-                <tbody>
 
-                    {% for a in aset %}
-                    <tr>
+        <!-- =================================================
+             PROGRES PENGISIAN
+        ================================================== -->
 
-                        <td>{{ forloop.counter }}</td>
+        <div class="col-6 col-xl-3">
 
-                        <td>
+            <div class="card border-0 shadow-sm h-100">
 
-                            <div class="d-flex align-items-center gap-3">
+                <div class="card-body">
 
-                                <div
-                                    class="flex-shrink-0"
-                                >
+                    <div class="d-flex align-items-center justify-content-between">
 
-                                    {% if a.foto %}
-                                        <img
-                                            src="{{ a.foto.url }}"
-                                            class="rounded border shadow-sm"
-                                            style="width:70px; height:70px; object-fit:cover;"
-                                        >
-                                    {% else %}
+                        <div>
 
-                                        <div
-                                            class="rounded bg-light border d-flex align-items-center justify-content-center"
-                                            style="width:70px; height:70px;"
-                                        >
-                                            <i class="bi bi-image text-muted"></i>
-                                        </div>
+                            <div class="text-muted small">
 
-                                    {% endif %}
-
-                                </div>
-
-                                <div>
-
-                                    <div class="fw-bold">
-                                        {{ a.nama }}
-                                    </div>
-
-                                    <small class="text-muted">
-                                        {{ a.kategori }}
-                                    </small>
-
-                                </div>
+                                Progres Pengisian
 
                             </div>
 
-                        </td>
 
-                        <td>
-                            <span class="badge bg-secondary">
-                                {{ a.kategori }}
-                            </span>
-                        </td>
+                            <div class="fs-3 fw-bold text-primary">
 
-                        <td>
-                            <span class="badge bg-primary">
-                                {{ a.jumlah }}
-                            </span>
-                        </td>
+                                {{ persentase_pengisian }}%
 
-                        <td>
+                            </div>
 
-                            {% if a.kondisi == 'Baik' %}
+                        </div>
 
-                                <span class="badge bg-success">
-                                    {{ a.kondisi }}
-                                </span>
 
-                            {% elif a.kondisi == 'Rusak Ringan' %}
+                        <i class="bi bi-clipboard-check fs-1 text-primary"></i>
 
-                                <span class="badge bg-warning text-dark">
-                                    {{ a.kondisi }}
-                                </span>
+                    </div>
 
-                            {% elif a.kondisi == 'Rusak Berat' %}
 
-                                <span class="badge bg-danger">
-                                    {{ a.kondisi }}
-                                </span>
+                    <div
+                        class="progress mt-3"
+                        style="height: 8px;"
+                    >
 
-                            {% else %}
+                        <div
+                            class="progress-bar"
+                            role="progressbar"
+                            style="
+                                width:
+                                {{ persentase_pengisian }}%;
+                            "
+                        ></div>
 
-                                <span class="badge bg-secondary">
-                                    {{ a.kondisi }}
-                                </span>
+                    </div>
 
-                            {% endif %}
+                </div>
 
-                        </td>
+            </div>
 
-                        <td class="text-nowrap">
+        </div>
 
-                            <a
-                                href="/edit-aset/{{ a.id }}/"
-                                class="btn btn-warning btn-sm"
-                            >
-                                <i class="bi bi-pencil-square"></i>
-                                Edit
-                            </a>
 
-                            <a
-                                href="/hapus-aset/{{ a.id }}/"
-                                class="btn btn-danger btn-sm tombol-hapus"
-                            >
-                                <i class="bi bi-trash"></i>
-                                Hapus
-                            </a>
 
-                        </td>
+        <!-- =================================================
+             ASET TERSEDIA
+        ================================================== -->
 
-                    </tr>
+        <div class="col-6 col-xl-3">
 
-                    {% empty %}
+            <div class="card border-0 shadow-sm h-100">
 
-                    <tr>
-                        <td class="text-center">-</td>
-                        <td class="text-center">Belum ada data aset</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
+                <div class="card-body">
 
-                    {% endfor %}
+                    <div class="d-flex align-items-center justify-content-between">
 
-                </tbody>
+                        <div>
 
-            </table>
+                            <div class="text-muted small">
+
+                                Aset Tersedia
+
+                            </div>
+
+
+                            <div class="fs-3 fw-bold text-success">
+
+                                {{ jumlah_ada }}
+
+                            </div>
+
+                        </div>
+
+
+                        <i class="bi bi-check-circle fs-1 text-success"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             TIDAK TERSEDIA
+        ================================================== -->
+
+        <div class="col-6 col-xl-3">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-body">
+
+                    <div class="d-flex align-items-center justify-content-between">
+
+                        <div>
+
+                            <div class="text-muted small">
+
+                                Tidak Tersedia
+
+                            </div>
+
+
+                            <div class="fs-3 fw-bold text-secondary">
+
+                                {{ jumlah_tidak_ada }}
+
+                            </div>
+
+                        </div>
+
+
+                        <i class="bi bi-x-circle fs-1 text-secondary"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             UNIT RUSAK
+        ================================================== -->
+
+        <div class="col-6 col-xl-3">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-body">
+
+                    <div class="d-flex align-items-center justify-content-between">
+
+                        <div>
+
+                            <div class="text-muted small">
+
+                                Unit Rusak
+
+                            </div>
+
+
+                            <div class="fs-3 fw-bold text-danger">
+
+                                {{ jumlah_rusak_ringan|add:jumlah_rusak_berat }}
+
+                            </div>
+
+
+                            <small class="text-muted">
+
+                                {{ jumlah_rusak_berat }}
+                                rusak berat
+
+                            </small>
+
+                        </div>
+
+
+                        <i class="bi bi-exclamation-triangle fs-1 text-danger"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =====================================================
+         DATA ASET
+    ====================================================== -->
+
+    <div class="card border-0 shadow-sm">
+
+
+        <!-- =================================================
+             HEADER DATA ASET
+        ================================================== -->
+
+        <div class="card-header bg-body">
+
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+                <div>
+
+                    <h5 class="mb-1">
+
+                        <i class="bi bi-grid text-primary me-2"></i>
+
+                        Daftar Aset
+
+                    </h5>
+
+
+                    <small class="text-muted">
+
+                        Kelola ketersediaan, jumlah,
+                        kondisi, dan dokumentasi aset sekolah
+
+                    </small>
+
+                </div>
+
+                <span class="badge bg-primary px-3 py-2">
+
+                    {{ jumlah_terisi }}
+                    dari
+                    {{ jumlah_master }}
+
+                    Terisi
+
+                </span>
+
+
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             TAB KATEGORI
+        ================================================== -->
+
+        <div class="border-bottom">
+
+            <ul
+                class="nav nav-tabs border-0 px-3 pt-3"
+                id="tabAset"
+                role="tablist"
+            >
+
+
+                <!-- =========================================
+                     BANGUNAN DAN RUANGAN
+                ========================================== -->
+
+                <li
+                    class="nav-item"
+                    role="presentation"
+                >
+
+                    <button
+                        class="nav-link {% if tab_aktif == 'bangunan' %}active{% endif %}"
+                        id="bangunan-tab"
+                        data-bs-toggle="tab"
+                        data-bs-target="#bangunan"
+                        type="button"
+                        role="tab"
+                    >
+
+                        <i class="bi bi-building me-1"></i>
+
+                        Bangunan & Ruangan
+
+
+                        <span class="badge bg-secondary ms-1">
+
+                            {{ bangunan|length }}
+
+                        </span>
+
+                    </button>
+
+                </li>
+
+
+
+                <!-- =========================================
+                     SANITASI DAN LINGKUNGAN
+                ========================================== -->
+
+                <li
+                    class="nav-item"
+                    role="presentation"
+                >
+
+                    <button
+                        class="nav-link {% if tab_aktif == 'sanitasi' %}active{% endif %}"
+                        id="sanitasi-tab"
+                        data-bs-toggle="tab"
+                        data-bs-target="#sanitasi"
+                        type="button"
+                        role="tab"
+                    >
+
+                        <i class="bi bi-tree me-1"></i>
+
+                        Sanitasi & Lingkungan
+
+
+                        <span class="badge bg-secondary ms-1">
+
+                            {{ sanitasi|length }}
+
+                        </span>
+
+                    </button>
+
+                </li>
+
+
+
+                <!-- =========================================
+                     BARANG DAN PERLENGKAPAN
+                ========================================== -->
+
+                <li
+                    class="nav-item"
+                    role="presentation"
+                >
+
+                    <button
+                        class="nav-link {% if tab_aktif == 'perlengkapan' %}active{% endif %}"
+                        id="perlengkapan-tab"
+                        data-bs-toggle="tab"
+                        data-bs-target="#perlengkapan"
+                        type="button"
+                        role="tab"
+                    >
+
+                        <i class="bi bi-box-seam me-1"></i>
+
+                        Barang & Perlengkapan
+
+
+                        <span class="badge bg-secondary ms-1">
+
+                            {{ perlengkapan|length }}
+
+                        </span>
+
+                    </button>
+
+                </li>
+
+
+            </ul>
+
+        </div>
+
+
+
+        <!-- =================================================
+             ISI DATA ASET
+        ================================================== -->
+
+       <div class="card-body card-body-tema">
+
+            <div
+                class="tab-content"
+                id="tabAsetContent"
+            >
+
+
+                <!-- =========================================
+                     BANGUNAN DAN RUANGAN
+                ========================================== -->
+
+                <div
+                    class="tab-pane fade {% if tab_aktif == 'bangunan' %}show active{% endif %}"
+                    id="bangunan"
+                    role="tabpanel"
+                >
+
+                    {% include 'akun/partials/daftar_aset_terstruktur.html' with daftar=bangunan %}
+
+                </div>
+
+
+
+                <!-- =========================================
+                     SANITASI DAN LINGKUNGAN
+                ========================================== -->
+
+                <div
+                    class="tab-pane fade {% if tab_aktif == 'sanitasi' %}show active{% endif %}"
+                    id="sanitasi"
+                    role="tabpanel"
+                >
+
+                    {% include 'akun/partials/daftar_aset_terstruktur.html' with daftar=sanitasi %}
+
+                </div>
+
+
+
+                <!-- =========================================
+                     BARANG DAN PERLENGKAPAN
+                ========================================== -->
+
+                <div
+                    class="tab-pane fade {% if tab_aktif == 'perlengkapan' %}show active{% endif %}"
+                    id="perlengkapan"
+                    role="tabpanel"
+                >
+
+                    {% include 'akun/partials/daftar_aset_terstruktur.html' with daftar=perlengkapan %}
+
+                </div>
+
+
+            </div>
 
         </div>
 
     </div>
 
+
+
+    <!-- =====================================================
+         INFORMASI
+    ====================================================== -->
+
+    <div class="card border-0 shadow-sm mt-4">
+
+        <div class="card-body">
+
+            <div class="d-flex align-items-start gap-3">
+
+
+                <!-- ICON -->
+
+                <div
+                    class="rounded-circle bg-primary-subtle d-flex align-items-center justify-content-center flex-shrink-0"
+                    style="
+                        width: 46px;
+                        height: 46px;
+                    "
+                >
+
+                    <i class="bi bi-info-circle text-primary fs-5"></i>
+
+                </div>
+
+
+
+                <!-- KETERANGAN -->
+
+                <div>
+
+                    <div class="fw-semibold mb-1">
+
+                        Tentang Data Aset
+
+                    </div>
+
+                    <div class="small text-muted">
+
+                        Lengkapi data aset sesuai kondisi sebenarnya di sekolah.
+                        Ketersediaan, jumlah, dan kondisi aset akan digunakan
+                        sebagai dasar perhitungan
+
+                        <strong class="text-body">
+                            Skor Aset
+                        </strong>
+
+                        dalam menentukan tingkat kebutuhan dan prioritas
+                        sarana dan prasarana sekolah di SIPETAKU.
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
 </div>
-
-{% endblock %}
-
-{% block js %}
-
-<script>
-
-    $(document).ready(function () {
-
-        $('#tableAset').DataTable({
-            responsive: true,
-            autoWidth: false,
-            pageLength: 10,
-            lengthMenu: [10, 25, 50, 100]
-        });
-
-        $('.tombol-hapus').on('click', function(e) {
-
-            e.preventDefault();
-
-            var href = $(this).attr('href');
-
-            Swal.fire({
-                title: 'Yakin hapus aset?',
-                text: 'Data yang sudah dihapus tidak bisa dikembalikan.',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Ya, hapus',
-                cancelButtonText: 'Batal'
-            }).then((result) => {
-
-                if (result.isConfirmed) {
-                    window.location.href = href;
-                }
-
-            });
-
-        });
-
-    });
-
-</script>
 
 {% endblock %}

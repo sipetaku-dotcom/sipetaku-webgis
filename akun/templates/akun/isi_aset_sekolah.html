@@ -1,0 +1,1267 @@
+{% extends 'base.html' %}
+
+{% block title %}{% endblock %}
+
+
+{% block content %}
+
+<div class="container-fluid">
+
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <div class="card shadow-sm border-0 mb-4">
+
+        <div class="card-header bg-body border-0">
+
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+                <div>
+
+                    <h5 class="mb-1">
+
+                        <i class="bi bi-building text-primary me-2"></i>
+
+                        {{ jenis_aset.nama }}
+
+                    </h5>
+
+
+                    <small class="text-muted">
+
+                        {{ sekolah.nama }}
+
+                        · Pengelolaan data aset sekolah
+
+                    </small>
+
+                </div>
+
+
+                <a
+                    href="{% url 'data_aset' %}"
+                    class="btn btn-outline-secondary btn-sm"
+                >
+
+                    <i class="bi bi-arrow-left me-1"></i>
+
+                    Kembali ke Data Aset
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         FORM
+    ====================================================== -->
+
+    <form
+        method="POST"
+        enctype="multipart/form-data"
+        id="formAsetSekolah"
+    >
+
+        {% csrf_token %}
+
+
+
+        <!-- =================================================
+             INFORMASI DASAR
+        ================================================== -->
+
+        <div class="card shadow-sm border-0 mb-4">
+
+            <div class="card-header bg-body">
+
+                <div>
+
+                    <h5 class="mb-1">
+
+                        <i class="bi bi-ui-checks-grid text-primary me-2"></i>
+
+                        Informasi Aset
+
+                    </h5>
+
+
+                    <small class="text-muted">
+
+                        Tentukan ketersediaan dan informasi dasar aset
+
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <div class="card-body">
+
+
+                <!-- =========================================
+                     NON FIELD ERROR
+                ========================================== -->
+
+                {% if form.non_field_errors %}
+
+                    <div class="alert alert-danger mb-4">
+
+                        <div class="fw-semibold mb-1">
+
+                            <i class="bi bi-exclamation-triangle-fill me-1"></i>
+
+                            Data belum dapat disimpan
+
+                        </div>
+
+
+                        {% for error in form.non_field_errors %}
+
+                            <div class="small">
+
+                                {{ error }}
+
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                {% endif %}
+
+
+
+                <div class="row g-3">
+
+
+                    <!-- =====================================
+                         KETERSEDIAAN
+                    ====================================== -->
+
+                    <div class="col-md-4">
+
+                        <label
+                            class="form-label fw-semibold"
+                            for="{{ form.ketersediaan.id_for_label }}"
+                        >
+
+                            Ketersediaan
+
+                            <span class="text-danger">
+                                *
+                            </span>
+
+                        </label>
+
+
+                        {{ form.ketersediaan }}
+
+
+                        {% for error in form.ketersediaan.errors %}
+
+                            <div class="text-danger small mt-1">
+
+                                <i class="bi bi-exclamation-circle me-1"></i>
+
+                                {{ error }}
+
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+
+
+                    <!-- =====================================
+                         KATEGORI
+                    ====================================== -->
+
+                    <div class="col-md-4">
+
+                        <label class="form-label fw-semibold">
+
+                            Kategori
+
+                        </label>
+
+
+                        <input
+                            type="text"
+                            class="form-control"
+                            value="{{ jenis_aset.get_kategori_display }}"
+                            readonly
+                        >
+
+                    </div>
+
+
+
+                    <!-- =====================================
+                         SATUAN
+                    ====================================== -->
+
+                    <div class="col-md-4">
+
+                        <label class="form-label fw-semibold">
+
+                            Satuan
+
+                        </label>
+
+
+                        <input
+                            type="text"
+                            class="form-control"
+                            value="{{ jenis_aset.satuan }}"
+                            readonly
+                        >
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             JUMLAH BERDASARKAN KONDISI
+        ================================================== -->
+
+        <div
+            class="card shadow-sm border-0 mb-4"
+            id="cardKondisiAset"
+        >
+
+            <div class="card-header bg-body">
+
+                <div>
+
+                    <h5 class="mb-1">
+
+                        <i class="bi bi-clipboard-data text-primary me-2"></i>
+
+                        Kondisi Aset
+
+                    </h5>
+
+
+                    <small class="text-muted">
+
+                        Masukkan jumlah unit berdasarkan kondisi fisik
+
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <div class="card-body">
+
+                <div class="row g-3">
+
+
+                    <!-- =====================================
+                         BAIK
+                    ====================================== -->
+
+                    <div class="col-6 col-lg-3">
+
+                        <label
+                            class="form-label fw-semibold text-success"
+                            for="{{ form.jumlah_baik.id_for_label }}"
+                        >
+
+                            Kondisi Baik
+
+                        </label>
+
+
+                        {{ form.jumlah_baik }}
+
+
+                        {% for error in form.jumlah_baik.errors %}
+
+                            <div class="text-danger small mt-1">
+
+                                {{ error }}
+
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+
+
+                    <!-- =====================================
+                         RUSAK RINGAN
+                    ====================================== -->
+
+                    <div class="col-6 col-lg-3">
+
+                        <label
+                            class="form-label fw-semibold text-warning"
+                            for="{{ form.jumlah_rusak_ringan.id_for_label }}"
+                        >
+
+                            Rusak Ringan
+
+                        </label>
+
+
+                        {{ form.jumlah_rusak_ringan }}
+
+
+                        {% for error in form.jumlah_rusak_ringan.errors %}
+
+                            <div class="text-danger small mt-1">
+
+                                {{ error }}
+
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+
+
+                    <!-- =====================================
+                         RUSAK BERAT
+                    ====================================== -->
+
+                    <div class="col-6 col-lg-3">
+
+                        <label
+                            class="form-label fw-semibold text-danger"
+                            for="{{ form.jumlah_rusak_berat.id_for_label }}"
+                        >
+
+                            Rusak Berat
+
+                        </label>
+
+
+                        {{ form.jumlah_rusak_berat }}
+
+
+                        {% for error in form.jumlah_rusak_berat.errors %}
+
+                            <div class="text-danger small mt-1">
+
+                                {{ error }}
+
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+
+
+                    <!-- =====================================
+                         TOTAL
+                    ====================================== -->
+
+                    <div class="col-6 col-lg-3">
+
+                        <label class="form-label fw-semibold">
+
+                            Jumlah Total
+
+                        </label>
+
+
+                        <input
+                            type="number"
+                            id="jumlahTotal"
+                            class="form-control fw-bold"
+                            value="0"
+                            readonly
+                        >
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             DOKUMENTASI FOTO
+        ================================================== -->
+
+        <div
+            class="card shadow-sm border-0 mb-4"
+            id="cardDokumentasi"
+        >
+
+            <div class="card-header bg-body">
+
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+                    <div>
+
+                        <h5 class="mb-1">
+
+                            <i class="bi bi-camera text-primary me-2"></i>
+
+                            Dokumentasi Foto
+
+                        </h5>
+
+
+                        <small class="text-muted">
+
+                            Tambahkan foto kondisi aset sebagai dokumentasi
+
+                        </small>
+
+                    </div>
+
+
+                    <span class="badge bg-body-tertiary text-body border px-3 py-2">
+
+                        Maksimal 3 foto · 2 MB per foto
+
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="card-body">
+
+                <div class="row g-3">
+
+
+                    <!-- =====================================
+                         FOTO 1
+                    ====================================== -->
+
+                    <div class="col-md-4">
+
+                        <div class="card h-100 border">
+
+                            <div class="card-body">
+
+                                <label class="form-label fw-semibold">
+
+                                    Foto 1
+
+                                </label>
+
+
+                                {{ form.foto_1 }}
+
+
+                                {% for error in form.foto_1.errors %}
+
+                                    <div class="text-danger small mt-1">
+
+                                        {{ error }}
+
+                                    </div>
+
+                                {% endfor %}
+
+
+                                <div class="mt-3">
+
+                                    {% if foto_1 %}
+
+                                        <img
+                                            src="{{ foto_1.foto.url }}"
+                                            id="previewFoto1"
+                                            class="img-fluid rounded border w-100"
+                                            style="
+                                                height: 190px;
+                                                object-fit: cover;
+                                            "
+                                            alt="Foto 1 {{ jenis_aset.nama }}"
+                                        >
+
+                                    {% else %}
+
+                                        <img
+                                            id="previewFoto1"
+                                            class="img-fluid rounded border w-100 d-none"
+                                            style="
+                                                height: 190px;
+                                                object-fit: cover;
+                                            "
+                                            alt="Preview Foto 1"
+                                        >
+
+
+                                        <div
+                                            id="kosongFoto1"
+                                            class="bg-body-tertiary border rounded d-flex flex-column align-items-center justify-content-center text-muted"
+                                            style="height: 190px;"
+                                        >
+
+                                            <i class="bi bi-image fs-3 mb-1"></i>
+
+                                            <small>
+                                                Belum ada foto
+                                            </small>
+
+                                        </div>
+
+                                    {% endif %}
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- =====================================
+                         FOTO 2
+                    ====================================== -->
+
+                    <div class="col-md-4">
+
+                        <div class="card h-100 border">
+
+                            <div class="card-body">
+
+                                <label class="form-label fw-semibold">
+
+                                    Foto 2
+
+                                </label>
+
+
+                                {{ form.foto_2 }}
+
+
+                                {% for error in form.foto_2.errors %}
+
+                                    <div class="text-danger small mt-1">
+
+                                        {{ error }}
+
+                                    </div>
+
+                                {% endfor %}
+
+
+                                <div class="mt-3">
+
+                                    {% if foto_2 %}
+
+                                        <img
+                                            src="{{ foto_2.foto.url }}"
+                                            id="previewFoto2"
+                                            class="img-fluid rounded border w-100"
+                                            style="
+                                                height: 190px;
+                                                object-fit: cover;
+                                            "
+                                            alt="Foto 2 {{ jenis_aset.nama }}"
+                                        >
+
+                                    {% else %}
+
+                                        <img
+                                            id="previewFoto2"
+                                            class="img-fluid rounded border w-100 d-none"
+                                            style="
+                                                height: 190px;
+                                                object-fit: cover;
+                                            "
+                                            alt="Preview Foto 2"
+                                        >
+
+
+                                        <div
+                                            id="kosongFoto2"
+                                            class="bg-body-tertiary border rounded d-flex flex-column align-items-center justify-content-center text-muted"
+                                            style="height: 190px;"
+                                        >
+
+                                            <i class="bi bi-image fs-3 mb-1"></i>
+
+                                            <small>
+                                                Belum ada foto
+                                            </small>
+
+                                        </div>
+
+                                    {% endif %}
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- =====================================
+                         FOTO 3
+                    ====================================== -->
+
+                    <div class="col-md-4">
+
+                        <div class="card h-100 border">
+
+                            <div class="card-body">
+
+                                <label class="form-label fw-semibold">
+
+                                    Foto 3
+
+                                </label>
+
+
+                                {{ form.foto_3 }}
+
+
+                                {% for error in form.foto_3.errors %}
+
+                                    <div class="text-danger small mt-1">
+
+                                        {{ error }}
+
+                                    </div>
+
+                                {% endfor %}
+
+
+                                <div class="mt-3">
+
+                                    {% if foto_3 %}
+
+                                        <img
+                                            src="{{ foto_3.foto.url }}"
+                                            id="previewFoto3"
+                                            class="img-fluid rounded border w-100"
+                                            style="
+                                                height: 190px;
+                                                object-fit: cover;
+                                            "
+                                            alt="Foto 3 {{ jenis_aset.nama }}"
+                                        >
+
+                                    {% else %}
+
+                                        <img
+                                            id="previewFoto3"
+                                            class="img-fluid rounded border w-100 d-none"
+                                            style="
+                                                height: 190px;
+                                                object-fit: cover;
+                                            "
+                                            alt="Preview Foto 3"
+                                        >
+
+
+                                        <div
+                                            id="kosongFoto3"
+                                            class="bg-body-tertiary border rounded d-flex flex-column align-items-center justify-content-center text-muted"
+                                            style="height: 190px;"
+                                        >
+
+                                            <i class="bi bi-image fs-3 mb-1"></i>
+
+                                            <small>
+                                                Belum ada foto
+                                            </small>
+
+                                        </div>
+
+                                    {% endif %}
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             KETERANGAN
+        ================================================== -->
+
+        <div class="card shadow-sm border-0 mb-4">
+
+            <div class="card-header bg-body">
+
+                <div>
+
+                    <h5 class="mb-1">
+
+                        <i class="bi bi-chat-left-text text-primary me-2"></i>
+
+                        Keterangan
+
+                    </h5>
+
+
+                    <small class="text-muted">
+
+                        Tambahkan catatan apabila diperlukan
+
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <div class="card-body">
+
+                <label
+                    class="form-label fw-semibold"
+                    for="{{ form.keterangan.id_for_label }}"
+                >
+
+                    Catatan Aset
+
+                </label>
+
+
+                {{ form.keterangan }}
+
+
+                {% for error in form.keterangan.errors %}
+
+                    <div class="text-danger small mt-1">
+
+                        <i class="bi bi-exclamation-circle me-1"></i>
+
+                        {{ error }}
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             AKSI
+        ================================================== -->
+
+        <div class="card border-0 shadow-sm">
+
+            <div class="card-body">
+
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+
+                    <small class="text-muted">
+
+                        <i class="bi bi-info-circle me-1"></i>
+
+                        Pastikan data sesuai kondisi aset di sekolah.
+
+                    </small>
+
+
+                    <div class="d-flex gap-2">
+
+                        <a
+                            href="{% url 'data_aset' %}"
+                            class="btn btn-outline-secondary"
+                        >
+
+                            <i class="bi bi-x-circle me-1"></i>
+
+                            Batal
+
+                        </a>
+
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary"
+                            id="btnSimpanAset"
+                        >
+
+                            <i
+                                class="bi bi-save me-1"
+                                id="iconSimpanAset"
+                            ></i>
+
+                            <span id="textSimpanAset">
+
+                                Simpan Data Aset
+
+                            </span>
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </form>
+
+
+</div>
+
+{% endblock %}
+
+
+
+{% block js %}
+
+<script>
+
+document.addEventListener(
+    'DOMContentLoaded',
+    function () {
+
+
+        // =====================================================
+        // ELEMENT FORM
+        // =====================================================
+
+        const form =
+            document.getElementById(
+                'formAsetSekolah'
+            );
+
+
+        const ketersediaan =
+            document.getElementById(
+                'id_ketersediaan'
+            );
+
+
+        const jumlahBaik =
+            document.getElementById(
+                'id_jumlah_baik'
+            );
+
+
+        const jumlahRingan =
+            document.getElementById(
+                'id_jumlah_rusak_ringan'
+            );
+
+
+        const jumlahBerat =
+            document.getElementById(
+                'id_jumlah_rusak_berat'
+            );
+
+
+        const jumlahTotal =
+            document.getElementById(
+                'jumlahTotal'
+            );
+
+
+        const cardKondisi =
+            document.getElementById(
+                'cardKondisiAset'
+            );
+
+
+        const cardDokumentasi =
+            document.getElementById(
+                'cardDokumentasi'
+            );
+
+
+        const button =
+            document.getElementById(
+                'btnSimpanAset'
+            );
+
+
+        const icon =
+            document.getElementById(
+                'iconSimpanAset'
+            );
+
+
+        const text =
+            document.getElementById(
+                'textSimpanAset'
+            );
+
+
+        const inputFoto = [
+
+            document.getElementById(
+                'id_foto_1'
+            ),
+
+            document.getElementById(
+                'id_foto_2'
+            ),
+
+            document.getElementById(
+                'id_foto_3'
+            )
+
+        ];
+
+
+
+        // =====================================================
+        // KONVERSI ANGKA
+        // =====================================================
+
+        function angka(nilai) {
+
+            return parseInt(
+                nilai || 0,
+                10
+            ) || 0;
+
+        }
+
+
+
+        // =====================================================
+        // HITUNG TOTAL
+        // =====================================================
+
+        function hitungTotal() {
+
+            if (
+                !jumlahTotal
+                ||
+                !jumlahBaik
+                ||
+                !jumlahRingan
+                ||
+                !jumlahBerat
+            ) {
+
+                return;
+
+            }
+
+
+            jumlahTotal.value =
+
+                angka(jumlahBaik.value)
+
+                + angka(jumlahRingan.value)
+
+                + angka(jumlahBerat.value);
+
+        }
+
+
+
+        // =====================================================
+        // ATUR KETERSEDIAAN
+        // =====================================================
+
+        function aturKetersediaan() {
+
+            if (!ketersediaan) {
+
+                return;
+
+            }
+
+
+            const tidakAda =
+                ketersediaan.value
+                === 'TIDAK_ADA';
+
+
+            const kolomJumlah = [
+
+                jumlahBaik,
+                jumlahRingan,
+                jumlahBerat
+
+            ];
+
+
+            kolomJumlah.forEach(
+                function (kolom) {
+
+                    if (!kolom) {
+
+                        return;
+
+                    }
+
+
+                    if (tidakAda) {
+
+                        kolom.value = 0;
+
+                    }
+
+
+                    kolom.readOnly =
+                        tidakAda;
+
+                }
+            );
+
+
+
+            inputFoto.forEach(
+                function (input) {
+
+                    if (input) {
+
+                        input.disabled =
+                            tidakAda;
+
+                    }
+
+                }
+            );
+
+
+
+            // =============================================
+            // VISUAL KETIKA ASET TIDAK TERSEDIA
+            // =============================================
+
+            if (cardKondisi) {
+
+                cardKondisi.style.opacity =
+                    tidakAda
+                    ? '0.65'
+                    : '1';
+
+            }
+
+
+            if (cardDokumentasi) {
+
+                cardDokumentasi.style.opacity =
+                    tidakAda
+                    ? '0.65'
+                    : '1';
+
+            }
+
+
+            hitungTotal();
+
+        }
+
+
+
+        // =====================================================
+        // EVENT JUMLAH
+        // =====================================================
+
+        [
+            jumlahBaik,
+            jumlahRingan,
+            jumlahBerat
+        ].forEach(
+            function (kolom) {
+
+                if (kolom) {
+
+                    kolom.addEventListener(
+                        'input',
+                        hitungTotal
+                    );
+
+                }
+
+            }
+        );
+
+
+
+        // =====================================================
+        // EVENT KETERSEDIAAN
+        // =====================================================
+
+        if (ketersediaan) {
+
+            ketersediaan.addEventListener(
+                'change',
+                aturKetersediaan
+            );
+
+        }
+
+
+
+        // =====================================================
+        // PREVIEW FOTO
+        // =====================================================
+
+        function pasangPreview(
+            nomor
+        ) {
+
+            const input =
+                document.getElementById(
+                    'id_foto_' + nomor
+                );
+
+
+            const preview =
+                document.getElementById(
+                    'previewFoto' + nomor
+                );
+
+
+            const kosong =
+                document.getElementById(
+                    'kosongFoto' + nomor
+                );
+
+
+            if (
+                !input
+                ||
+                !preview
+            ) {
+
+                return;
+
+            }
+
+
+            input.addEventListener(
+                'change',
+                function () {
+
+                    const file =
+                        this.files[0];
+
+
+                    if (!file) {
+
+                        return;
+
+                    }
+
+
+                    preview.src =
+                        URL.createObjectURL(
+                            file
+                        );
+
+
+                    preview.classList.remove(
+                        'd-none'
+                    );
+
+
+                    if (kosong) {
+
+                        kosong.classList.add(
+                            'd-none'
+                        );
+
+                    }
+
+                }
+            );
+
+        }
+
+
+
+        pasangPreview(1);
+        pasangPreview(2);
+        pasangPreview(3);
+
+
+
+        // =====================================================
+        // CEGAH DOUBLE SUBMIT
+        // =====================================================
+
+        if (
+            form
+            &&
+            button
+            &&
+            icon
+            &&
+            text
+        ) {
+
+            form.addEventListener(
+                'submit',
+                function () {
+
+                    button.disabled =
+                        true;
+
+
+                    icon.className =
+                        'spinner-border '
+                        + 'spinner-border-sm me-2';
+
+
+                    text.textContent =
+                        'Menyimpan...';
+
+                }
+            );
+
+        }
+
+
+
+        // =====================================================
+        // KONDISI AWAL
+        // =====================================================
+
+        aturKetersediaan();
+
+
+    }
+);
+
+</script>
+
+{% endblock %}

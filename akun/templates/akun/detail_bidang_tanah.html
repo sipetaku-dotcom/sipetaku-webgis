@@ -1,0 +1,1007 @@
+{% extends 'base.html' %}
+{% load format_angka %}
+{% block title %}{% endblock %}
+
+
+{% block content %}
+
+<div class="container-fluid">
+
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <div class="card shadow-sm border-0 mb-4">
+
+        <div class="card-header bg-body border-0">
+
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+                <div>
+
+                    <h5 class="mb-1">
+
+                        <i class="bi bi-map text-primary me-2"></i>
+
+                        Bidang Tanah {{ bidang.nomor_bidang }}
+
+                    </h5>
+
+
+                    <small class="text-muted">
+
+                        {{ sekolah.nama }}
+
+                        · Pengelolaan bidang dan dokumen legalitas
+
+                    </small>
+
+                </div>
+
+
+                <a
+                    href="{% url 'tanah_legalitas_sekolah' %}"
+                    class="btn btn-outline-secondary btn-sm"
+                >
+
+                    <i class="bi bi-arrow-left me-1"></i>
+
+                    Kembali ke Data Legalitas
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+        INFORMASI BIDANG
+    ====================================================== -->
+
+    <div class="card shadow-sm border-0 mb-4">
+
+        <div class="card-header bg-body">
+
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+                <div>
+
+                    <h5 class="mb-1">
+
+                        <i class="bi bi-info-square text-primary me-2"></i>
+
+                        Informasi Bidang
+
+                    </h5>
+
+
+                    <small class="text-muted">
+
+                        Data dasar bidang tanah sekolah
+
+                    </small>
+
+                </div>
+
+
+                <a
+                    href="{% url 'edit_bidang_tanah' bidang.id %}"
+                    class="btn btn-warning btn-sm"
+                >
+
+                    <i class="bi bi-pencil-square me-1"></i>
+
+                    Edit Bidang
+
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <div class="card-body">
+
+            <div class="row g-3 align-items-center">
+
+                <!-- =====================================
+                    KEPEMILIKAN
+                ====================================== -->
+
+                <div class="col-md-3">
+
+                    <div class="text-muted small">
+
+                        Kepemilikan
+
+                    </div>
+
+                    <div class="fw-semibold">
+
+                        {{ bidang.get_status_kepemilikan_display }}
+
+                    </div>
+
+                </div>
+
+
+                <!-- =====================================
+                    KETERANGAN
+                ====================================== -->
+
+                <div class="col-md-3">
+
+                    <div class="text-muted small">
+
+                        Keterangan
+
+                    </div>
+
+                    <div class="fw-semibold">
+
+                        {% if bidang.keterangan %}
+
+                            {{ bidang.keterangan }}
+
+                        {% else %}
+
+                            <span class="text-muted">
+                                -
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>       
+
+
+                <!-- =====================================
+                    LUAS
+                ====================================== -->
+
+                <div class="col-md-3">
+
+                    <div class="text-muted small">
+
+                        Luas Tanah
+
+                    </div>
+
+                    <div class="fw-semibold">
+
+                        {{ bidang.luas_bidang_m2|format_ribuan }} m²
+
+                    </div>
+
+                </div>
+
+                
+                <!-- =====================================
+                    STATUS LEGALITAS
+                ====================================== -->
+
+                <div class="col-md-3">
+
+                    <div class="text-muted small mb-1">
+
+                        Status Legalitas
+
+                    </div>
+
+
+                    {% if jumlah_legalitas > 0 %}
+
+                        <span class="badge bg-success px-3 py-2">
+
+                            <i class="bi bi-check-circle me-1"></i>
+
+                            Berlegalitas
+
+                        </span>
+
+                    {% else %}
+
+                        <span class="badge bg-warning text-dark px-3 py-2">
+
+                            <i class="bi bi-exclamation-circle me-1"></i>
+
+                            Belum Ada Legalitas
+
+                        </span>
+
+                    {% endif %}
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         DAFTAR LEGALITAS
+    ====================================================== -->
+
+    <div class="card shadow-sm border-0 mb-4">
+
+        <div class="card-header bg-body">
+
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+                <div>
+
+                    <h5 class="mb-1">
+
+                        <i class="bi bi-file-earmark-check text-primary me-2"></i>
+
+                        Daftar Legalitas
+
+                        <span class="badge bg-primary ms-2">
+
+                            {{ jumlah_legalitas }} Legalitas
+
+                        </span>
+
+                    </h5>
+
+
+                    <small class="text-muted">
+
+                        Satu bidang dapat memiliki lebih dari satu
+                        dokumen legalitas
+
+                    </small>
+
+                </div>
+
+
+                <a
+                    href="{% url 'tambah_legalitas_tanah' bidang.id %}"
+                    class="btn btn-primary btn-sm"
+                >
+
+                    <i class="bi bi-plus-circle me-1"></i>
+
+                    Tambah Legalitas
+
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <div class="card-body">
+
+
+            {% if daftar_legalitas %}
+
+                <div class="table-responsive">
+
+                    <table
+                        class="table table-bordered table-striped table-hover align-middle w-100"
+                    >
+
+                        <thead>
+
+                            <tr>
+
+                                <th class="text-center">
+                                    No
+                                </th>
+
+                                <th>
+                                    Dokumen
+                                </th>
+
+                                <th>
+                                    Nomor
+                                </th>
+
+                                <th>
+                                    Tanggal
+                                </th>
+
+                                <th>
+                                    Atas Nama
+                                </th>
+
+                                <th>
+                                    Lampiran
+                                </th>
+
+                                <th class="text-center">
+                                    Aksi
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            {% for legalitas in daftar_legalitas %}
+
+                                <tr>
+
+
+                                    <!-- NO -->
+
+                                    <td class="text-center">
+
+                                        {{ forloop.counter }}
+
+                                    </td>
+
+
+
+                                    <!-- DOKUMEN -->
+
+                                    <td>
+
+                                        <div class="fw-semibold">
+
+                                            {{ legalitas.get_jenis_dokumen_display }}
+
+                                        </div>
+
+
+                                        {% if legalitas.nama_dokumen %}
+
+                                            <small class="text-muted">
+
+                                                {{ legalitas.nama_dokumen }}
+
+                                            </small>
+
+                                        {% endif %}
+
+                                    </td>
+
+
+
+                                    <!-- NOMOR -->
+
+                                    <td>
+
+                                        {% if legalitas.nomor_dokumen %}
+
+                                            {{ legalitas.nomor_dokumen }}
+
+                                        {% else %}
+
+                                            <span class="text-muted">
+                                                -
+                                            </span>
+
+                                        {% endif %}
+
+                                    </td>
+
+
+
+                                    <!-- TANGGAL -->
+
+                                    <td class="text-nowrap">
+
+                                        {% if legalitas.tanggal_dokumen %}
+
+                                            {{ legalitas.tanggal_dokumen|date:"d M Y" }}
+
+                                        {% else %}
+
+                                            <span class="text-muted">
+                                                -
+                                            </span>
+
+                                        {% endif %}
+
+                                    </td>
+
+
+
+                                    <!-- ATAS NAMA -->
+
+                                    <td>
+
+                                        {% if legalitas.atas_nama %}
+
+                                            {{ legalitas.atas_nama }}
+
+                                        {% else %}
+
+                                            <span class="text-muted">
+                                                -
+                                            </span>
+
+                                        {% endif %}
+
+                                    </td>
+
+
+
+                                    <!-- =================================
+                                        LAMPIRAN
+                                    ================================== -->
+
+                                    <td>
+
+                                        {% if legalitas.lampiran.count > 0 %}
+
+                                            {% with lampiran=legalitas.lampiran.first %}
+
+                                                <div class="d-flex align-items-center gap-2">
+
+                                                    <a
+                                                        href="{{ lampiran.file.url }}"
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        class="btn btn-outline-primary btn-sm"
+                                                    >
+
+                                                        <i class="bi bi-file-earmark me-1"></i>
+
+                                                        Lampiran {{ forloop.counter }}
+
+                                                    </a>
+
+
+                                                    <form
+                                                        method="POST"
+                                                        action="{% url 'hapus_lampiran_legalitas' lampiran.id %}"
+                                                        class="d-inline form-hapus-lampiran"
+                                                        data-nama="Lampiran {{ forloop.counter }}"
+                                                        data-manual-loading="true"
+                                                    >
+
+                                                        {% csrf_token %}
+
+                                                        <button
+                                                            type="submit"
+                                                            class="btn btn-link text-danger p-0"
+                                                            title="Hapus Lampiran"
+                                                        >
+
+                                                            <i class="bi bi-x-circle"></i>
+
+                                                        </button>
+
+                                                    </form>
+
+                                                </div>
+
+                                            {% endwith %}
+
+                                        {% else %}
+
+                                            <span class="text-muted small">
+
+                                                Belum Ada
+
+                                            </span>
+
+                                        {% endif %}
+
+                                    </td>
+
+
+
+                                    <!-- AKSI -->
+
+                                    <td class="text-nowrap text-center">
+
+                                        <div class="d-inline-flex gap-1 flex-wrap justify-content-center">
+
+
+                                            <!-- EDIT -->
+
+                                            <a
+                                                href="{% url 'edit_legalitas_tanah' legalitas.id %}"
+                                                class="btn btn-warning btn-sm"
+                                            >
+
+                                                <i class="bi bi-pencil-square" title="Edit"></i>
+
+
+                                            </a>
+
+
+
+                                            <!-- TAMBAH LAMPIRAN -->
+
+                                            <a
+                                                href="{% url 'tambah_lampiran_legalitas' legalitas.id %}"
+                                                class="btn btn-info btn-sm"
+                                            >
+
+                                                <i class="bi bi-paperclip" title="Lampiran"></i>
+
+
+                                            </a>
+
+
+
+                                            <!-- HAPUS -->
+
+                                            <form
+                                                method="POST"
+                                                action="{% url 'hapus_legalitas_tanah' legalitas.id %}"
+                                                class="d-inline form-hapus-legalitas"
+                                                data-nama="{{ legalitas.get_jenis_dokumen_display }}"
+                                                data-nomor="{{ legalitas.nomor_dokumen|default:'' }}"
+                                                data-lampiran="{{ legalitas.lampiran.count }}"
+                                                data-manual-loading="true"
+                                            >
+
+                                                {% csrf_token %}
+
+
+                                                <button
+                                                    type="submit"
+                                                    class="btn btn-danger btn-sm"
+                                                    title="Hapus"
+                                                >
+
+                                                    <i class="bi bi-trash"></i>
+
+
+                                                </button>
+
+                                            </form>
+
+
+                                        </div>
+
+                                    </td>
+
+
+                                </tr>
+
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+
+            {% else %}
+
+                <div class="text-center py-5">
+
+                    <i class="bi bi-file-earmark-x fs-1 text-muted"></i>
+
+
+                    <div class="fw-semibold mt-2">
+
+                        Belum Ada Legalitas
+
+                    </div>
+
+
+                    <div class="small text-muted mb-3">
+
+                        Bidang Tanah {{ bidang.nomor_bidang }}
+                        belum memiliki dokumen legalitas.
+
+                    </div>
+
+
+                    <a
+                        href="{% url 'tambah_legalitas_tanah' bidang.id %}"
+                        class="btn btn-primary btn-sm"
+                    >
+
+                        <i class="bi bi-plus-circle me-1"></i>
+
+                        Tambah Legalitas
+
+                    </a>
+
+                </div>
+
+            {% endif %}
+
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         HAPUS BIDANG
+    ====================================================== -->
+
+    <div class="card border-0 shadow-sm">
+
+        <div class="card-body">
+
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+                <div>
+
+                    <div class="fw-semibold">
+
+                        Pengelolaan Bidang
+
+                    </div>
+
+
+                    <small class="text-muted">
+
+                        Menghapus bidang juga akan menghapus
+                        seluruh legalitas dan lampiran terkait.
+
+                    </small>
+
+                </div>
+
+
+                <form
+                    method="POST"
+                    action="{% url 'hapus_bidang_tanah' bidang.id %}"
+                    id="formHapusBidang"
+                    data-bidang="{{ bidang.nomor_bidang }}"
+                    data-legalitas="{{ jumlah_legalitas }}"
+                    data-manual-loading="true"
+                >
+
+                    {% csrf_token %}
+
+
+                    <button
+                        type="submit"
+                        class="btn btn-outline-danger"
+                    >
+
+                        <i class="bi bi-trash me-1"></i>
+
+                        Hapus Bidang
+
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+{% endblock %}
+
+
+
+{% block js %}
+
+<script>
+
+$(document).ready(function () {
+
+
+    
+    // =====================================================
+    // HAPUS LEGALITAS
+    // =====================================================
+
+    $('.form-hapus-legalitas').on(
+        'submit',
+        function (event) {
+
+            event.preventDefault();
+
+
+            const form = this;
+
+            const nama =
+                $(this).data('nama');
+
+            const nomor =
+                $(this).data('nomor');
+
+            const lampiran =
+                $(this).data('lampiran');
+
+
+            let identitas = nama;
+
+
+            if (nomor) {
+
+                identitas += (
+                    ' No. '
+                    + nomor
+                );
+
+            }
+
+
+            let pesan = (
+                identitas
+                + ' akan dihapus.'
+            );
+
+
+            if (lampiran > 0) {
+
+                pesan += (
+                    ' '
+                    + lampiran
+                    + ' lampiran yang terkait '
+                    + 'juga akan dihapus.'
+                );
+
+            }
+
+
+            Swal.fire({
+
+                title:
+                    'Hapus legalitas?',
+
+                text:
+                    pesan,
+
+                icon:
+                    'warning',
+
+                showCancelButton:
+                    true,
+
+                confirmButtonText:
+                    'Ya, hapus',
+
+                cancelButtonText:
+                    'Batal',
+
+                confirmButtonColor:
+                    '#dc3545'
+
+            }).then(function (hasil) {
+
+                if (
+                    hasil.isConfirmed
+                ) {
+
+                    const tombol =
+                        form.querySelector(
+                            'button[type="submit"]'
+                        );
+
+
+                    if (tombol) {
+
+                        tombol.disabled =
+                            true;
+
+
+                        tombol.innerHTML = `
+                            <span
+                                class="spinner-border spinner-border-sm me-2"
+                                role="status"
+                                aria-hidden="true">
+                            </span>
+                            Menghapus...
+                        `;
+
+                    }
+
+
+                    form.submit();
+
+                }
+
+            });
+
+        }
+    );
+
+
+
+    // =====================================================
+    // HAPUS LAMPIRAN
+    // =====================================================
+
+    $('.form-hapus-lampiran').on(
+        'submit',
+        function (event) {
+
+            event.preventDefault();
+
+
+            const form = this;
+
+            const nama =
+                $(this).data('nama');
+
+
+            Swal.fire({
+
+                title:
+                    'Hapus lampiran?',
+
+                text:
+                    (
+                        nama
+                        + ' akan dihapus.'
+                    ),
+
+                icon:
+                    'warning',
+
+                showCancelButton:
+                    true,
+
+                confirmButtonText:
+                    'Ya, hapus',
+
+                cancelButtonText:
+                    'Batal',
+
+                confirmButtonColor:
+                    '#dc3545'
+
+            }).then(function (hasil) {
+
+                if (
+                    hasil.isConfirmed
+                ) {
+
+                    const tombol =
+                        form.querySelector(
+                            'button[type="submit"]'
+                        );
+
+
+                    if (tombol) {
+
+                        tombol.disabled =
+                            true;
+
+
+                        tombol.innerHTML = `
+                            <span
+                                class="spinner-border spinner-border-sm me-2"
+                                role="status"
+                                aria-hidden="true">
+                            </span>
+                            Menghapus...
+                        `;
+
+                    }
+
+
+                    form.submit();
+
+                }
+
+            });
+
+        }
+    );
+
+
+
+    // =====================================================
+    // HAPUS BIDANG
+    // =====================================================
+
+    $('#formHapusBidang').on(
+        'submit',
+        function (event) {
+
+            event.preventDefault();
+
+
+            const form = this;
+
+            const bidang =
+                $(this).data('bidang');
+
+            const legalitas =
+                $(this).data('legalitas');
+
+
+            let pesan = (
+                'Bidang Tanah '
+                + bidang
+                + ' akan dihapus.'
+            );
+
+
+            if (legalitas > 0) {
+
+                pesan += (
+                    ' Seluruh '
+                    + legalitas
+                    + ' data legalitas serta '
+                    + 'lampiran terkait juga akan dihapus.'
+                );
+
+            }
+
+
+            Swal.fire({
+
+                title:
+                    'Hapus bidang tanah?',
+
+                text:
+                    pesan,
+
+                icon:
+                    'warning',
+
+                showCancelButton:
+                    true,
+
+                confirmButtonText:
+                    'Ya, hapus',
+
+                cancelButtonText:
+                    'Batal',
+
+                confirmButtonColor:
+                    '#dc3545'
+
+            }).then(function (hasil) {
+
+                if (
+                    hasil.isConfirmed
+                ) {
+
+                    const tombol =
+                        form.querySelector(
+                            'button[type="submit"]'
+                        );
+
+
+                    if (tombol) {
+
+                        tombol.disabled =
+                            true;
+
+
+                        tombol.innerHTML = `
+                            <span
+                                class="spinner-border spinner-border-sm me-2"
+                                role="status"
+                                aria-hidden="true">
+                            </span>
+                            Menghapus...
+                        `;
+
+                    }
+
+
+                    form.submit();
+
+                }
+
+            });
+
+        }
+    );
+
+
+});
+
+</script>
+
+{% endblock %}

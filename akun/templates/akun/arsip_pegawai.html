@@ -1,0 +1,1065 @@
+{% extends 'base.html' %}
+
+{% block title %}{% endblock %}
+
+
+{% block content %}
+
+<div class="container-fluid">
+
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <div class="card shadow-sm border-0 mb-4">
+
+        <div class="card-header bg-body border-0">
+
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+                <div>
+
+                    <h5 class="mb-1">
+
+                        <i class="bi bi-archive text-primary me-2"></i>
+
+                        Arsip Pegawai
+
+                    </h5>
+
+
+                    <small class="text-muted">
+
+                        {% if admin_kabupaten %}
+
+                            Seluruh Sekolah Kabupaten Kutai Timur
+
+                        {% elif admin_kecamatan %}
+
+                            Kecamatan {{ request.user.profil.kecamatan }}
+
+                        {% elif operator_sekolah %}
+
+                            {% if request.user.profil.sekolah %}
+
+                                {{ request.user.profil.sekolah.nama }}
+
+                            {% else %}
+
+                                Sekolah Operator
+
+                            {% endif %}
+
+                        {% endif %}
+
+                        · Riwayat pegawai yang sudah tidak aktif
+
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         FILTER
+    ====================================================== -->
+
+    <div class="card border-0 shadow-sm mb-4">
+
+        <div class="card-body">
+
+            <form
+                method="GET"
+                class="row g-3 align-items-end"
+            >
+
+
+                <!-- =========================================
+                     KECAMATAN
+                ========================================== -->
+
+                {% if admin_kabupaten %}
+
+                    <div class="col-lg-2 col-md-6">
+
+                        <label class="form-label fw-semibold">
+
+                            Kecamatan
+
+                        </label>
+
+
+                        <select
+                            name="kecamatan"
+                            class="form-select"
+                        >
+
+                            <option value="">
+
+                                Semua Kecamatan
+
+                            </option>
+
+
+                            {% for kec in daftar_kecamatan %}
+
+                                <option
+                                    value="{{ kec }}"
+                                    {% if filter_kecamatan == kec %}
+                                        selected
+                                    {% endif %}
+                                >
+
+                                    {{ kec }}
+
+                                </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+                {% endif %}
+
+
+
+                <!-- =========================================
+                     SEKOLAH
+                ========================================== -->
+
+                {% if admin_kabupaten or admin_kecamatan %}
+
+                    <div class="col-lg-3 col-md-6">
+
+                        <label class="form-label fw-semibold">
+
+                            Sekolah
+
+                        </label>
+
+
+                        <select
+                            name="sekolah"
+                            class="form-select"
+                        >
+
+                            <option value="">
+
+                                Semua Sekolah
+
+                            </option>
+
+
+                            {% for s in daftar_sekolah %}
+
+                                <option
+                                    value="{{ s.id }}"
+                                    {% if filter_sekolah == s.id|stringformat:"s" %}
+                                        selected
+                                    {% endif %}
+                                >
+
+                                    {{ s.nama }}
+
+                                    {% if admin_kabupaten %}
+
+                                        - {{ s.kecamatan }}
+
+                                    {% endif %}
+
+                                </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+                {% endif %}
+
+
+
+                <!-- =========================================
+                     STATUS AKHIR
+                ========================================== -->
+
+                <div
+                    class="
+                        {% if operator_sekolah %}
+                            col-md-4
+                        {% else %}
+                            col-lg-2 col-md-6
+                        {% endif %}
+                    "
+                >
+
+                    <label class="form-label fw-semibold">
+
+                        Status Akhir
+
+                    </label>
+
+
+                    <select
+                        name="status"
+                        class="form-select"
+                    >
+
+                        <option value="">
+
+                            Semua Status
+
+                        </option>
+
+
+                        <option
+                            value="MUTASI"
+                            {% if filter_status == 'MUTASI' %}
+                                selected
+                            {% endif %}
+                        >
+
+                            Mutasi
+
+                        </option>
+
+
+                        <option
+                            value="PENSIUN"
+                            {% if filter_status == 'PENSIUN' %}
+                                selected
+                            {% endif %}
+                        >
+
+                            Pensiun
+
+                        </option>
+
+
+                        <option
+                            value="BERHENTI"
+                            {% if filter_status == 'BERHENTI' %}
+                                selected
+                            {% endif %}
+                        >
+
+                            Berhenti
+
+                        </option>
+
+
+                        <option
+                            value="MENINGGAL"
+                            {% if filter_status == 'MENINGGAL' %}
+                                selected
+                            {% endif %}
+                        >
+
+                            Meninggal
+
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+
+                <!-- =========================================
+                     PENCARIAN
+                ========================================== -->
+
+                <div
+                    class="
+                        {% if operator_sekolah %}
+                            col-md-6
+                        {% else %}
+                            col-lg-4 col-md-8
+                        {% endif %}
+                    "
+                >
+
+                    <label class="form-label fw-semibold">
+
+                        Cari Pegawai
+
+                    </label>
+
+
+                    <input
+                        type="text"
+                        name="cari"
+                        class="form-control"
+                        value="{{ filter_cari }}"
+                        placeholder="Nama, NIP, NIK, NUPTK, jabatan..."
+                    >
+
+                </div>
+
+
+
+                <!-- =========================================
+                     TOMBOL FILTER
+                ========================================== -->
+
+                <div
+                    class="
+                        {% if operator_sekolah %}
+                            col-md-2
+                        {% else %}
+                            col-lg-auto col-md-4
+                        {% endif %}
+                    "
+                >
+
+                    <div class="d-flex gap-2">
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary flex-grow-1"
+                            title="Terapkan Filter"
+                        >
+
+                            <i class="bi bi-funnel me-1"></i>
+
+                            {% if operator_sekolah %}
+
+                                Filter
+
+                            {% endif %}
+
+                        </button>
+
+
+                        <a
+                            href="{% url 'arsip_pegawai' %}"
+                            class="btn btn-outline-secondary"
+                            title="Reset Filter"
+                        >
+
+                            <i class="bi bi-arrow-clockwise"></i>
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         RINGKASAN
+    ====================================================== -->
+
+    <div class="row g-3 mb-4">
+
+
+        <!-- TOTAL ARSIP -->
+
+        <div class="col-6 col-xl">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-body">
+
+                    <div class="text-muted small">
+
+                        Total Arsip
+
+                    </div>
+
+                    <div class="fs-3 fw-bold text-primary">
+
+                        {{ total_arsip }}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- MUTASI -->
+
+        <div class="col-6 col-xl">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-body">
+
+                    <div class="text-muted small">
+
+                        Mutasi
+
+                    </div>
+
+                    <div class="fs-3 fw-bold text-warning">
+
+                        {{ total_mutasi }}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- PENSIUN -->
+
+        <div class="col-6 col-xl">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-body">
+
+                    <div class="text-muted small">
+
+                        Pensiun
+
+                    </div>
+
+                    <div class="fs-3 fw-bold text-secondary">
+
+                        {{ total_pensiun }}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- BERHENTI -->
+
+        <div class="col-6 col-xl">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-body">
+
+                    <div class="text-muted small">
+
+                        Berhenti
+
+                    </div>
+
+                    <div class="fs-3 fw-bold text-danger">
+
+                        {{ total_berhenti }}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- MENINGGAL -->
+
+        <div class="col-6 col-xl">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-body">
+
+                    <div class="text-muted small">
+
+                        Meninggal
+
+                    </div>
+
+                    <div class="fs-3 fw-bold text-dark">
+
+                        {{ total_meninggal }}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         TABEL ARSIP PEGAWAI
+    ====================================================== -->
+
+    <div class="card shadow-sm border-0">
+
+        <div class="card-header bg-body">
+
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+                <div>
+
+                    <h5 class="mb-1">
+
+                        <i class="bi bi-table text-primary me-2"></i>
+
+                        Daftar Arsip Pegawai
+
+                    </h5>
+
+
+                    <small class="text-muted">
+
+                        Riwayat penempatan pegawai yang
+                        sudah berakhir
+
+                    </small>
+
+                </div>
+
+
+                {% if filter_status %}
+
+                    <span class="badge bg-secondary px-3 py-2">
+
+                        <i class="bi bi-funnel me-1"></i>
+
+                        {{ filter_status|title }}
+
+                    </span>
+
+                {% else %}
+
+                    <span class="badge bg-secondary px-3 py-2">
+
+                        <i class="bi bi-archive me-1"></i>
+
+                        Semua Status
+
+                    </span>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+
+
+        <div class="card-body">
+
+            <div class="table-responsive">
+
+                <table
+                    id="tableArsipPegawai"
+                    class="table table-bordered table-striped table-hover align-middle w-100"
+                >
+
+                    <thead>
+
+                        <tr>
+
+                            <th
+                                class="text-center align-top"
+                                style="width: 30px;"
+                            >
+                                No
+                            </th>
+
+                            <th class="align-top">
+                                Pegawai
+                            </th>
+
+                            <th class="align-top">
+                                Tahun
+                            </th>
+
+                            <th class="align-top">
+                                Jabatan
+                            </th>
+
+                            <th class="align-top">
+                                Kepegawaian
+                            </th>
+
+                            <th class="align-top">
+                                Status
+                            </th>
+
+                            <th class="align-top">
+                                Efektif
+                            </th>
+
+                            <th class="align-top">
+                                Keterangan
+                            </th>
+
+                            <th class="text-center align-top">
+                                Aksi
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        {% for data in arsip %}
+
+                            <tr>
+
+
+                                <!-- =====================================
+                                     NO
+                                ====================================== -->
+
+                                <td class="text-center">
+
+                                    {{ forloop.counter }}
+
+                                </td>
+
+
+
+                                <!-- =====================================
+                                     PEGAWAI
+                                ====================================== -->
+
+                                <td>
+
+                                    <div class="d-flex align-items-center gap-3">
+
+                                        <div
+                                            class="rounded-circle bg-primary-subtle d-flex align-items-center justify-content-center flex-shrink-0"
+                                            style="width: 46px; height: 46px;"
+                                        >
+                                            <i class="bi bi-person-fill text-primary"></i>
+                                        </div>
+
+                                        <div style="min-width: 0;">
+
+                                            <div class="fw-bold text-nowrap">
+
+                                                {{ data.pegawai.nama }}
+
+                                            </div>
+
+                                            <div
+                                                class="text-muted text-nowrap mt-1"
+                                                style="font-size: 0.85rem;"
+                                            >
+
+                                                {% if data.pegawai.nip %}
+
+                                                    NIP {{ data.pegawai.nip }}
+
+                                                {% elif data.pegawai.nik %}
+
+                                                    NIK {{ data.pegawai.nik }}
+
+                                                {% elif data.pegawai.nuptk %}
+
+                                                    NUPTK {{ data.pegawai.nuptk }}
+
+                                                {% else %}
+
+                                                    Identitas belum tersedia
+
+                                                {% endif %}
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </td>
+
+
+
+                                <!-- =====================================
+                                     SEKOLAH TERAKHIR
+                                ====================================== -->
+
+                                {% if not operator_sekolah %}
+
+                                    <td>
+
+                                        <div class="fw-semibold">
+
+                                            {{ data.sekolah.nama }}
+
+                                        </div>
+
+
+                                        <small class="text-muted">
+
+                                            {{ data.sekolah.kecamatan }}
+
+                                        </small>
+
+                                    </td>
+
+                                {% endif %}
+
+
+
+                                <!-- =====================================
+                                     TAHUN AJARAN
+                                ====================================== -->
+
+                                <td>
+
+                                    <span class="fw-semibold">
+
+                                        {{ data.tahun_ajaran.nama }}
+
+                                    </span>
+
+                                </td>
+
+
+
+                                <!-- =====================================
+                                     JABATAN TERAKHIR
+                                ====================================== -->
+
+                                <td>
+
+                                    {% if data.jabatan %}
+
+                                        <div class="fw-semibold">
+
+                                            {{ data.jabatan }}
+
+                                        </div>
+
+                                    {% else %}
+
+                                        <span class="text-muted">
+
+                                            -
+
+                                        </span>
+
+                                    {% endif %}
+
+
+                                    {% if data.mata_pelajaran %}
+
+                                        <small class="text-muted">
+
+                                            {{ data.mata_pelajaran }}
+
+                                        </small>
+
+                                    {% endif %}
+
+                                </td>
+
+
+
+                                <!-- =====================================
+                                     STATUS PEGAWAI
+                                ====================================== -->
+
+                                <td>
+
+                                    {% if data.status_pegawai == 'PNS' %}
+
+                                        <span class="badge bg-primary">
+
+                                            PNS
+
+                                        </span>
+
+
+                                    {% elif data.status_pegawai == 'PPPK' %}
+
+                                        <span class="badge bg-info text-dark">
+
+                                            PPPK
+
+                                        </span>
+
+
+                                    {% elif data.status_pegawai == 'HONORER' %}
+
+                                        <span class="badge bg-warning text-dark">
+
+                                            Honorer
+
+                                        </span>
+
+
+                                    {% else %}
+
+                                        <span class="badge bg-secondary">
+
+                                            {{ data.get_status_pegawai_display }}
+
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+
+                                <!-- =====================================
+                                     STATUS AKHIR
+                                ====================================== -->
+
+                                <td>
+
+                                    {% if data.status_akhir == 'MUTASI' %}
+
+                                        <span class="badge bg-warning text-dark">
+
+                                            <i class="bi bi-arrow-left-right me-1"></i>
+
+                                            Mutasi
+
+                                        </span>
+
+
+                                    {% elif data.status_akhir == 'PENSIUN' %}
+
+                                        <span class="badge bg-secondary">
+
+                                            <i class="bi bi-hourglass-split me-1"></i>
+
+                                            Pensiun
+
+                                        </span>
+
+
+                                    {% elif data.status_akhir == 'BERHENTI' %}
+
+                                        <span class="badge bg-danger">
+
+                                            <i class="bi bi-person-x me-1"></i>
+
+                                            Berhenti
+
+                                        </span>
+
+
+                                    {% elif data.status_akhir == 'MENINGGAL' %}
+
+                                        <span class="badge bg-dark">
+
+                                            <i class="bi bi-person-dash me-1"></i>
+
+                                            Meninggal
+
+                                        </span>
+
+
+                                    {% else %}
+
+                                        <span class="badge bg-secondary">
+
+                                            {{ data.get_status_akhir_display }}
+
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+
+                                <!-- =====================================
+                                     TANGGAL EFEKTIF
+                                ====================================== -->
+
+                                <td>
+
+                                    {% if data.tanggal_selesai %}
+
+                                        <span class="text-nowrap">
+
+                                            {{ data.tanggal_selesai|date:"d M Y" }}
+
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="text-muted">
+
+                                            -
+
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+
+                                <!-- =====================================
+                                     KETERANGAN
+                                ====================================== -->
+
+                                <td>
+
+                                    {% if data.keterangan %}
+
+                                        {{ data.keterangan }}
+
+                                    {% else %}
+
+                                        <span class="text-muted">
+
+                                            -
+
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+
+                                <!-- =====================================
+                                     AKSI
+                                ====================================== -->
+
+                                <td class="text-nowrap text-center">
+
+                                    <a
+                                        href="{% url 'riwayat_pegawai' data.pegawai.id %}"
+                                        class="btn btn-info btn-sm"
+                                        title="Lihat Riwayat Pegawai"
+                                    >
+
+                                        <i class="bi bi-clock-history"></i>
+
+                                        Riwayat
+
+                                    </a>
+
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+{% endblock %}
+
+
+
+{% block js %}
+
+<script>
+
+$(document).ready(function () {
+
+
+    // =====================================================
+    // DATATABLE
+    // =====================================================
+
+    $('#tableArsipPegawai').DataTable({
+
+        responsive: true,
+
+        autoWidth: false,
+
+        pageLength: 10,
+
+        lengthMenu: [
+            10,
+            25,
+            50,
+            100
+        ],
+
+        columnDefs: [
+
+            {
+                targets: [
+                    0,
+                    -1
+                ],
+                orderable: false
+            }
+
+        ],
+
+        language: {
+
+            emptyTable:
+                'Belum ada arsip pegawai',
+
+            search:
+                'Cari:',
+
+            lengthMenu:
+                'Tampilkan _MENU_ data',
+
+            info:
+                'Menampilkan _START_–_END_ dari _TOTAL_ data',
+
+            infoEmpty:
+                'Belum ada data',
+
+            zeroRecords:
+                'Arsip pegawai tidak ditemukan',
+
+            paginate: {
+
+                previous:
+                    'Sebelumnya',
+
+                next:
+                    'Berikutnya'
+
+            }
+
+        }
+
+    });
+
+});
+
+</script>
+
+{% endblock %}

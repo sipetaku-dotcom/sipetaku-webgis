@@ -5,110 +5,789 @@
 {% block content %}
 
 <style>
-    .dashboard-card {
-        transition: all 0.25s ease;
+
+    /* =====================================================
+       KEPALA DASHBOARD
+    ====================================================== */
+
+    .dashboard-header {
+
+        background:
+            linear-gradient(
+                135deg,
+                rgba(13, 110, 253, 0.14),
+                rgba(111, 66, 193, 0.08)
+            );
+
+        border:
+            1px solid
+            var(--bs-border-color);
+
+        border-radius:
+            16px;
     }
 
-    .dashboard-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+
+    .dashboard-header-icon {
+
+        width:
+            52px;
+
+        height:
+            52px;
+
+        border-radius:
+            14px;
+
+        display:
+            flex;
+
+        align-items:
+            center;
+
+        justify-content:
+            center;
+
+        background:
+            rgba(13, 110, 253, 0.14);
+
+        color:
+            var(--bs-primary);
+
+        font-size:
+            1.55rem;
+
+        flex-shrink:
+            0;
     }
+
+
+    /* =====================================================
+       KARTU RINGKASAN
+    ====================================================== */
+
+    .summary-card {
+
+        border:
+            1px solid
+            var(--bs-border-color);
+
+        border-radius:
+            14px;
+
+        overflow:
+            hidden;
+
+        position:
+            relative;
+
+        transition:
+            transform 0.20s ease,
+            box-shadow 0.20s ease,
+            border-color 0.20s ease;
+    }
+
+
+    .summary-card:hover {
+
+        transform:
+            translateY(-3px);
+
+        box-shadow:
+            0 10px 24px
+            rgba(0, 0, 0, 0.10);
+
+        border-color:
+            rgba(13, 110, 253, 0.35);
+    }
+
+
+    .summary-card::before {
+
+        content:
+            "";
+
+        position:
+            absolute;
+
+        top:
+            0;
+
+        left:
+            0;
+
+        right:
+            0;
+
+        height:
+            4px;
+
+        background:
+            var(--card-accent);
+    }
+
+
+    .summary-card-primary {
+
+        --card-accent:
+            #0d6efd;
+    }
+
+
+    .summary-card-info {
+
+        --card-accent:
+            #0dcaf0;
+    }
+
+
+    .summary-card-success {
+
+        --card-accent:
+            #198754;
+    }
+
+
+    .summary-card-indigo {
+
+        --card-accent:
+            #6610f2;
+    }
+
+
+    .summary-card-warning {
+
+        --card-accent:
+            #ffc107;
+    }
+
+
+    .summary-card-danger {
+
+        --card-accent:
+            #dc3545;
+    }
+
+
+    .summary-icon {
+
+        width:
+            42px;
+
+        height:
+            42px;
+
+        border-radius:
+            12px;
+
+        display:
+            flex;
+
+        align-items:
+            center;
+
+        justify-content:
+            center;
+
+        font-size:
+            1.25rem;
+
+        flex-shrink:
+            0;
+    }
+
+
+    .summary-number {
+
+        font-size:
+            1.65rem;
+
+        font-weight:
+            700;
+
+        line-height:
+            1.1;
+    }
+
+
+    .summary-label {
+
+        font-size:
+            0.82rem;
+
+        color:
+            var(--bs-secondary-color);
+
+        margin-top:
+            4px;
+    }
+
+
+    /* =====================================================
+       GRAFIK
+    ====================================================== */
 
     .chart-container {
-        position: relative;
-        height: 280px;
+
+        position:
+            relative;
+
+        height:
+            280px;
     }
+
 
     @media (max-width: 576px) {
-        .chart-container {
-            height: 240px;
+
+        .dashboard-header-icon {
+
+            width:
+                46px;
+
+            height:
+                46px;
+
+            font-size:
+                1.35rem;
         }
+
+
+        .dashboard-title {
+
+            font-size:
+                1.25rem;
+        }
+
+
+        .summary-number {
+
+            font-size:
+                1.45rem;
+        }
+
+
+        .chart-container {
+
+            height:
+                240px;
+        }
+
     }
+
 </style>
 
-<div class="card shadow-sm border-0 mb-4">
-    <div class="card-body">
-        <div class="d-flex justify-content-between align-items-start flex-wrap gap-3">
 
-            <div>
-                <h3 class="fw-bold mb-2">
-                    <i class="bi bi-speedometer2 text-primary me-2"></i>
-                    Dashboard SIPETAKU
-                </h3>
+<!-- =====================================================
+     KEPALA DASHBOARD
+====================================================== -->
 
-                <p class="text-muted mb-0">
-                    Monitoring data sekolah, guru, murid, prestasi, aset dan guru akan pensiun.
-                </p>
+<div class="dashboard-header shadow-sm mb-4">
+
+    <div class="p-4">
+
+        <div
+            class="
+                d-flex
+                justify-content-between
+                align-items-center
+                flex-wrap
+                gap-3
+            "
+        >
+
+            <div class="d-flex align-items-center gap-3">
+
+                <div class="dashboard-header-icon">
+
+                    <i class="bi bi-speedometer2"></i>
+
+                </div>
+
+
+                <div>
+
+                    <h3 class="dashboard-title fw-bold mb-1">
+
+                        {{ judul_dashboard }}
+
+                    </h3>
+
+
+                    <div class="text-body-secondary">
+
+                        Monitoring data pendidikan
+
+                        <span class="fw-semibold">
+
+                            {{ cakupan_wilayah }}
+
+                        </span>
+
+                    </div>
+
+                </div>
+
             </div>
 
-            <span class="badge bg-primary-subtle text-primary border px-3 py-2">
-                Kutai Timur
-            </span>
+
+            <div
+                class="
+                    d-flex
+                    align-items-center
+                    flex-wrap
+                    gap-2
+                "
+            >
+
+                <span
+                    class="
+                        badge
+                        bg-primary-subtle
+                        text-primary-emphasis
+                        border
+                        px-3
+                        py-2
+                    "
+                >
+
+                    <i class="bi bi-person-badge me-1"></i>
+
+                    {{ nama_role }}
+
+                </span>
+
+
+                {% if tahun_aktif %}
+
+                    <span
+                        class="
+                            badge
+                            bg-success-subtle
+                            text-success-emphasis
+                            border
+                            px-3
+                            py-2
+                        "
+                    >
+
+                        <i class="bi bi-calendar-check me-1"></i>
+
+                        Tahun Ajaran {{ tahun_aktif.nama }}
+
+                    </span>
+
+                {% else %}
+
+                    <span
+                        class="
+                            badge
+                            bg-warning-subtle
+                            text-warning-emphasis
+                            border
+                            px-3
+                            py-2
+                        "
+                    >
+
+                        <i class="bi bi-exclamation-triangle me-1"></i>
+
+                        Tahun Ajaran Belum Aktif
+
+                    </span>
+
+                {% endif %}
+
+            </div>
 
         </div>
+
     </div>
+
 </div>
+
+
+<!-- =====================================================
+     KARTU RINGKASAN UTAMA
+====================================================== -->
 
 <div class="row g-3 mb-4">
 
-    <div class="col-6 col-md-4 col-xl-2">
-        <div class="card border-0 shadow-sm h-100 dashboard-card">
-            <div class="card-body text-center">
-                <i class="bi bi-building text-primary fs-2"></i>
-                <div class="fw-bold mt-2 fs-4">{{ total_sekolah }}</div>
-                <small class="text-muted">Sekolah</small>
-            </div>
-        </div>
-    </div>
+
+    <!-- TOTAL SEKOLAH -->
 
     <div class="col-6 col-md-4 col-xl-2">
-        <div class="card border-0 shadow-sm h-100 dashboard-card">
-            <div class="card-body text-center">
-                <i class="bi bi-people text-primary fs-2"></i>
-                <div class="fw-bold mt-2 fs-4">{{ total_murid }}</div>
-                <small class="text-muted">Murid</small>
+
+        <div
+            class="
+                card
+                summary-card
+                summary-card-primary
+                shadow-sm
+                h-100
+            "
+        >
+
+            <div class="card-body">
+
+                <div
+                    class="
+                        d-flex
+                        justify-content-between
+                        align-items-start
+                        gap-2
+                    "
+                >
+
+                    <div>
+
+                        <div class="summary-number">
+
+                            {{ total_sekolah }}
+
+                        </div>
+
+                        <div class="summary-label">
+
+                            Total Sekolah
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="
+                            summary-icon
+                            bg-primary-subtle
+                            text-primary-emphasis
+                        "
+                    >
+
+                        <i class="bi bi-buildings"></i>
+
+                    </div>
+
+                </div>
+
             </div>
+
         </div>
+
     </div>
 
-    <div class="col-6 col-md-4 col-xl-2">
-        <div class="card border-0 shadow-sm h-100 dashboard-card">
-            <div class="card-body text-center">
-                <i class="bi bi-person-badge text-success fs-2"></i>
-                <div class="fw-bold mt-2 fs-4">{{ total_guru }}</div>
-                <small class="text-muted">Guru</small>
-            </div>
-        </div>
-    </div>
+
+    <!-- TOTAL MURID AKTIF -->
 
     <div class="col-6 col-md-4 col-xl-2">
-        <div class="card border-0 shadow-sm h-100 dashboard-card">
-            <div class="card-body text-center">
-                <i class="bi bi-trophy text-warning fs-2"></i>
-                <div class="fw-bold mt-2 fs-4">{{ total_prestasi }}</div>
-                <small class="text-muted">Prestasi</small>
+
+        <div
+            class="
+                card
+                summary-card
+                summary-card-info
+                shadow-sm
+                h-100
+            "
+        >
+
+            <div class="card-body">
+
+                <div
+                    class="
+                        d-flex
+                        justify-content-between
+                        align-items-start
+                        gap-2
+                    "
+                >
+
+                    <div>
+
+                        <div class="summary-number">
+
+                            {{ total_murid }}
+
+                        </div>
+
+                        <div class="summary-label">
+
+                            Murid Aktif
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="
+                            summary-icon
+                            bg-info-subtle
+                            text-info-emphasis
+                        "
+                    >
+
+                        <i class="bi bi-mortarboard"></i>
+
+                    </div>
+
+                </div>
+
             </div>
+
         </div>
+
     </div>
 
-    <div class="col-6 col-md-4 col-xl-2">
-        <div class="card border-0 shadow-sm h-100 dashboard-card">
-            <div class="card-body text-center">
-                <i class="bi bi-box-seam text-danger fs-2"></i>
-                <div class="fw-bold mt-2 fs-4">{{ total_aset }}</div>
-                <small class="text-muted">Aset</small>
-            </div>
-        </div>
-    </div>
+
+    <!-- TOTAL GURU AKTIF -->
 
     <div class="col-6 col-md-4 col-xl-2">
-        <div class="card border-0 shadow-sm h-100 dashboard-card">
-            <div class="card-body text-center">
-                <i class="bi bi-calendar-check text-danger fs-2"></i>
-                <div class="fw-bold mt-2 fs-4">{{ total_guru_akan_pensiun }}</div>
-                <small class="text-muted">Akan Pensiun</small>
+
+        <div
+            class="
+                card
+                summary-card
+                summary-card-success
+                shadow-sm
+                h-100
+            "
+        >
+
+            <div class="card-body">
+
+                <div
+                    class="
+                        d-flex
+                        justify-content-between
+                        align-items-start
+                        gap-2
+                    "
+                >
+
+                    <div>
+
+                        <div class="summary-number">
+
+                            {{ total_guru }}
+
+                        </div>
+
+                        <div class="summary-label">
+
+                            Guru Aktif
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="
+                            summary-icon
+                            bg-success-subtle
+                            text-success-emphasis
+                        "
+                    >
+
+                        <i class="bi bi-person-badge"></i>
+
+                    </div>
+
+                </div>
+
             </div>
+
         </div>
+
+    </div>
+
+
+    <!-- TOTAL OPERATOR -->
+
+    <div class="col-6 col-md-4 col-xl-2">
+
+        <div
+            class="
+                card
+                summary-card
+                summary-card-indigo
+                shadow-sm
+                h-100
+            "
+        >
+
+            <div class="card-body">
+
+                <div
+                    class="
+                        d-flex
+                        justify-content-between
+                        align-items-start
+                        gap-2
+                    "
+                >
+
+                    <div>
+
+                        <div class="summary-number">
+
+                            {{ total_operator }}
+
+                        </div>
+
+                        <div class="summary-label">
+
+                            Operator Aktif
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="
+                            summary-icon
+                            bg-primary-subtle
+                            text-primary-emphasis
+                        "
+                    >
+
+                        <i class="bi bi-person-workspace"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- SEKOLAH TANPA OPERATOR -->
+
+    <div class="col-6 col-md-4 col-xl-2">
+
+        <div
+            class="
+                card
+                summary-card
+                summary-card-warning
+                shadow-sm
+                h-100
+            "
+        >
+
+            <div class="card-body">
+
+                <div
+                    class="
+                        d-flex
+                        justify-content-between
+                        align-items-start
+                        gap-2
+                    "
+                >
+
+                    <div>
+
+                        <div class="summary-number">
+
+                            {{ sekolah_tanpa_operator }}
+
+                        </div>
+
+                        <div class="summary-label">
+
+                            Tanpa Operator
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="
+                            summary-icon
+                            bg-warning-subtle
+                            text-warning-emphasis
+                        "
+                    >
+
+                        <i class="bi bi-person-x"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- GURU AKAN PENSIUN -->
+
+    <div class="col-6 col-md-4 col-xl-2">
+
+        <div
+            class="
+                card
+                summary-card
+                summary-card-danger
+                shadow-sm
+                h-100
+            "
+        >
+
+            <div class="card-body">
+
+                <div
+                    class="
+                        d-flex
+                        justify-content-between
+                        align-items-start
+                        gap-2
+                    "
+                >
+
+                    <div>
+
+                        <div class="summary-number">
+
+                            {{ total_guru_akan_pensiun }}
+
+                        </div>
+
+                        <div class="summary-label">
+
+                            Akan Pensiun
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="
+                            summary-icon
+                            bg-danger-subtle
+                            text-danger-emphasis
+                        "
+                    >
+
+                        <i class="bi bi-calendar2-week"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
     </div>
 
 </div>
@@ -172,6 +851,158 @@
         </div>
     </div>
 </div>
+
+<!-- STATUS KESIAPAN SEKOLAH -->
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-header bg-transparent border-0 pt-4 px-4">
+        <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+            <div>
+                <h5 class="fw-bold mb-1">
+                    <i class="bi bi-clipboard-check text-success me-2"></i>
+                    Status Kesiapan Sekolah
+                </h5>
+
+                <p class="text-muted small mb-0">
+                    {% if kesiapan_tersedia %}
+                        Tahun Ajaran {{ tahun_aktif }} menuju {{ tahun_tujuan }}
+                    {% else %}
+                        Tahun ajaran tujuan belum tersedia
+                    {% endif %}
+                </p>
+            </div>
+
+            {% if kesiapan_tersedia %}
+                <span class="badge bg-success-subtle text-success border px-3 py-2">
+                    {{ persentase_siap }}% Siap
+                </span>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="card-body px-4 pb-4">
+        {% if kesiapan_tersedia %}
+
+            <div class="mb-4">
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="small fw-semibold">Progres kesiapan sekolah</span>
+                    <span class="small text-muted">
+                        {{ total_siap }} dari {{ total_sekolah }} sekolah
+                    </span>
+                </div>
+
+                <div
+                    class="progress"
+                    role="progressbar"
+                    aria-valuenow="{{ persentase_siap|stringformat:'s' }}"
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                    style="height: 10px;"
+                >
+                    <div
+                        class="progress-bar bg-success"
+                        style="width: {{ persentase_siap|stringformat:'s' }}%;"
+                    ></div>
+                </div>
+            </div>
+
+            <div class="row g-3">
+
+                <div class="col-6 col-lg-3">
+                    <div class="border border-success border-start border-4 rounded-3 p-3 h-100">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="text-success fs-3">
+                                <i class="bi bi-check-circle-fill"></i>
+                            </div>
+
+                            <div>
+                                <div class="fs-4 fw-bold">
+                                    {{ total_siap }}
+                                </div>
+                                <div class="small text-muted">
+                                    Sekolah Siap
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-6 col-lg-3">
+                    <div class="border border-warning border-start border-4 rounded-3 p-3 h-100">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="text-warning fs-3">
+                                <i class="bi bi-clock-fill"></i>
+                            </div>
+
+                            <div>
+                                <div class="fs-4 fw-bold">
+                                    {{ total_belum_siap }}
+                                </div>
+                                <div class="small text-muted">
+                                    Belum Siap
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-6 col-lg-3">
+                    <div class="border border-danger border-start border-4 rounded-3 p-3 h-100">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="text-danger fs-3">
+                                <i class="bi bi-people-fill"></i>
+                            </div>
+
+                            <div>
+                                <div class="fs-4 fw-bold">
+                                    {{ total_rombel_belum_siap }}
+                                </div>
+                                <div class="small text-muted">
+                                    Rombel Belum Siap
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-6 col-lg-3">
+                    <div class="border border-secondary border-start border-4 rounded-3 p-3 h-100">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="text-secondary fs-3">
+                                <i class="bi bi-database-exclamation"></i>
+                            </div>
+
+                            <div>
+                                <div class="fs-4 fw-bold">
+                                    {{ total_belum_ada_data }}
+                                </div>
+                                <div class="small text-muted">
+                                    Belum Ada Data
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        {% else %}
+
+            <div class="alert alert-warning mb-0">
+                <div class="d-flex align-items-center gap-2">
+                    <i class="bi bi-exclamation-triangle-fill"></i>
+                    <span>
+                        Silakan buat tahun ajaran tujuan terlebih dahulu agar status
+                        kesiapan sekolah dapat dihitung.
+                    </span>
+                </div>
+            </div>
+
+        {% endif %}
+    </div>
+</div>
+<!-- END STATUS KESIAPAN SEKOLAH -->
+
+
 
 <div class="row g-3 mb-4">
 

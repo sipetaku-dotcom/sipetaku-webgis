@@ -1,0 +1,649 @@
+{% extends 'base.html' %}
+
+{% block title %}{% endblock %}
+
+
+{% block content %}
+
+<div class="container-fluid">
+
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <div class="card shadow-sm border-0 mb-4">
+
+        <div class="card-header bg-body border-0">
+
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+                <div>
+
+                    <h5 class="mb-1">
+
+                        <i class="bi bi-box-arrow-right text-warning me-2"></i>
+
+                        Arsip Siswa Keluar
+
+                    </h5>
+
+
+                    <small class="text-muted">
+
+                        {{ sekolah.nama }}
+
+                        {% if status_terpilih == 'PINDAH' %}
+
+                            · Siswa Pindah
+
+                        {% elif status_terpilih == 'KELUAR' %}
+
+                            · Siswa Keluar
+
+                        {% else %}
+
+                            · Semua Status
+
+                        {% endif %}
+
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+        FILTER DAN RINGKASAN
+    ====================================================== -->
+
+    <div class="row g-3 align-items-stretch mb-4">
+
+        <!-- FILTER STATUS SISWA -->
+        <div class="col-12 col-xl-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+
+                    <form method="GET" class="row g-3 align-items-end h-100">
+
+                        <div class="col-md-8">
+                            <label class="form-label fw-semibold">
+                                Status Siswa
+                            </label>
+
+                            <select name="status" class="form-select">
+                                <option value="">Semua Status</option>
+
+                                <option
+                                    value="PINDAH"
+                                    {% if status_terpilih == 'PINDAH' %}
+                                        selected
+                                    {% endif %}
+                                >
+                                    Pindah
+                                </option>
+
+                                <option
+                                    value="KELUAR"
+                                    {% if status_terpilih == 'KELUAR' %}
+                                        selected
+                                    {% endif %}
+                                >
+                                    Keluar
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-4">
+                            <button
+                                type="submit"
+                                class="btn btn-primary w-100"
+                            >
+                                <i class="bi bi-funnel me-1"></i>
+                                Filter
+                            </button>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
+
+        <!-- TOTAL ARSIP -->
+        <div class="col-6 col-md-4 col-xl-2">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+
+                    <div class="text-muted small">
+                        Total Arsip
+                    </div>
+
+                    <div class="fs-3 fw-bold text-primary">
+                        {{ total_siswa }}
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+        <!-- PINDAH -->
+        <div class="col-6 col-md-4 col-xl-2">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+
+                    <div class="text-muted small">
+                        Pindah
+                    </div>
+
+                    <div class="fs-3 fw-bold text-warning">
+                        {{ total_pindah }}
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+        <!-- KELUAR -->
+        <div class="col-12 col-md-4 col-xl-2">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+
+                    <div class="text-muted small">
+                        Keluar
+                    </div>
+
+                    <div class="fs-3 fw-bold text-danger">
+                        {{ total_keluar }}
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         TABEL SISWA KELUAR
+    ====================================================== -->
+
+    <div class="card shadow-sm border-0">
+
+        <div class="card-header bg-body">
+
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+                <div>
+
+                    <h5 class="mb-1">
+
+                        <i class="bi bi-table text-primary me-2"></i>
+
+                        Daftar Siswa Keluar
+
+                    </h5>
+
+
+                    <small class="text-muted">
+
+                        Riwayat siswa yang telah pindah
+                        atau keluar dari sekolah ini
+
+                    </small>
+
+                </div>
+
+
+
+                <!-- =========================================
+                     STATUS FILTER
+                ========================================== -->
+
+                {% if status_terpilih == 'PINDAH' %}
+
+                    <span class="badge bg-warning text-dark px-3 py-2">
+
+                        <i class="bi bi-box-arrow-right me-1"></i>
+
+                        Siswa Pindah
+
+                    </span>
+
+
+                {% elif status_terpilih == 'KELUAR' %}
+
+                    <span class="badge bg-danger px-3 py-2">
+
+                        <i class="bi bi-person-x me-1"></i>
+
+                        Siswa Keluar
+
+                    </span>
+
+
+                {% else %}
+
+                    <span class="badge bg-secondary px-3 py-2">
+
+                        <i class="bi bi-archive me-1"></i>
+
+                        Semua Status
+
+                    </span>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+
+
+        <div class="card-body">
+
+            <div class="table-responsive">
+
+                <table
+                    id="tableSiswaKeluar"
+                    class="table table-bordered table-striped table-hover align-middle w-100"
+                >
+
+                    <thead>
+
+                        <tr>
+
+                            <th class="text-center">
+                                No
+                            </th>
+
+                            <th>
+                                Murid
+                            </th>
+
+                            <th>
+                                NISN
+                            </th>
+
+                            <th>
+                                Kelas Terakhir
+                            </th>
+
+                            <th>
+                                Tahun Ajaran
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th class="text-center">
+                                Aksi
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+
+                    <tbody>
+
+                        {% for data in daftar_siswa %}
+
+                            <tr>
+
+
+                                <!-- =====================================
+                                     NO
+                                ====================================== -->
+
+                                <td class="text-center">
+
+                                    {{ forloop.counter }}
+
+                                </td>
+
+
+
+                                <!-- =====================================
+                                     MURID
+                                ====================================== -->
+
+                                <td>
+
+                                    <div class="d-flex align-items-center gap-3">
+
+
+                                        <!-- AVATAR -->
+
+                                        <div
+                                            class="rounded-circle bg-primary-subtle d-flex align-items-center justify-content-center flex-shrink-0"
+                                            style="
+                                                width: 46px;
+                                                height: 46px;
+                                            "
+                                        >
+
+                                            {% if data.murid.jenis_kelamin == 'L' %}
+
+                                                <i class="bi bi-person-fill text-primary fs-5"></i>
+
+                                            {% elif data.murid.jenis_kelamin == 'P' %}
+
+                                                <i class="bi bi-person-fill text-danger fs-5"></i>
+
+                                            {% else %}
+
+                                                <i class="bi bi-person-fill text-secondary fs-5"></i>
+
+                                            {% endif %}
+
+                                        </div>
+
+
+
+                                        <!-- IDENTITAS -->
+
+                                        <div>
+
+                                            <div class="fw-bold">
+
+                                                {{ data.murid.nama }}
+
+                                            </div>
+
+
+                                            <small class="text-muted">
+
+                                                {% if data.murid.jenis_kelamin == 'L' %}
+
+                                                    Laki-laki
+
+                                                {% elif data.murid.jenis_kelamin == 'P' %}
+
+                                                    Perempuan
+
+                                                {% else %}
+
+                                                    Jenis kelamin belum tersedia
+
+                                                {% endif %}
+
+
+                                                {% if data.murid.nik %}
+
+                                                    · NIK {{ data.murid.nik }}
+
+                                                {% endif %}
+
+                                            </small>
+
+                                        </div>
+
+                                    </div>
+
+                                </td>
+
+
+
+                                <!-- =====================================
+                                     NISN
+                                ====================================== -->
+
+                                <td>
+
+                                    {% if data.murid.nisn %}
+
+                                        <span class="badge bg-secondary">
+
+                                            {{ data.murid.nisn }}
+
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="text-muted">
+
+                                            -
+
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+
+                                <!-- =====================================
+                                     KELAS TERAKHIR
+                                ====================================== -->
+
+                                <td>
+
+                                    {% if data.rombel %}
+
+                                        <span class="fw-semibold">
+
+                                            {{ data.rombel.nama_kelas }}
+
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="text-muted">
+
+                                            -
+
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+
+                                <!-- =====================================
+                                     TAHUN AJARAN
+                                ====================================== -->
+
+                                <td>
+
+                                    {% if data.tahun_ajaran %}
+
+                                        <span class="fw-semibold">
+
+                                            {{ data.tahun_ajaran.nama }}
+
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="text-muted">
+
+                                            -
+
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+
+                                <!-- =====================================
+                                     STATUS
+                                ====================================== -->
+
+                                <td>
+
+                                    {% if data.status_akhir == 'PINDAH' %}
+
+                                        <span class="badge bg-warning text-dark">
+
+                                            <i class="bi bi-box-arrow-right me-1"></i>
+
+                                            Pindah
+
+                                        </span>
+
+
+                                    {% elif data.status_akhir == 'KELUAR' %}
+
+                                        <span class="badge bg-danger">
+
+                                            <i class="bi bi-person-x me-1"></i>
+
+                                            Keluar
+
+                                        </span>
+
+
+                                    {% else %}
+
+                                        <span class="badge bg-secondary">
+
+                                            {{ data.get_status_akhir_display }}
+
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+
+                                <!-- =====================================
+                                     AKSI
+                                ====================================== -->
+
+                                <td class="text-nowrap text-center">
+
+                                    <a
+                                        href="{% url 'riwayat_murid' data.murid.id %}"
+                                        class="btn btn-info btn-sm"
+                                        title="Lihat Riwayat Murid"
+                                    >
+
+                                        <i class="bi bi-clock-history"></i>
+
+                                        Riwayat
+
+                                    </a>
+
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+{% endblock %}
+
+
+
+{% block js %}
+
+<script>
+
+$(document).ready(function () {
+
+
+    // =====================================================
+    // DATATABLE
+    // =====================================================
+
+    $('#tableSiswaKeluar').DataTable({
+
+        responsive: true,
+
+        autoWidth: false,
+
+        pageLength: 10,
+
+        lengthMenu: [
+            10,
+            25,
+            50,
+            100
+        ],
+
+        columnDefs: [
+
+            {
+                targets: [
+                    0,
+                    6
+                ],
+                orderable: false
+            }
+
+        ],
+
+        order: [
+            [
+                4,
+                'desc'
+            ]
+        ],
+
+        language: {
+
+            emptyTable:
+                'Belum ada siswa pindah atau keluar',
+
+            search:
+                'Cari:',
+
+            lengthMenu:
+                'Tampilkan _MENU_ data',
+
+            info:
+                'Menampilkan _START_–_END_ dari _TOTAL_ data',
+
+            infoEmpty:
+                'Belum ada data',
+
+            zeroRecords:
+                'Data siswa tidak ditemukan',
+
+            paginate: {
+
+                previous:
+                    'Sebelumnya',
+
+                next:
+                    'Berikutnya'
+
+            }
+
+        }
+
+    });
+
+});
+
+</script>
+
+{% endblock %}

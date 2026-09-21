@@ -1,0 +1,553 @@
+{% extends 'base.html' %}
+
+{% block title %}{% endblock %}
+
+
+{% block content %}
+
+<div class="container-fluid">
+
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <div class="card shadow-sm border-0 mb-4">
+
+        <div class="card-header bg-body border-0">
+
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+                <div>
+
+                    <h5 class="mb-1">
+
+                        <i class="bi bi-paperclip text-primary me-2"></i>
+
+                        Tambah Lampiran Legalitas
+
+                    </h5>
+
+
+                    <small class="text-muted">
+
+                        {{ sekolah.nama }}
+
+                        · Bidang Tanah {{ bidang.nomor_bidang }}
+
+                    </small>
+
+                </div>
+
+
+                <a
+                    href="{% url 'detail_bidang_tanah' bidang.id %}"
+                    class="btn btn-outline-secondary btn-sm"
+                >
+
+                    <i class="bi bi-arrow-left me-1"></i>
+
+                    Kembali ke Detail Bidang
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         INFORMASI LEGALITAS
+    ====================================================== -->
+
+    <div class="card border-0 shadow-sm mb-4">
+
+        <div class="card-body">
+
+            <div class="row g-3">
+
+
+                <!-- JENIS LEGALITAS -->
+
+                <div class="col-md-4">
+
+                    <div class="text-muted small">
+
+                        Jenis Legalitas
+
+                    </div>
+
+
+                    <div class="fw-semibold">
+
+                        {{ legalitas.get_jenis_dokumen_display }}
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- NOMOR DOKUMEN -->
+
+                <div class="col-md-4">
+
+                    <div class="text-muted small">
+
+                        Nomor Dokumen
+
+                    </div>
+
+
+                    <div class="fw-semibold">
+
+                        {% if legalitas.nomor_dokumen %}
+
+                            {{ legalitas.nomor_dokumen }}
+
+                        {% else %}
+
+                            -
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- ATAS NAMA -->
+
+                <div class="col-md-4">
+
+                    <div class="text-muted small">
+
+                        Atas Nama
+
+                    </div>
+
+
+                    <div class="fw-semibold">
+
+                        {% if legalitas.atas_nama %}
+
+                            {{ legalitas.atas_nama }}
+
+                        {% else %}
+
+                            -
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         INFORMASI LAMPIRAN
+    ====================================================== -->
+
+    <div class="card border-0 shadow-sm mb-4">
+
+        <div class="card-body">
+
+            <div class="d-flex align-items-start gap-3">
+
+
+                <div
+                    class="rounded-circle bg-primary-subtle d-flex align-items-center justify-content-center flex-shrink-0"
+                    style="
+                        width: 46px;
+                        height: 46px;
+                    "
+                >
+
+                    <i class="bi bi-info-circle text-primary fs-5"></i>
+
+                </div>
+
+
+                <div>
+
+                    <div class="fw-semibold mb-1">
+
+                        Tentang Lampiran
+
+                    </div>
+
+
+                    <div class="small text-muted">
+
+                        Unggah satu file pendukung untuk dokumen
+                        legalitas ini. Setiap dokumen legalitas
+                        hanya dapat memiliki satu lampiran.
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         FORM LAMPIRAN
+    ====================================================== -->
+
+    <form
+        method="POST"
+        enctype="multipart/form-data"
+        id="formLampiranLegalitas"
+    >
+
+        {% csrf_token %}
+
+
+        <div class="card shadow-sm border-0">
+
+            <div class="card-header bg-body border-0">
+
+                <div>
+
+                    <h5 class="mb-1">
+
+                        <i class="bi bi-file-earmark-arrow-up text-primary me-2"></i>
+
+                        File Lampiran
+
+                    </h5>
+
+
+                    <small class="text-muted">
+
+                        Pilih file dokumen yang akan dijadikan lampiran
+
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <div class="card-body">
+
+
+                <!-- =================================================
+                     NON FIELD ERROR
+                ================================================== -->
+
+                {% if form.non_field_errors %}
+
+                    <div class="alert alert-danger mb-4">
+
+                        <div class="fw-semibold mb-1">
+
+                            <i class="bi bi-exclamation-triangle-fill me-1"></i>
+
+                            Lampiran belum dapat disimpan
+
+                        </div>
+
+
+                        {% for error in form.non_field_errors %}
+
+                            <div class="small">
+
+                                {{ error }}
+
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                {% endif %}
+
+
+
+                <!-- =================================================
+                     FIELD FORM
+                ================================================== -->
+
+                <div class="row g-3">
+
+
+                    <!-- =====================================
+                         FILE DOKUMEN
+                    ====================================== -->
+
+                    <div class="col-md-6">
+
+                        <label
+                            for="{{ form.file.id_for_label }}"
+                            class="form-label fw-semibold"
+                        >
+
+                            File Dokumen
+
+                            <span class="text-danger">
+                                *
+                            </span>
+
+                        </label>
+
+
+                        {{ form.file }}
+
+
+                        <div class="form-text">
+
+                            Format PDF, JPG, JPEG, atau PNG.
+                            Ukuran maksimal 5 MB.
+
+                        </div>
+
+
+                        {% for error in form.file.errors %}
+
+                            <div class="text-danger small mt-1">
+
+                                <i class="bi bi-exclamation-circle me-1"></i>
+
+                                {{ error }}
+
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+
+
+                    <!-- =====================================
+                         KETERANGAN
+                    ====================================== -->
+
+                    <div class="col-md-6">
+
+                        <label
+                            for="{{ form.keterangan.id_for_label }}"
+                            class="form-label fw-semibold"
+                        >
+
+                            Keterangan
+
+                        </label>
+
+
+                        {{ form.keterangan }}
+
+
+                        <div class="form-text">
+
+                            Keterangan tambahan lampiran
+                            (opsional).
+
+                        </div>
+
+
+                        {% for error in form.keterangan.errors %}
+
+                            <div class="text-danger small mt-1">
+
+                                <i class="bi bi-exclamation-circle me-1"></i>
+
+                                {{ error }}
+
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =====================================================
+             AKSI
+        ====================================================== -->
+
+        <div class="card border-0 shadow-sm mt-4">
+
+            <div class="card-body">
+
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+
+                    <small class="text-muted">
+
+                        <span class="text-danger">
+                            *
+                        </span>
+
+                        File dokumen wajib dipilih
+
+                    </small>
+
+
+                    <div class="d-flex gap-2">
+
+
+                        <!-- BATAL -->
+
+                        <a
+                            href="{% url 'detail_bidang_tanah' bidang.id %}"
+                            class="btn btn-outline-secondary"
+                        >
+
+                            <i class="bi bi-x-circle me-1"></i>
+
+                            Batal
+
+                        </a>
+
+
+
+                        <!-- SIMPAN -->
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary"
+                            id="btnSimpanLampiran"
+                        >
+
+                            <i
+                                class="bi bi-upload me-1"
+                                id="iconSimpanLampiran"
+                            ></i>
+
+
+                            <span id="textSimpanLampiran">
+
+                                Simpan Lampiran
+
+                            </span>
+
+                        </button>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </form>
+
+
+</div>
+
+{% endblock %}
+
+
+
+{% block js %}
+
+<script>
+
+document.addEventListener(
+    'DOMContentLoaded',
+    function () {
+
+
+        // =====================================================
+        // ELEMENT
+        // =====================================================
+
+        const form =
+            document.getElementById(
+                'formLampiranLegalitas'
+            );
+
+
+        const button =
+            document.getElementById(
+                'btnSimpanLampiran'
+            );
+
+
+        const icon =
+            document.getElementById(
+                'iconSimpanLampiran'
+            );
+
+
+        const text =
+            document.getElementById(
+                'textSimpanLampiran'
+            );
+
+
+
+        // =====================================================
+        // CEGAH DOUBLE SUBMIT
+        // =====================================================
+
+        if (form) {
+
+            form.addEventListener(
+                'submit',
+                function () {
+
+
+                    if (
+                        button
+                        &&
+                        icon
+                        &&
+                        text
+                    ) {
+
+                        button.disabled =
+                            true;
+
+
+                        icon.className =
+                            'spinner-border '
+                            + 'spinner-border-sm me-2';
+
+
+                        text.textContent =
+                            'Mengunggah...';
+
+                    }
+
+                }
+            );
+
+        }
+
+
+    }
+);
+
+</script>
+
+{% endblock %}

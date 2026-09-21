@@ -1,0 +1,1595 @@
+{% extends 'base.html' %}
+
+{% block title %}{% endblock %}
+
+
+{% block content %}
+
+<div class="container-fluid">
+
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <div class="card shadow-sm border-0 mb-4">
+
+        <div class="card-header bg-body border-0">
+
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+                <div>
+
+                    <h5 class="mb-1">
+
+                        <i class="bi bi-arrow-up-circle text-primary me-2"></i>
+
+                        Proses Akhir Tahun
+
+                    </h5>
+
+
+                    <small class="text-muted">
+
+                        {{ sekolah.nama }}
+
+                        · {{ tahun_aktif.nama }}
+
+                        <i class="bi bi-arrow-right mx-1"></i>
+
+                        {{ tahun_tujuan.nama }}
+
+                    </small>
+
+                </div>
+
+
+                <a
+                    href="{% url 'persiapan_tahun_ajaran' %}?tahun={{ tahun_tujuan.id }}"
+                    class="btn btn-outline-secondary btn-sm"
+                >
+
+                    <i class="bi bi-arrow-left me-1"></i>
+
+                    Kembali ke Persiapan
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         FORM POST PROSES SISWA
+         DIBUAT TERPISAH AGAR TIDAK NESTED DENGAN FORM GET
+    ====================================================== -->
+
+    <form
+        method="POST"
+        id="formProsesAkhirTahun"
+        data-manual-loading="true"
+    >
+
+        {% csrf_token %}
+
+    </form>
+
+
+
+    <!-- =====================================================
+        FILTER, PROSES, DAN DAFTAR SISWA
+    ====================================================== -->
+
+    <div class="card border-0 shadow-sm mb-4">
+
+        <!-- =================================================
+            HEADER
+        ================================================== -->
+
+        <div class="card-header bg-body">
+
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+                <div>
+
+                    <h5 class="mb-1">
+
+                        <i class="bi bi-list-check text-primary me-2"></i>
+
+                        Filter dan Proses Siswa
+
+                    </h5>
+
+
+                    <small class="text-muted">
+
+                        Pilih kelas, tentukan siswa dan aksi akademik,
+                        kemudian proses ke Tahun Ajaran
+                        {{ tahun_tujuan.nama }}
+
+                    </small>
+
+                </div>
+
+
+                <span
+                    class="badge bg-primary px-3 py-2"
+                    id="badgeJumlahDipilih"
+                >
+
+                    0 Siswa Dipilih
+
+                </span>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+            FILTER & AKSI
+        ================================================== -->
+
+        <div class="card-body">
+
+            <div class="row g-3 align-items-end">
+
+
+                <!-- =============================================
+                    FILTER KELAS
+                ============================================== -->
+
+                <div class="col-xl-4">
+
+                    <form
+                        method="GET"
+                        class="row g-2 align-items-end"
+                    >
+
+                        <div class="col">
+
+                            <label class="form-label fw-semibold">
+
+                                Kelas Asal
+
+                            </label>
+
+
+                            <select
+                                name="rombel"
+                                id="rombelAsal"
+                                class="form-select"
+                            >
+
+                                <option value="">
+
+                                    Semua Kelas
+
+                                </option>
+
+
+                                {% for rombel in daftar_rombel_asal %}
+
+                                    <option
+                                        value="{{ rombel.id }}"
+                                        data-tingkat="{{ rombel.tingkat|default:'' }}"
+                                        {% if rombel_asal_terpilih == rombel.id|stringformat:"s" %}
+                                            selected
+                                        {% endif %}
+                                    >
+
+                                        {{ rombel.nama_kelas }}
+
+                                    </option>
+
+                                {% endfor %}
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="col-auto">
+
+                            <button
+                                type="submit"
+                                class="btn btn-primary"
+                                title="Tampilkan Siswa"
+                            >
+
+                                <i class="bi bi-search"></i>
+
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+
+
+                <!-- =============================================
+                    AKSI
+                ============================================== -->
+
+                <div class="col-xl-3">
+
+                    <label
+                        for="aksiMassal"
+                        class="form-label fw-semibold"
+                    >
+
+                        Aksi
+
+                    </label>
+
+
+                    <select
+                        name="aksi_massal"
+                        id="aksiMassal"
+                        class="form-select"
+                        form="formProsesAkhirTahun"
+                        required
+                    >
+
+                        <option value="">
+                            Pilih Aksi
+                        </option>
+
+                        <option
+                            value="NAIK_KELAS"
+                            id="optionNaikKelas"
+                        >
+                            Naik Kelas
+                        </option>
+
+                        <option
+                            value="TINGGAL_KELAS"
+                            id="optionTinggalKelas"
+                        >
+                            Tinggal Kelas
+                        </option>
+
+                        <option
+                            value="LULUS"
+                            id="optionLulus"
+                        >
+                            Lulus
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+
+                <!-- =============================================
+                    ROMBEL TUJUAN
+                ============================================== -->
+
+                <div class="col-xl-3">
+
+                    <label
+                        for="rombelTujuan"
+                        class="form-label fw-semibold"
+                    >
+
+                        Rombel Tujuan
+
+                    </label>
+
+
+                    <select
+                        name="rombel_tujuan"
+                        id="rombelTujuan"
+                        class="form-select"
+                        form="formProsesAkhirTahun"
+                    >
+
+                        <option value="">
+
+                            Pilih Rombel Tujuan
+
+                        </option>
+
+
+                        {% for tujuan in daftar_rombel_tujuan %}
+
+                            <option
+                                value="{{ tujuan.id }}"
+                                data-tingkat="{{ tujuan.tingkat|default:'' }}"
+                            >
+
+                                {{ tujuan.nama_kelas }}
+
+                            </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+
+                <!-- =============================================
+                    PROSES
+                ============================================== -->
+
+                <div class="col-xl-2">
+
+                    <button
+                        type="submit"
+                        class="btn btn-success w-100"
+                        id="btnProsesSiswa"
+                        form="formProsesAkhirTahun"
+                    >
+
+                        <i
+                            class="bi bi-check-circle me-1"
+                            id="iconProsesSiswa"
+                        ></i>
+
+
+                        <span id="textProsesSiswa">
+
+                            Proses
+
+                        </span>
+
+                    </button>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+            TABEL SISWA
+        ================================================== -->
+
+        <div class="card-body">
+
+            <div class="table-responsive">
+
+                <table
+                    class="table table-bordered table-striped table-hover align-middle mb-0 w-100"
+                >
+
+                    <thead>
+
+                        <tr>
+
+                            <th
+                                class="text-center"
+                                style="width: 55px;"
+                            >
+
+                                <input
+                                    type="checkbox"
+                                    id="pilihSemua"
+                                    class="form-check-input"
+                                    title="Pilih Semua"
+                                >
+
+                            </th>
+
+
+                            <th
+                                class="text-center"
+                                style="width: 65px;"
+                            >
+                                No
+                            </th>
+
+
+                            <th>
+                                Nama
+                            </th>
+
+
+                            <th>
+                                NIK
+                            </th>
+
+
+                            <th>
+                                NISN
+                            </th>
+
+
+                            <th>
+                                Jenis Kelamin
+                            </th>
+
+
+                            <th>
+                                Kelas
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for data in riwayat_siswa %}
+
+                            <tr>
+
+
+                                <!-- =================================
+                                    PILIH
+                                ================================== -->
+
+                                <td class="text-center">
+
+                                    <input
+                                        type="checkbox"
+                                        name="riwayat_ids"
+                                        value="{{ data.id }}"
+                                        class="form-check-input checkbox-siswa"
+                                        form="formProsesAkhirTahun"
+                                    >
+
+                                </td>
+
+
+
+                                <!-- =================================
+                                    NO
+                                ================================== -->
+
+                                <td class="text-center">
+
+                                    {{ forloop.counter }}
+
+                                </td>
+
+
+
+                                <!-- =================================
+                                    NAMA
+                                ================================== -->
+
+                                <td>
+
+                                    <div class="fw-semibold">
+
+                                        {{ data.murid.nama }}
+
+                                    </div>
+
+                                </td>
+
+
+
+                                <!-- =================================
+                                    NIK
+                                ================================== -->
+
+                                <td class="text-nowrap">
+
+                                    {{ data.murid.nik|default:"-" }}
+
+                                </td>
+
+
+
+                                <!-- =================================
+                                    NISN
+                                ================================== -->
+
+                                <td class="text-nowrap">
+
+                                    {{ data.murid.nisn|default:"-" }}
+
+                                </td>
+
+
+
+                                <!-- =================================
+                                    JENIS KELAMIN
+                                ================================== -->
+
+                                <td>
+
+                                    {% if data.murid.jenis_kelamin == 'L' %}
+
+                                        Laki-laki
+
+                                    {% elif data.murid.jenis_kelamin == 'P' %}
+
+                                        Perempuan
+
+                                    {% else %}
+
+                                        <span class="text-muted">
+                                            -
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+
+                                <!-- =================================
+                                    KELAS
+                                ================================== -->
+
+                                <td>
+
+                                    {% if data.rombel %}
+
+                                        {% if data.rombel.tingkat == 1 %}
+
+                                            <span class="badge bg-primary px-2 py-1">
+                                                {{ data.rombel.nama_kelas }}
+                                            </span>
+
+                                        {% elif data.rombel.tingkat == 2 %}
+
+                                            <span class="badge bg-success px-2 py-1">
+                                                {{ data.rombel.nama_kelas }}
+                                            </span>
+
+                                        {% elif data.rombel.tingkat == 3 %}
+
+                                            <span class="badge bg-warning text-dark px-2 py-1">
+                                                {{ data.rombel.nama_kelas }}
+                                            </span>
+
+                                        {% elif data.rombel.tingkat == 4 %}
+
+                                            <span class="badge bg-info text-dark px-2 py-1">
+                                                {{ data.rombel.nama_kelas }}
+                                            </span>
+
+                                        {% elif data.rombel.tingkat == 5 %}
+
+                                            <span class="badge bg-secondary px-2 py-1">
+                                                {{ data.rombel.nama_kelas }}
+                                            </span>
+
+                                        {% elif data.rombel.tingkat == 6 %}
+
+                                            <span class="badge bg-danger px-2 py-1">
+                                                {{ data.rombel.nama_kelas }}
+                                            </span>
+
+                                        {% elif data.rombel.tingkat == 7 %}
+
+                                            <span class="badge bg-primary px-2 py-1">
+                                                {{ data.rombel.nama_kelas }}
+                                            </span>
+
+                                        {% elif data.rombel.tingkat == 8 %}
+
+                                            <span class="badge bg-warning text-dark px-2 py-1">
+                                                {{ data.rombel.nama_kelas }}
+                                            </span>
+
+                                        {% elif data.rombel.tingkat == 9 %}
+
+                                            <span class="badge bg-success px-2 py-1">
+                                                {{ data.rombel.nama_kelas }}
+                                            </span>
+
+                                        {% else %}
+
+                                            <span class="badge bg-body-tertiary text-body border px-2 py-1">
+
+                                                {{ data.rombel.nama_kelas }}
+
+                                            </span>
+
+                                        {% endif %}
+
+                                    {% else %}
+
+                                        <span class="text-muted">
+                                            -
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+                            </tr>
+
+
+                        {% empty %}
+
+                            <tr>
+
+                                <td
+                                    colspan="7"
+                                    class="text-center py-5"
+                                >
+
+                                    <i class="bi bi-check-circle fs-1 text-success"></i>
+
+
+                                    <div class="fw-semibold mt-2">
+
+                                        Tidak Ada Siswa yang Perlu Diproses
+
+                                    </div>
+
+
+                                    <div class="small text-muted">
+
+                                        Seluruh siswa pada pilihan kelas ini
+                                        telah diproses atau tidak terdapat
+                                        siswa aktif.
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         INFORMASI PROSES
+    ====================================================== -->
+
+    {% if riwayat_siswa %}
+
+        <div class="card border-0 shadow-sm mt-4">
+
+            <div class="card-body">
+
+                <div class="d-flex align-items-start gap-3">
+
+                    <div
+                        class="rounded-circle bg-primary-subtle d-flex align-items-center justify-content-center flex-shrink-0"
+                        style="
+                            width: 46px;
+                            height: 46px;
+                        "
+                    >
+
+                        <i class="bi bi-info-circle text-primary fs-5"></i>
+
+                    </div>
+
+
+                    <div class="flex-grow-1">
+
+                        <div class="fw-semibold mb-1">
+
+                            Informasi Proses Akhir Tahun
+
+                        </div>
+
+                        <div class="small text-muted">
+
+                            Pilih siswa yang akan diproses ke Tahun Ajaran
+
+                            <strong>
+                                {{ tahun_tujuan.nama }}
+                            </strong>,
+
+                            kemudian tentukan
+
+                            <strong>
+                                aksi akademik
+                            </strong>
+
+                            dan
+
+                            <strong>
+                                rombel tujuan
+                            </strong>
+
+                            sesuai tingkat kelas.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    {% endif %}
+
+
+</div>
+
+{% endblock %}
+
+
+{% block js %}
+
+<script>
+
+document.addEventListener(
+    'DOMContentLoaded',
+    function () {
+
+
+        // =====================================================
+        // ELEMENT
+        // =====================================================
+
+        const form =
+            document.getElementById(
+                'formProsesAkhirTahun'
+            );
+
+
+        const pilihSemua =
+            document.getElementById(
+                'pilihSemua'
+            );
+
+
+        const checkboxSiswa =
+            document.querySelectorAll(
+                '.checkbox-siswa'
+            );
+
+
+        const aksiMassal =
+            document.getElementById(
+                'aksiMassal'
+            );
+
+
+        const optionNaikKelas =
+            document.getElementById(
+                'optionNaikKelas'
+            );
+
+
+        const optionTinggalKelas =
+            document.getElementById(
+                'optionTinggalKelas'
+            );
+
+
+        const optionLulus =
+            document.getElementById(
+                'optionLulus'
+            );
+
+
+        const rombelAsal =
+            document.getElementById(
+                'rombelAsal'
+            );
+
+
+        const rombelTujuan =
+            document.getElementById(
+                'rombelTujuan'
+            );
+
+
+        const badgeJumlahDipilih =
+            document.getElementById(
+                'badgeJumlahDipilih'
+            );
+
+
+        const button =
+            document.getElementById(
+                'btnProsesSiswa'
+            );
+
+
+        const icon =
+            document.getElementById(
+                'iconProsesSiswa'
+            );
+
+
+        const text =
+            document.getElementById(
+                'textProsesSiswa'
+            );
+
+
+
+        // =====================================================
+        // HITUNG SISWA DIPILIH
+        // =====================================================
+
+        function hitungDipilih() {
+
+            let jumlah = 0;
+
+
+            checkboxSiswa.forEach(
+                function (checkbox) {
+
+                    if (checkbox.checked) {
+
+                        jumlah++;
+
+                    }
+
+                }
+            );
+
+
+            if (badgeJumlahDipilih) {
+
+                badgeJumlahDipilih.textContent =
+                    jumlah
+                    + ' Siswa Dipilih';
+
+            }
+
+
+            if (
+                pilihSemua
+                &&
+                checkboxSiswa.length > 0
+            ) {
+
+                pilihSemua.checked =
+                    jumlah
+                    === checkboxSiswa.length;
+
+
+                pilihSemua.indeterminate =
+                    jumlah > 0
+                    &&
+                    jumlah < checkboxSiswa.length;
+
+            }
+
+        }
+
+
+
+        // =====================================================
+        // PILIH SEMUA
+        // =====================================================
+
+        if (pilihSemua) {
+
+            pilihSemua.addEventListener(
+                'change',
+                function () {
+
+                    checkboxSiswa.forEach(
+                        function (checkbox) {
+
+                            checkbox.checked =
+                                pilihSemua.checked;
+
+                        }
+                    );
+
+
+                    hitungDipilih();
+
+                }
+            );
+
+        }
+
+
+
+        // =====================================================
+        // CHECKBOX PER SISWA
+        // =====================================================
+
+        checkboxSiswa.forEach(
+            function (checkbox) {
+
+                checkbox.addEventListener(
+                    'change',
+                    hitungDipilih
+                );
+
+            }
+        );
+
+
+
+        // =====================================================
+        // AMBIL TINGKAT ROMBEL ASAL
+        // =====================================================
+
+        function ambilTingkatAsal() {
+
+            if (
+                !rombelAsal
+                ||
+                !rombelAsal.value
+            ) {
+
+                return null;
+
+            }
+
+
+            const optionTerpilih =
+                rombelAsal.options[
+                    rombelAsal.selectedIndex
+                ];
+
+
+            if (!optionTerpilih) {
+
+                return null;
+
+            }
+
+
+            const tingkat =
+                optionTerpilih.dataset.tingkat;
+
+
+            if (!tingkat) {
+
+                return null;
+
+            }
+
+
+            return parseInt(
+                tingkat,
+                10
+            );
+
+        }
+
+
+        // =====================================================
+        // ATUR PILIHAN AKSI BERDASARKAN TINGKAT
+        // =====================================================
+
+        function aturPilihanAksi() {
+
+            if (!aksiMassal) {
+
+                return;
+
+            }
+
+
+            const tingkatAsal =
+                ambilTingkatAsal();
+
+
+            // Reset pilihan aksi
+            aksiMassal.value =
+                '';
+
+
+            // =================================================
+            // SEMBUNYIKAN SEMUA AKSI TERLEBIH DAHULU
+            // =================================================
+
+            if (optionNaikKelas) {
+
+                optionNaikKelas.hidden =
+                    true;
+
+                optionNaikKelas.disabled =
+                    true;
+
+            }
+
+
+            if (optionTinggalKelas) {
+
+                optionTinggalKelas.hidden =
+                    true;
+
+                optionTinggalKelas.disabled =
+                    true;
+
+            }
+
+
+            if (optionLulus) {
+
+                optionLulus.hidden =
+                    true;
+
+                optionLulus.disabled =
+                    true;
+
+            }
+
+
+            // =================================================
+            // BELUM MEMILIH KELAS ASAL
+            // =================================================
+
+            if (tingkatAsal === null) {
+
+                aturRombelTujuan();
+
+                return;
+
+            }
+
+
+            // =================================================
+            // TINGGAL KELAS
+            //
+            // Berlaku untuk seluruh tingkat SD dan SMP
+            // =================================================
+
+            if (optionTinggalKelas) {
+
+                optionTinggalKelas.hidden =
+                    false;
+
+                optionTinggalKelas.disabled =
+                    false;
+
+            }
+
+
+            // =================================================
+            // NAIK KELAS
+            //
+            // SD  : Kelas 1 - 5
+            // SMP : Kelas 7 - 8
+            // =================================================
+
+            if (
+                (
+                    tingkatAsal >= 1
+                    &&
+                    tingkatAsal <= 5
+                )
+                ||
+                (
+                    tingkatAsal >= 7
+                    &&
+                    tingkatAsal <= 8
+                )
+            ) {
+
+                if (optionNaikKelas) {
+
+                    optionNaikKelas.hidden =
+                        false;
+
+                    optionNaikKelas.disabled =
+                        false;
+
+                }
+
+            }
+
+
+            // =================================================
+            // LULUS
+            //
+            // SD  : Kelas 6
+            // SMP : Kelas 9
+            // =================================================
+
+            if (
+                tingkatAsal === 6
+                ||
+                tingkatAsal === 9
+            ) {
+
+                if (optionLulus) {
+
+                    optionLulus.hidden =
+                        false;
+
+                optionLulus.disabled =
+                        false;
+
+                }
+
+            }
+
+
+            // Reset kondisi rombel tujuan
+            aturRombelTujuan();
+
+        }
+
+
+
+        // =====================================================
+        // TAMPILKAN SEMUA OPTION ROMBEL TUJUAN
+        // =====================================================
+
+        function resetPilihanRombelTujuan() {
+
+            if (!rombelTujuan) {
+
+                return;
+
+            }
+
+
+            Array.from(
+                rombelTujuan.options
+            ).forEach(
+                function (option) {
+
+                    option.hidden =
+                        false;
+
+                    option.disabled =
+                        false;
+
+                }
+            );
+
+        }
+
+
+
+        // =====================================================
+        // FILTER ROMBEL TUJUAN BERDASARKAN TINGKAT
+        // =====================================================
+
+        function filterRombelTujuan(
+            tingkatTujuan
+        ) {
+
+            if (!rombelTujuan) {
+
+                return 0;
+
+            }
+
+
+            let jumlahPilihan = 0;
+
+
+            Array.from(
+                rombelTujuan.options
+            ).forEach(
+                function (option) {
+
+
+                    // =========================================
+                    // OPTION PLACEHOLDER
+                    // =========================================
+
+                    if (!option.value) {
+
+                        option.hidden =
+                            false;
+
+                        option.disabled =
+                            false;
+
+                        return;
+
+                    }
+
+
+                    const tingkatOption =
+                        option.dataset.tingkat;
+
+
+                    const cocok =
+                        tingkatOption
+                        &&
+                        parseInt(
+                            tingkatOption,
+                            10
+                        )
+                        === tingkatTujuan;
+
+
+                    option.hidden =
+                        !cocok;
+
+                    option.disabled =
+                        !cocok;
+
+
+                    if (cocok) {
+
+                        jumlahPilihan++;
+
+                    }
+
+                }
+            );
+
+
+            return jumlahPilihan;
+
+        }
+
+
+
+        // =====================================================
+        // ATUR ROMBEL TUJUAN
+        // =====================================================
+
+        function aturRombelTujuan() {
+
+            if (
+                !aksiMassal
+                ||
+                !rombelTujuan
+            ) {
+
+                return;
+
+            }
+
+
+            const aksi =
+                aksiMassal.value;
+
+
+            // Selalu reset pilihan sebelumnya
+            rombelTujuan.value =
+                '';
+
+
+            resetPilihanRombelTujuan();
+
+
+            // =================================================
+            // NAIK KELAS / TINGGAL KELAS
+            // =================================================
+
+            if (
+                aksi === 'NAIK_KELAS'
+                ||
+                aksi === 'TINGGAL_KELAS'
+            ) {
+
+                rombelTujuan.disabled =
+                    false;
+
+
+                rombelTujuan.required =
+                    true;
+
+
+                const tingkatAsal =
+                    ambilTingkatAsal();
+
+
+                // =============================================
+                // BELUM MEMILIH FILTER KELAS ASAL
+                // =============================================
+
+                if (tingkatAsal === null) {
+
+                    /*
+                    Jangan tampilkan semua rombel tujuan.
+
+                    Operator harus memilih kelas asal terlebih
+                    dahulu agar tingkat tujuan dapat ditentukan.
+                    */
+
+                    Array.from(
+                        rombelTujuan.options
+                    ).forEach(
+                        function (option) {
+
+                            if (option.value) {
+
+                                option.hidden =
+                                    true;
+
+                                option.disabled =
+                                    true;
+
+                            }
+
+                        }
+                    );
+
+
+                    return;
+
+                }
+
+
+                // =============================================
+                // TENTUKAN TINGKAT TUJUAN
+                // =============================================
+
+                let tingkatTujuan =
+                    tingkatAsal;
+
+
+                if (
+                    aksi === 'NAIK_KELAS'
+                ) {
+
+                    tingkatTujuan =
+                        tingkatAsal + 1;
+
+                }
+
+
+                // =============================================
+                // FILTER OPTION
+                // =============================================
+
+                filterRombelTujuan(
+                    tingkatTujuan
+                );
+
+
+            // =================================================
+            // PINDAH / LULUS / BELUM PILIH AKSI
+            // =================================================
+
+            } else {
+
+                rombelTujuan.value =
+                    '';
+
+
+                rombelTujuan.disabled =
+                    true;
+
+
+                rombelTujuan.required =
+                    false;
+
+            }
+
+        }
+
+
+
+        // =====================================================
+        // PERUBAHAN AKSI
+        // =====================================================
+
+        if (aksiMassal) {
+
+            aksiMassal.addEventListener(
+                'change',
+                aturRombelTujuan
+            );
+
+        }
+
+
+
+        // =====================================================
+        // PERUBAHAN ROMBEL ASAL
+        // =====================================================
+
+        if (rombelAsal) {
+
+            rombelAsal.addEventListener(
+                'change',
+                aturPilihanAksi
+            );
+
+        }
+
+
+
+        // =====================================================
+        // VALIDASI SUBMIT
+        // =====================================================
+
+        if (form) {
+
+            form.addEventListener(
+                'submit',
+                function (event) {
+
+                    let jumlahDipilih = 0;
+
+
+                    checkboxSiswa.forEach(
+                        function (checkbox) {
+
+                            if (checkbox.checked) {
+
+                                jumlahDipilih++;
+
+                            }
+
+                        }
+                    );
+
+
+
+                    // =========================================
+                    // SISWA BELUM DIPILIH
+                    // =========================================
+
+                    if (jumlahDipilih === 0) {
+
+                        event.preventDefault();
+
+
+                        Swal.fire({
+
+                            icon:
+                                'warning',
+
+                            title:
+                                'Belum ada siswa dipilih',
+
+                            text:
+                                'Pilih minimal satu siswa '
+                                + 'yang akan diproses.',
+
+                            confirmButtonText:
+                                'Baik'
+
+                        });
+
+
+                        return;
+
+                    }
+
+
+
+                    // =========================================
+                    // AKSI BELUM DIPILIH
+                    // =========================================
+
+                    if (
+                        !aksiMassal
+                        ||
+                        !aksiMassal.value
+                    ) {
+
+                        event.preventDefault();
+
+
+                        Swal.fire({
+
+                            icon:
+                                'warning',
+
+                            title:
+                                'Aksi belum dipilih',
+
+                            text:
+                                'Pilih aksi akademik '
+                                + 'yang akan dilakukan.',
+
+                            confirmButtonText:
+                                'Baik'
+
+                        });
+
+
+                        return;
+
+                    }
+
+
+
+                    // =========================================
+                    // ROMBEL TUJUAN WAJIB
+                    // =========================================
+
+                    if (
+                        (
+                            aksiMassal.value
+                            === 'NAIK_KELAS'
+                            ||
+                            aksiMassal.value
+                            === 'TINGGAL_KELAS'
+                        )
+                        &&
+                        (
+                            !rombelTujuan
+                            ||
+                            !rombelTujuan.value
+                        )
+                    ) {
+
+                        event.preventDefault();
+
+
+                        Swal.fire({
+
+                            icon:
+                                'warning',
+
+                            title:
+                                'Rombel tujuan belum dipilih',
+
+                            text:
+                                'Pilih rombel tujuan '
+                                + 'untuk siswa yang diproses.',
+
+                            confirmButtonText:
+                                'Baik'
+
+                        });
+
+
+                        return;
+
+                    }
+
+
+
+                    // =========================================
+                    // LOADING
+                    // =========================================
+
+                    if (
+                        button
+                        &&
+                        icon
+                        &&
+                        text
+                    ) {
+
+                        button.disabled =
+                            true;
+
+
+                        icon.className =
+                            'spinner-border '
+                            + 'spinner-border-sm me-2';
+
+
+                        text.textContent =
+                            'Memproses...';
+
+                    }
+
+                }
+            );
+
+        }
+
+
+        // =====================================================
+        // KONDISI AWAL
+        // =====================================================
+
+        aturPilihanAksi();
+
+        hitungDipilih();
+
+
+
+    }
+);
+
+</script>
+
+{% endblock %}

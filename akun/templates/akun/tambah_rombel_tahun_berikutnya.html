@@ -1,0 +1,406 @@
+{% extends 'base.html' %}
+
+{% block title %}{% endblock %}
+
+
+{% block content %}
+
+<div class="container-fluid">
+
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <div class="card shadow-sm border-0 mb-4">
+
+        <div class="card-header bg-body border-0">
+
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+                <div>
+
+                    <h5 class="mb-1">
+
+                        <i class="bi bi-plus-circle text-primary me-2"></i>
+
+                        Tambah Rombel Persiapan
+
+                    </h5>
+
+
+                    <small class="text-muted">
+
+                        {{ sekolah.nama }}
+
+                        · Tahun Ajaran
+                        {{ tahun_tujuan.nama }}
+
+                    </small>
+
+                </div>
+
+
+                <a
+                    href="{% url 'persiapan_tahun_ajaran' %}?tahun={{ tahun_tujuan.id }}"
+                    class="btn btn-outline-secondary btn-sm"
+                >
+
+                    <i class="bi bi-arrow-left me-1"></i>
+
+                    Kembali ke Persiapan
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         INFORMASI
+    ====================================================== -->
+
+    <div class="card border-0 shadow-sm mb-4">
+
+        <div class="card-body">
+
+            <div class="d-flex align-items-start gap-3">
+
+                <div
+                    class="rounded-circle bg-primary-subtle d-flex align-items-center justify-content-center flex-shrink-0"
+                    style="
+                        width: 46px;
+                        height: 46px;
+                    "
+                >
+
+                    <i class="bi bi-info-circle text-primary fs-5"></i>
+
+                </div>
+
+
+                <div>
+
+                    <div class="fw-semibold mb-1">
+
+                        Tentang Rombel Persiapan
+
+                    </div>
+
+
+                    <div class="small text-muted">
+
+                        Rombel yang ditambahkan pada halaman ini hanya
+                        berlaku untuk Tahun Ajaran
+                        <strong>{{ tahun_tujuan.nama }}</strong>
+                        dan belum menjadi rombel aktif sampai Tahun Ajaran
+                        tersebut diaktifkan oleh Admin Kabupaten.
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         FORM
+    ====================================================== -->
+
+    <form
+        method="POST"
+        id="formTambahRombel"
+    >
+
+        {% csrf_token %}
+
+
+        <div class="card shadow-sm border-0">
+
+            <div class="card-header bg-body">
+
+                <div>
+
+                    <h5 class="mb-1">
+
+                        <i class="bi bi-door-open text-primary me-2"></i>
+
+                        Informasi Rombel
+
+                    </h5>
+
+
+                    <small class="text-muted">
+
+                        Isi data rombongan belajar untuk
+                        Tahun Ajaran {{ tahun_tujuan.nama }}
+
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <div class="card-body">
+
+
+                <!-- =================================================
+                     NON FIELD ERROR
+                ================================================== -->
+
+                {% if form.non_field_errors %}
+
+                    <div class="alert alert-danger mb-4">
+
+                        <div class="fw-semibold mb-1">
+
+                            <i class="bi bi-exclamation-triangle-fill me-1"></i>
+
+                            Data belum dapat disimpan
+
+                        </div>
+
+
+                        {% for error in form.non_field_errors %}
+
+                            <div class="small">
+
+                                {{ error }}
+
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                {% endif %}
+
+
+
+                <div class="row g-3">
+
+
+                    {% for field in form %}
+
+                        <div
+                            class="
+                                {% if field.name == 'keterangan' %}
+                                    col-12
+                                {% else %}
+                                    col-md-6
+                                {% endif %}
+                            "
+                        >
+
+                            <label
+                                for="{{ field.id_for_label }}"
+                                class="form-label fw-semibold"
+                            >
+
+                                {{ field.label }}
+
+                                {% if field.field.required %}
+
+                                    <span class="text-danger">
+                                        *
+                                    </span>
+
+                                {% endif %}
+
+                            </label>
+
+
+                            {{ field }}
+
+
+                            {% if field.help_text %}
+
+                                <div class="form-text">
+
+                                    {{ field.help_text }}
+
+                                </div>
+
+                            {% endif %}
+
+
+                            {% for error in field.errors %}
+
+                                <div class="text-danger small mt-1">
+
+                                    <i class="bi bi-exclamation-circle me-1"></i>
+
+                                    {{ error }}
+
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+                    {% endfor %}
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =====================================================
+             AKSI
+        ====================================================== -->
+
+        <div class="card border-0 shadow-sm mt-4">
+
+            <div class="card-body">
+
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+
+                    <small class="text-muted">
+
+                        <span class="text-danger">
+                            *
+                        </span>
+
+                        Wajib diisi
+
+                    </small>
+
+
+                    <div class="d-flex gap-2">
+
+                        <a
+                            href="{% url 'persiapan_tahun_ajaran' %}?tahun={{ tahun_tujuan.id }}"
+                            class="btn btn-outline-secondary"
+                        >
+
+                            <i class="bi bi-x-circle me-1"></i>
+
+                            Batal
+
+                        </a>
+
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary"
+                            id="btnSimpanRombel"
+                        >
+
+                            <i
+                                class="bi bi-save me-1"
+                                id="iconSimpanRombel"
+                            ></i>
+
+
+                            <span id="textSimpanRombel">
+
+                                Simpan Rombel
+
+                            </span>
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </form>
+
+
+</div>
+
+{% endblock %}
+
+
+
+{% block js %}
+
+<script>
+
+document.addEventListener(
+    'DOMContentLoaded',
+    function () {
+
+        const form =
+            document.getElementById(
+                'formTambahRombel'
+            );
+
+
+        const button =
+            document.getElementById(
+                'btnSimpanRombel'
+            );
+
+
+        const icon =
+            document.getElementById(
+                'iconSimpanRombel'
+            );
+
+
+        const text =
+            document.getElementById(
+                'textSimpanRombel'
+            );
+
+
+        if (form) {
+
+            form.addEventListener(
+                'submit',
+                function () {
+
+                    if (
+                        button
+                        &&
+                        icon
+                        &&
+                        text
+                    ) {
+
+                        button.disabled =
+                            true;
+
+
+                        icon.className =
+                            'spinner-border '
+                            + 'spinner-border-sm me-2';
+
+
+                        text.textContent =
+                            'Menyimpan...';
+
+                    }
+
+                }
+            );
+
+        }
+
+    }
+);
+
+</script>
+
+{% endblock %}

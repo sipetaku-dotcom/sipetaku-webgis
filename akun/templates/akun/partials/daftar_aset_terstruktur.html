@@ -1,0 +1,398 @@
+<div class="row g-3">
+
+    {% for jenis in daftar %}
+
+        {% with data=jenis.data_sekolah_aktif %}
+
+            <div
+                class="col-xl-4 col-md-6"
+                id="aset-{{ jenis.id }}"
+                style="scroll-margin-top: 100px;"
+            >
+
+                <div class="card h-100 border shadow-sm">
+
+
+                    <!-- =================================================
+                         HEADER ASET
+                    ================================================== -->
+
+                    <div class="card-body d-flex flex-column">
+
+
+                        <div class="d-flex justify-content-between align-items-start gap-2 mb-3">
+
+                            <div>
+
+                                <h6 class="fw-bold mb-1">
+
+                                    {{ jenis.nama }}
+
+                                </h6>
+
+
+                                <small class="text-muted">
+
+                                    Satuan:
+                                    {{ jenis.satuan }}
+
+                                </small>
+
+                            </div>
+
+
+                            {% if jenis.aset_kritis %}
+
+                                <span class="badge bg-danger">
+
+                                    <i class="bi bi-exclamation-triangle me-1"></i>
+
+                                    Prioritas
+
+                                </span>
+
+                            {% endif %}
+
+                        </div>
+
+
+
+                        <!-- =================================================
+                             DATA SUDAH DIISI
+                        ================================================== -->
+
+                        {% if data %}
+
+
+                            <!-- =============================================
+                                 ASET TERSEDIA
+                            ============================================== -->
+
+                            {% if data.ketersediaan == 'ADA' %}
+
+
+                                <div class="d-flex align-items-center gap-2 flex-wrap mb-3">
+
+                                    <span class="badge bg-success">
+
+                                        <i class="bi bi-check-circle me-1"></i>
+
+                                        Tersedia
+
+                                    </span>
+
+
+                                    <span class="badge bg-primary">
+
+                                        Total:
+                                        {{ data.jumlah_total }}
+
+                                    </span>
+
+                                </div>
+
+
+
+                                <!-- =========================================
+                                     KONDISI ASET
+                                ========================================== -->
+
+                                <div class="row g-2 text-center mb-3">
+
+
+                                    <!-- BAIK -->
+
+                                    <div class="col-4">
+
+                                        <div class="rounded border bg-success-subtle p-2">
+
+                                            <div class="fw-bold text-success">
+
+                                                {{ data.jumlah_baik }}
+
+                                            </div>
+
+
+                                            <small class="text-muted">
+
+                                                Baik
+
+                                            </small>
+
+                                        </div>
+
+                                    </div>
+
+
+
+                                    <!-- RUSAK RINGAN -->
+
+                                    <div class="col-4">
+
+                                        <div class="rounded border bg-warning-subtle p-2">
+
+                                            <div class="fw-bold text-warning">
+
+                                                {{ data.jumlah_rusak_ringan }}
+
+                                            </div>
+
+
+                                            <small class="text-muted">
+
+                                                Ringan
+
+                                            </small>
+
+                                        </div>
+
+                                    </div>
+
+
+
+                                    <!-- RUSAK BERAT -->
+
+                                    <div class="col-4">
+
+                                        <div class="rounded border bg-danger-subtle p-2">
+
+                                            <div class="fw-bold text-danger">
+
+                                                {{ data.jumlah_rusak_berat }}
+
+                                            </div>
+
+
+                                            <small class="text-muted">
+
+                                                Berat
+
+                                            </small>
+
+                                        </div>
+
+                                    </div>
+
+
+                                </div>
+
+
+
+                                <!-- =========================================
+                                     INFORMASI TAMBAHAN
+                                ========================================== -->
+
+                                <div class="border-top pt-2 mb-3">
+
+                                    <div class="d-flex justify-content-between align-items-center gap-2 flex-wrap">
+
+                                        <small class="text-muted">
+
+                                            <i class="bi bi-camera me-1"></i>
+
+                                            {{ data.foto_dokumentasi.count }}
+                                            Foto
+
+                                        </small>
+
+
+                                        <small class="text-muted">
+
+                                            <i class="bi bi-clock-history me-1"></i>
+
+                                            {{ data.diperbarui_pada|date:"d M Y" }}
+
+                                        </small>
+
+                                    </div>
+
+                                </div>
+
+
+
+                            <!-- =============================================
+                                 ASET TIDAK TERSEDIA
+                            ============================================== -->
+
+                            {% else %}
+
+                                <div class="mb-3">
+
+                                    <span class="badge bg-secondary">
+
+                                        <i class="bi bi-x-circle me-1"></i>
+
+                                        Tidak Tersedia
+
+                                    </span>
+
+                                </div>
+
+
+                                <div class="border rounded p-3 text-center mb-3">
+
+                                    <i class="bi bi-dash-circle text-secondary fs-4"></i>
+
+
+                                    <div class="small text-muted mt-1">
+
+                                        Aset ini belum tersedia
+                                        di sekolah
+
+                                    </div>
+
+                                </div>
+
+
+                                <div class="border-top pt-2 mb-3">
+
+                                    <small class="text-muted">
+
+                                        <i class="bi bi-clock-history me-1"></i>
+
+                                        Diperbarui
+                                        {{ data.diperbarui_pada|date:"d M Y" }}
+
+                                    </small>
+
+                                </div>
+
+                            {% endif %}
+
+
+
+                            <!-- =============================================
+                                 KETERANGAN
+                            ============================================== -->
+
+                            {% if data.keterangan %}
+
+                                <div class="small text-muted mb-3">
+
+                                    <i class="bi bi-chat-left-text me-1"></i>
+
+                                    {{ data.keterangan|truncatechars:100 }}
+
+                                </div>
+
+                            {% endif %}
+
+
+
+                        <!-- =================================================
+                             DATA BELUM DIISI
+                        ================================================== -->
+
+                        {% else %}
+
+                            <div class="mb-3">
+
+                                <span class="badge bg-warning text-dark">
+
+                                    <i class="bi bi-exclamation-circle me-1"></i>
+
+                                    Belum Diisi
+
+                                </span>
+
+                            </div>
+
+
+                            <div class="border rounded p-3 text-center mb-3">
+
+                                <i class="bi bi-clipboard-plus text-warning fs-4"></i>
+
+
+                                <div class="small text-muted mt-1">
+
+                                    Data aset ini belum dilengkapi
+
+                                </div>
+
+                            </div>
+
+                        {% endif %}
+
+
+
+                        <!-- =================================================
+                             TOMBOL
+                        ================================================== -->
+
+                        <div class="mt-auto pt-2">
+
+                            <div class="d-grid">
+
+                                <a
+                                    href="{% url 'isi_aset_sekolah' jenis.id %}"
+                                    class="
+                                        btn btn-sm
+                                        {% if data %}
+                                            btn-outline-primary
+                                        {% else %}
+                                            btn-primary
+                                        {% endif %}
+                                    "
+                                >
+
+                                    {% if data %}
+
+                                        <i class="bi bi-pencil-square me-1"></i>
+
+                                        Ubah Data
+
+                                    {% else %}
+
+                                        <i class="bi bi-plus-circle me-1"></i>
+
+                                        Isi Data
+
+                                    {% endif %}
+
+                                </a>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        {% endwith %}
+
+
+    {% empty %}
+
+        <div class="col-12">
+
+            <div class="text-center py-5">
+
+                <i class="bi bi-inbox fs-1 text-muted"></i>
+
+
+                <div class="fw-semibold mt-2">
+
+                    Belum Ada Data Aset
+
+                </div>
+
+
+                <div class="small text-muted">
+
+                    Belum terdapat master aset
+                    dalam kategori ini.
+
+                </div>
+
+            </div>
+
+        </div>
+
+    {% endfor %}
+
+</div>

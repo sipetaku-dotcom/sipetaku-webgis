@@ -1,0 +1,909 @@
+{% extends 'base.html' %}
+
+{% block title %}{% endblock %}
+
+
+{% block content %}
+
+<div class="container-fluid">
+
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <div class="card shadow-sm border-0 mb-4">
+
+        <div class="card-header bg-body border-0">
+
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+                <div>
+
+                    <h5 class="mb-1">
+
+                        <i class="bi bi-clock-history text-primary me-2"></i>
+
+                        Riwayat Akademik Murid
+
+                        <span class="badge bg-primary ms-2">
+
+                            {{ daftar_riwayat|length }} Riwayat
+
+                        </span>
+
+                    </h5>
+
+
+                    <small class="text-muted">
+
+                        {{ murid.nama }}
+
+                        {% if murid.nisn %}
+
+                            · NISN {{ murid.nisn }}
+
+                        {% endif %}
+
+                    </small>
+
+                </div>
+
+
+                <a
+                    href="{% url 'data_murid' %}"
+                    class="btn btn-outline-secondary btn-sm"
+                >
+
+                    <i class="bi bi-arrow-left me-1"></i>
+
+                    Kembali ke Data Murid
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         IDENTITAS MURID
+    ====================================================== -->
+
+    <div class="card border-0 shadow-sm mb-4">
+
+        <div class="card-body">
+
+            <div class="row g-3 align-items-center">
+
+
+                <!-- =========================================
+                     AVATAR
+                ========================================== -->
+
+                <div class="col-lg-auto">
+
+                    <div
+                        class="rounded-circle bg-primary-subtle d-flex align-items-center justify-content-center"
+                        style="
+                            width: 72px;
+                            height: 72px;
+                        "
+                    >
+
+                        {% if murid.jenis_kelamin == 'L' %}
+
+                            <i class="bi bi-person-fill text-primary fs-2"></i>
+
+                        {% elif murid.jenis_kelamin == 'P' %}
+
+                            <i class="bi bi-person-fill text-danger fs-2"></i>
+
+                        {% else %}
+
+                            <i class="bi bi-person-fill text-secondary fs-2"></i>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =========================================
+                     NAMA
+                ========================================== -->
+
+                <div class="col-lg-3">
+
+                    <div class="text-muted small">
+
+                        Nama Murid
+
+                    </div>
+
+
+                    <div class="fw-bold fs-5">
+
+                        {{ murid.nama }}
+
+                    </div>
+
+
+                    <small class="text-muted">
+
+                        {% if murid.jenis_kelamin == 'L' %}
+
+                            Laki-laki
+
+                        {% elif murid.jenis_kelamin == 'P' %}
+
+                            Perempuan
+
+                        {% else %}
+
+                            -
+
+                        {% endif %}
+
+                    </small>
+
+                </div>
+
+
+
+                <!-- =========================================
+                     NISN
+                ========================================== -->
+
+                <div class="col-lg-2 col-md-4">
+
+                    <div class="text-muted small">
+
+                        NISN
+
+                    </div>
+
+
+                    <div class="fw-semibold">
+
+                        {% if murid.nisn %}
+
+                            {{ murid.nisn }}
+
+                        {% else %}
+
+                            <span class="text-muted">
+                                -
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =========================================
+                     NIK
+                ========================================== -->
+
+                <div class="col-lg-2 col-md-4">
+
+                    <div class="text-muted small">
+
+                        NIK
+
+                    </div>
+
+
+                    <div class="fw-semibold">
+
+                        {% if murid.nik %}
+
+                            {{ murid.nik }}
+
+                        {% else %}
+
+                            <span class="text-muted">
+                                -
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =========================================
+                     SEKOLAH
+                ========================================== -->
+
+                <div class="col-lg col-md-4">
+
+                    <div class="text-muted small">
+
+                        Sekolah
+
+                    </div>
+
+
+                    <div class="fw-semibold">
+
+                        <i class="bi bi-building text-success me-1"></i>
+
+                        {{ sekolah.nama }}
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         PERJALANAN AKADEMIK
+    ====================================================== -->
+
+    <div class="card border-0 shadow-sm">
+
+        <div class="card-header bg-body">
+
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+                <div>
+
+                    <h5 class="mb-1">
+
+                        <i class="bi bi-list-ul text-primary me-2"></i>
+
+                        Perjalanan Akademik
+
+                    </h5>
+
+
+                    <small class="text-muted">
+
+                        Riwayat kelas dan status murid
+                        pada setiap Tahun Ajaran
+
+                    </small>
+
+                </div>
+
+
+                <span class="badge bg-secondary px-3 py-2">
+
+                    <i class="bi bi-clock-history me-1"></i>
+
+                    Seluruh Riwayat
+
+                </span>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="card-body">
+
+            <div class="table-responsive">
+
+                <table
+                    id="tableRiwayatMurid"
+                    class="table table-bordered table-striped table-hover align-middle w-100"
+                >
+
+                    <thead>
+
+                        <tr>
+
+                            <th class="text-center">
+
+                                No
+
+                            </th>
+
+
+                            <th>
+
+                                Tahun Ajaran
+
+                            </th>
+
+
+                            <th>
+
+                                Kelas / Rombel
+
+                            </th>
+
+
+                            <th>
+
+                                Status Masuk
+
+                            </th>
+
+
+                            <th>
+
+                                Status Akhir
+
+                            </th>
+
+
+                            <th class="text-center">
+
+                                Tahun Lulus
+
+                            </th>
+
+
+                            <th>
+
+                                Keterangan
+
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+
+                    <tbody>
+
+                        {% for data in daftar_riwayat %}
+
+                            <tr>
+
+
+                                <!-- =====================================
+                                     NO
+                                ====================================== -->
+
+                                <td class="text-center">
+
+                                    {{ forloop.counter }}
+
+                                </td>
+
+
+
+                                <!-- =====================================
+                                     TAHUN AJARAN
+                                ====================================== -->
+
+                                <td>
+
+                                    <div class="fw-semibold">
+
+                                        {{ data.tahun_ajaran.nama }}
+
+                                    </div>
+
+
+                                    {% if data.tahun_ajaran.aktif %}
+
+                                        <div class="mt-1">
+
+                                            <span class="badge bg-success">
+
+                                                <i class="bi bi-check-circle me-1"></i>
+
+                                                Tahun Aktif
+
+                                            </span>
+
+                                        </div>
+
+                                    {% endif %}
+
+                                </td>
+
+
+
+                                <!-- =====================================
+                                     KELAS / ROMBEL
+                                ====================================== -->
+
+                                <td>
+
+                                    {% if data.rombel %}
+
+                                        <span class="fw-semibold">
+
+                                            {{ data.rombel.nama_kelas }}
+
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="text-muted">
+
+                                            -
+
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+
+                                <!-- =====================================
+                                     STATUS MASUK
+                                ====================================== -->
+
+                                <td>
+
+                                    {% if data.status_masuk == 'SISWA_BARU' %}
+
+                                        <span class="badge bg-success">
+
+                                            <i class="bi bi-person-plus me-1"></i>
+
+                                            Siswa Baru
+
+                                        </span>
+
+
+                                    {% elif data.status_masuk == 'NAIK_KELAS' %}
+
+                                        <span class="badge bg-info text-dark">
+
+                                            <i class="bi bi-arrow-up-circle me-1"></i>
+
+                                            Naik Kelas
+
+                                        </span>
+
+
+                                    {% elif data.status_masuk == 'TINGGAL_KELAS' %}
+
+                                        <span class="badge bg-warning text-dark">
+
+                                            <i class="bi bi-arrow-repeat me-1"></i>
+
+                                            Tinggal Kelas
+
+                                        </span>
+
+
+                                    {% elif data.status_masuk == 'PINDAHAN' %}
+
+                                        <span class="badge bg-primary">
+
+                                            <i class="bi bi-box-arrow-in-right me-1"></i>
+
+                                            Pindahan
+
+                                        </span>
+
+
+                                    {% elif data.status_masuk == 'LANJUT' %}
+
+                                        <span class="badge bg-secondary">
+
+                                            <i class="bi bi-arrow-right-circle me-1"></i>
+
+                                            Lanjutan
+
+                                        </span>
+
+
+                                    {% else %}
+
+                                        <span class="badge bg-secondary">
+
+                                            {{ data.get_status_masuk_display }}
+
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+
+                                <!-- =====================================
+                                     STATUS AKHIR
+                                ====================================== -->
+
+                                <td>
+
+                                    {% if data.status_akhir == 'AKTIF' %}
+
+                                        <span class="badge bg-success">
+
+                                            <i class="bi bi-check-circle me-1"></i>
+
+                                            Aktif
+
+                                        </span>
+
+
+                                    {% elif data.status_akhir == 'NAIK_KELAS' %}
+
+                                        <span class="badge bg-info text-dark">
+
+                                            <i class="bi bi-arrow-up-circle me-1"></i>
+
+                                            Naik Kelas
+
+                                        </span>
+
+
+                                    {% elif data.status_akhir == 'TINGGAL_KELAS' %}
+
+                                        <span class="badge bg-warning text-dark">
+
+                                            <i class="bi bi-arrow-repeat me-1"></i>
+
+                                            Tinggal Kelas
+
+                                        </span>
+
+
+                                    {% elif data.status_akhir == 'LULUS' %}
+
+                                        <span class="badge bg-primary">
+
+                                            <i class="bi bi-mortarboard me-1"></i>
+
+                                            Lulus
+
+                                        </span>
+
+
+                                    {% elif data.status_akhir == 'PINDAH' %}
+
+                                        <span class="badge bg-secondary">
+
+                                            <i class="bi bi-box-arrow-right me-1"></i>
+
+                                            Pindah
+
+                                        </span>
+
+
+                                    {% elif data.status_akhir == 'KELUAR' %}
+
+                                        <span class="badge bg-danger">
+
+                                            <i class="bi bi-person-x me-1"></i>
+
+                                            Keluar
+
+                                        </span>
+
+
+                                    {% else %}
+
+                                        <span class="badge bg-secondary">
+
+                                            {{ data.get_status_akhir_display }}
+
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+
+                                <!-- =====================================
+                                     TAHUN LULUS
+                                ====================================== -->
+
+                                <td class="text-center">
+
+                                    {% if data.tahun_lulus %}
+
+                                        <span class="badge bg-primary">
+
+                                            <i class="bi bi-mortarboard me-1"></i>
+
+                                            {{ data.tahun_lulus }}
+
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="text-muted">
+
+                                            -
+
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+
+                                <!-- =====================================
+                                     KETERANGAN
+                                ====================================== -->
+
+                                <td>
+
+                                    {% if data.keterangan %}
+
+
+                                        <!-- PINDAH -->
+
+                                        {% if data.status_akhir == 'PINDAH' %}
+
+                                            <div class="d-flex gap-2">
+
+                                                <i class="bi bi-info-circle text-secondary"></i>
+
+
+                                                <div>
+
+                                                    <div class="small text-muted">
+
+                                                        Keterangan Pindah
+
+                                                    </div>
+
+
+                                                    <div>
+
+                                                        {{ data.keterangan }}
+
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+
+
+
+                                        <!-- KELUAR -->
+
+                                        {% elif data.status_akhir == 'KELUAR' %}
+
+                                            <div class="d-flex gap-2">
+
+                                                <i class="bi bi-exclamation-circle text-danger"></i>
+
+
+                                                <div>
+
+                                                    <div class="small text-muted">
+
+                                                        Keterangan Keluar
+
+                                                    </div>
+
+
+                                                    <div>
+
+                                                        {{ data.keterangan }}
+
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+
+
+
+                                        <!-- LAINNYA -->
+
+                                        {% else %}
+
+                                            <div class="d-flex gap-2">
+
+                                                <i class="bi bi-chat-left-text text-primary"></i>
+
+
+                                                <div>
+
+                                                    {{ data.keterangan }}
+
+                                                </div>
+
+                                            </div>
+
+                                        {% endif %}
+
+
+                                    {% else %}
+
+                                        <span class="text-muted">
+
+                                            -
+
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         INFORMASI RIWAYAT
+    ====================================================== -->
+
+    {% if daftar_riwayat %}
+
+        <div class="card border-0 shadow-sm mt-4">
+
+            <div class="card-body">
+
+                <div class="d-flex align-items-start gap-3">
+
+
+                    <!-- ICON -->
+
+                    <div
+                        class="rounded-circle bg-primary-subtle d-flex align-items-center justify-content-center flex-shrink-0"
+                        style="
+                            width: 46px;
+                            height: 46px;
+                        "
+                    >
+
+                        <i class="bi bi-info-circle text-primary fs-5"></i>
+
+                    </div>
+
+
+
+                    <!-- INFORMASI -->
+
+                    <div>
+
+                        <div class="fw-semibold mb-1">
+
+                            Tentang Riwayat Akademik
+
+                        </div>
+
+
+                        <div class="text-muted small">
+
+                            Riwayat akademik disimpan untuk
+                            setiap Tahun Ajaran. Status seperti
+                            Naik Kelas, Tinggal Kelas, Lulus,
+                            Pindah, dan Keluar tidak menghapus
+                            data murid sehingga seluruh
+                            perjalanan akademiknya tetap dapat
+                            ditelusuri di SIPETAKU.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    {% endif %}
+
+
+</div>
+
+{% endblock %}
+
+
+
+{% block js %}
+
+<script>
+
+$(document).ready(function () {
+
+
+    // =====================================================
+    // DATATABLE
+    // =====================================================
+
+    $('#tableRiwayatMurid').DataTable({
+
+        responsive: true,
+
+        autoWidth: false,
+
+        pageLength: 10,
+
+        lengthMenu: [
+            10,
+            25,
+            50,
+            100
+        ],
+
+        columnDefs: [
+
+            {
+                targets: [
+                    0
+                ],
+                orderable: false
+            }
+
+        ],
+
+        order: [
+            [
+                1,
+                'desc'
+            ]
+        ],
+
+        language: {
+
+            emptyTable:
+                'Belum ada riwayat akademik murid',
+
+            search:
+                'Cari:',
+
+            lengthMenu:
+                'Tampilkan _MENU_ data',
+
+            info:
+                'Menampilkan _START_–_END_ dari _TOTAL_ data',
+
+            infoEmpty:
+                'Belum ada data',
+
+            zeroRecords:
+                'Riwayat akademik tidak ditemukan',
+
+            paginate: {
+
+                previous:
+                    'Sebelumnya',
+
+                next:
+                    'Berikutnya'
+
+            }
+
+        }
+
+    });
+
+});
+
+</script>
+
+{% endblock %}

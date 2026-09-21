@@ -4,10 +4,7 @@ from decouple import config
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-SECRET_KEY = config(
-    'SECRET_KEY',
-    default='django-insecure-demo-sipetaku'
-)
+SECRET_KEY = config('SECRET_KEY')
 
 DEBUG = config(
     'DEBUG',
@@ -105,9 +102,9 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': config('DB_NAME', default='sipetaku_db'),
-            'USER': config('DB_USER', default='sipetaku_user'),
-            'PASSWORD': config('DB_PASSWORD', default='SipetakuDB@2026'),
+            'NAME': config('DB_NAME'),
+            'USER': config('DB_USER'),
+            'PASSWORD': config('DB_PASSWORD'),
             'HOST': config('DB_HOST', default='localhost'),
             'PORT': config('DB_PORT', default='5432'),
         }
@@ -139,16 +136,23 @@ USE_I18N = True
 USE_TZ = True
 
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STORAGES = {
+    'default': {
+        'BACKEND': 'django.core.files.storage.FileSystemStorage',
+    },
+    'staticfiles': {
+        'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
+    },
+}
 
-MEDIA_URL = 'media/'
+MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 
@@ -166,6 +170,10 @@ CSRF_COOKIE_HTTPONLY = True
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+SECURE_PROXY_SSL_HEADER = (
+    'HTTP_X_FORWARDED_PROTO',
+    'https',
+)
 
 if not DEBUG:
 

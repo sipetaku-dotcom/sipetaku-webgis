@@ -38,97 +38,970 @@
         href="https://cdn.jsdelivr.net/npm/admin-lte@4.0.0-beta3/dist/css/adminlte.min.css"
     >
 
-    <style>
+<style>
 
-        body:not(.halaman-peta) .app-header {
-            height: 57px !important;
-            min-height: 57px !important;
+    /* =========================================================
+       SIPETAKU - GLOBAL THEME
+    ========================================================= */
 
-            position: sticky !important;
-            top: 0 !important;
-            z-index: 1030 !important;
 
-            background-color: #1f252b !important;
-            border-bottom: 1px solid rgba(255,255,255,0.08) !important;
-        }
+    /* =========================================================
+       LIGHT MODE
+       BACKGROUND HALAMAN
+    ========================================================= */
 
-        .sidebar-brand {
-            height: 57px !important;
-            min-height: 57px !important;
+    html:not([data-bs-theme="dark"]) body,
+    html:not([data-bs-theme="dark"]) .app-main,
+    html:not([data-bs-theme="dark"]) .app-content {
 
-            display: flex !important;
-            align-items: center !important;
+        background-color:
+            #e9ecef !important;
+    }
 
-            padding-top: 0 !important;
-            padding-bottom: 0 !important;
 
-            background-color: #1f252b !important;
 
-            border-bottom: 1px solid rgba(255,255,255,0.08) !important;
-        }
+    /* =========================================================
+       NAVBAR
+       DEFAULT / LIGHT MODE
+    ========================================================= */
 
-        .sidebar-brand .brand-link {
-            height: 57px !important;
+    body:not(.halaman-peta) .app-header {
 
-            display: flex !important;
-            align-items: center !important;
-        }
+        height:
+            57px !important;
 
-        .sidebar-brand img {
-            max-height: 38px !important;
-        }
+        min-height:
+            57px !important;
 
-        .app-sidebar,
-        .sidebar-wrapper {
-            background-color: #1f252b !important;
-        }
+        position:
+            sticky !important;
 
-        .app-sidebar {
-            height: 100vh !important;
-            overflow: hidden !important;
-        }
+        top:
+            0 !important;
 
-        .sidebar-wrapper {
-            overflow-y: auto !important;
-            overflow-x: hidden !important;
-            padding-bottom: 30px !important;
-        }
+        z-index:
+            1030 !important;
 
-        .sidebar-brand .brand-text {
-            font-weight: 800 !important;
-            letter-spacing: 0.5px;
-        }
+        background-color:
+            #1f252b !important;
 
-        .sidebar-brand .brand-text,
-        .sidebar-brand span,
-        .sidebar-brand a,
-        .app-header .nav-link,
-        .app-header .nav-link i,
-        .app-header .navbar-nav .nav-link,
-        .app-sidebar .nav-link,
-        .app-sidebar .nav-link i,
-        .app-sidebar .nav-link p {
-            color: #ffffff !important;
-        }
+        border:
+            none !important;
 
-        .app-sidebar .nav-link {
-            margin: 4px 10px;
-            border-radius: 0.5rem;
-            transition: all 0.2s ease;
-        }
+        box-shadow:
+            none !important;
+    }
 
-        .app-sidebar .nav-link:hover {
-            background-color: rgba(255,255,255,0.10) !important;
-            transform: translateX(3px);
-        }
 
-        .app-sidebar .nav-link.active {
-            background-color: rgba(13,110,253,0.22) !important;
-            color: #ffffff !important;
-            box-shadow: inset 3px 0 0 #0d6efd;
-        }
 
-    </style>
+    /* =========================================================
+       NAVBAR BUTTON HOVER PRIMARY
+    ========================================================= */
+
+    .navbar-btn-primary-hover {
+
+        color:
+            #ffffff !important;
+
+        border-color:
+            #6c757d !important;
+
+        background-color:
+            transparent !important;
+
+        transition:
+            background-color 0.2s ease,
+            border-color 0.2s ease,
+            color 0.2s ease;
+    }
+
+
+    .navbar-btn-primary-hover i {
+
+        color:
+            #ffffff !important;
+    }
+
+
+    .navbar-btn-primary-hover:hover {
+
+        color:
+            #ffffff !important;
+
+        background-color:
+            #0d6efd !important;
+
+        border-color:
+            #0d6efd !important;
+    }
+
+
+    .navbar-btn-primary-hover:hover i {
+
+        color:
+            #ffffff !important;
+    }
+
+
+    /* =========================================================
+    NAVBAR BUTTON
+    ========================================================= */
+
+    .navbar-btn-primary-hover {
+
+        color: #ffffff !important;
+
+        background-color: transparent !important;
+
+        border:
+            1px solid #6c757d !important;
+
+        border-radius:
+            6px;
+
+        transition:
+            background-color 0.2s ease,
+            border-color 0.2s ease,
+            color 0.2s ease;
+    }
+
+
+    .navbar-btn-primary-hover i {
+
+        color:
+            #ffffff !important;
+    }
+
+
+    /* Hover */
+    .navbar-btn-primary-hover:hover {
+
+        color:
+            #ffffff !important;
+
+        background-color:
+            #0d6efd !important;
+
+        border-color:
+            #0d6efd !important;
+    }
+
+
+    .navbar-btn-primary-hover:hover i {
+
+        color:
+            #ffffff !important;
+    }
+
+
+    /* =========================================================
+       SIDEBAR BRAND
+    ========================================================= */
+
+    .sidebar-brand {
+
+        height:
+            57px !important;
+
+        min-height:
+            57px !important;
+
+        display:
+            flex !important;
+
+        align-items:
+            center !important;
+
+        padding-top:
+            0 !important;
+
+        padding-bottom:
+            0 !important;
+
+        background-color:
+            #1f252b !important;
+
+        border:
+            none !important;
+
+        box-shadow:
+            none !important;
+    }
+
+
+    .sidebar-brand .brand-link {
+
+        height:
+            57px !important;
+
+        display:
+            flex !important;
+
+        align-items:
+            center !important;
+
+        border:
+            none !important;
+
+        box-shadow:
+            none !important;
+    }
+
+
+    .sidebar-brand img {
+
+        max-height:
+            38px !important;
+    }
+
+
+    .sidebar-brand .brand-text {
+
+        font-weight:
+            800 !important;
+
+        letter-spacing:
+            0.5px;
+    }
+
+
+
+    /* =========================================================
+       SIDEBAR
+    ========================================================= */
+
+    .app-sidebar,
+    .sidebar-wrapper {
+
+        background-color:
+            #1f252b !important;
+    }
+
+
+    .app-sidebar {
+
+        height:
+            100vh !important;
+
+        overflow:
+            hidden !important;
+
+        border:
+            none !important;
+
+        border-right:
+            1px solid rgba(255, 255, 255, 0.10) !important;
+
+        box-shadow:
+            none !important;
+    }
+
+
+    .sidebar-wrapper {
+
+        overflow-y:
+            auto !important;
+
+        overflow-x:
+            hidden !important;
+
+        padding-bottom:
+            30px !important;
+
+        border:
+            none !important;
+    }
+
+
+
+    /* =========================================================
+       WARNA TEKS NAVBAR & SIDEBAR
+    ========================================================= */
+
+    .sidebar-brand .brand-text,
+    .sidebar-brand span,
+    .sidebar-brand a,
+
+    .app-header .nav-link,
+    .app-header .nav-link i,
+    .app-header .navbar-nav .nav-link,
+
+    .app-sidebar .nav-link,
+    .app-sidebar .nav-link i,
+    .app-sidebar .nav-link p {
+
+        color:
+            #ffffff !important;
+    }
+
+
+
+    /* =========================================================
+       MENU SIDEBAR
+    ========================================================= */
+
+    .app-sidebar .nav-link {
+
+        margin:
+            4px 10px;
+
+        border-radius:
+            0.5rem;
+
+        transition:
+            background-color 0.20s ease,
+            transform 0.20s ease,
+            box-shadow 0.20s ease;
+    }
+
+
+
+    /* =========================================================
+       HOVER SIDEBAR
+    ========================================================= */
+
+    .app-sidebar .nav-link:hover {
+
+        background-color:
+            rgba(
+                255,
+                255,
+                255,
+                0.10
+            ) !important;
+
+        transform:
+            translateX(
+                3px
+            );
+    }
+
+
+
+    /* =========================================================
+       MENU SIDEBAR AKTIF
+    ========================================================= */
+
+    .app-sidebar .nav-link.active {
+
+        background-color:
+            rgba(
+                13,
+                110,
+                253,
+                0.22
+            ) !important;
+
+        color:
+            #ffffff !important;
+
+        box-shadow:
+            inset
+            3px
+            0
+            0
+            #0d6efd;
+    }
+
+
+
+    /* =========================================================
+       PANAH MENU SIDEBAR
+    ========================================================= */
+
+    .app-sidebar .nav-link p {
+
+        position:
+            relative;
+
+        width:
+            100%;
+    }
+
+
+    .app-sidebar .sidebar-arrow {
+
+        position:
+            absolute;
+
+        right:
+            12px;
+
+        top:
+            50%;
+
+        transform:
+            translateY(-50%)
+            rotate(0deg);
+
+        font-size:
+            0.80rem;
+
+        opacity:
+            0.75;
+
+        transition:
+            transform 0.25s ease,
+            opacity 0.25s ease;
+    }
+
+
+    .app-sidebar
+    .nav-link:hover
+    .sidebar-arrow {
+
+        opacity:
+            1;
+    }
+
+
+    .app-sidebar
+    .nav-item.menu-open
+    > .nav-link
+    .sidebar-arrow {
+
+        transform:
+            translateY(-50%)
+            rotate(180deg);
+    }
+
+
+
+    /* =========================================================
+       DARK MODE
+       CARD
+    ========================================================= */
+
+    [data-bs-theme="dark"] .card {
+
+        background-color:
+            var(
+                --bs-body-bg
+            ) !important;
+
+        color:
+            var(
+                --bs-body-color
+            ) !important;
+
+        border-color:
+            var(
+                --bs-border-color
+            ) !important;
+    }
+
+
+
+    /* =========================================================
+       DARK MODE
+       CARD HEADER
+    ========================================================= */
+
+    [data-bs-theme="dark"] .card-header,
+    [data-bs-theme="dark"] .card-header.bg-body {
+
+        background-color:
+            var(
+                --bs-card-bg
+            ) !important;
+
+        color:
+            var(
+                --bs-body-color
+            ) !important;
+
+        border-color:
+            var(
+                --bs-border-color
+            ) !important;
+    }
+
+
+
+    /* =========================================================
+       DARK MODE
+       NAVBAR
+    ========================================================= */
+
+    [data-bs-theme="dark"]
+    body:not(.halaman-peta)
+    .app-header {
+
+        background-color:
+            #212529 !important;
+
+        border:
+            none !important;
+
+        box-shadow:
+            none !important;
+    }
+
+
+
+    /* =========================================================
+       DARK MODE
+       SIDEBAR + BRAND
+    ========================================================= */
+
+    [data-bs-theme="dark"] .app-sidebar,
+    [data-bs-theme="dark"] .sidebar-wrapper,
+    [data-bs-theme="dark"] .sidebar-brand {
+
+        background-color:
+            #212529 !important;
+
+        border:
+            none !important;
+
+        border-right:
+            1px solid #343a40 !important;
+
+        box-shadow:
+            none !important;
+    }
+
+
+    [data-bs-theme="dark"]
+    .sidebar-brand
+    .brand-link {
+
+        background-color: #212529 !important;
+        
+        border:
+            none !important;
+
+        box-shadow:
+            none !important;
+    }
+
+
+
+    /* =========================================================
+       DARK MODE
+       SIDEBAR HOVER
+    ========================================================= */
+
+    [data-bs-theme="dark"]
+    .app-sidebar
+    .nav-link:hover {
+
+        background-color:
+            rgba(
+                255,
+                255,
+                255,
+                0.08
+            ) !important;
+    }
+
+
+
+    /* =========================================================
+       DARK MODE
+       SIDEBAR AKTIF
+    ========================================================= */
+
+    [data-bs-theme="dark"]
+    .app-sidebar
+    .nav-link.active {
+
+        background-color:
+            rgba(
+                13,
+                110,
+                253,
+                0.28
+            ) !important;
+
+        color:
+            #ffffff !important;
+
+        box-shadow:
+            inset
+            3px
+            0
+            0
+            #0d6efd;
+    }
+
+
+
+    /* =========================================================
+       DARK MODE
+       FORM CONTROL
+    ========================================================= */
+
+    [data-bs-theme="dark"] .form-control,
+    [data-bs-theme="dark"] .form-select {
+
+        background-color:
+            var(
+                --bs-body-bg
+            ) !important;
+
+        color:
+            var(
+                --bs-body-color
+            ) !important;
+
+        border-color:
+            var(
+                --bs-border-color
+            ) !important;
+    }
+
+
+    [data-bs-theme="dark"]
+    .form-control:read-only {
+
+        background-color:
+            var(
+                --bs-tertiary-bg
+            ) !important;
+
+        color:
+            var(
+                --bs-secondary-color
+            ) !important;
+    }
+
+
+
+    /* =========================================================
+       DARK MODE
+       NAV TABS
+    ========================================================= */
+
+    [data-bs-theme="dark"] .nav-tabs {
+
+        border-color:
+            var(
+                --bs-border-color
+            ) !important;
+    }
+
+
+    [data-bs-theme="dark"]
+    .nav-tabs
+    .nav-link {
+
+        color:
+            var(
+                --bs-secondary-color
+            ) !important;
+
+        border-color:
+            transparent;
+    }
+
+
+    [data-bs-theme="dark"]
+    .nav-tabs
+    .nav-link:hover {
+
+        color:
+            var(
+                --bs-body-color
+            ) !important;
+
+        background-color:
+            var(
+                --bs-tertiary-bg
+            ) !important;
+
+        border-color:
+            var(
+                --bs-border-color
+            ) !important;
+    }
+
+
+    [data-bs-theme="dark"]
+    .nav-tabs
+    .nav-link.active {
+
+        color:
+            var(
+                --bs-emphasis-color
+            ) !important;
+
+        background-color:
+            var(
+                --bs-body-bg
+            ) !important;
+
+        border-color:
+            var(--bs-border-color)
+            var(--bs-border-color)
+            var(--bs-body-bg)
+            !important;
+    }
+
+    /* =========================================================
+    DASHBOARD MINI CARD
+    ========================================================= */
+
+    .dashboard-mini-card {
+
+        height: 100%;
+
+        padding: 18px 20px;
+
+        border: 1px solid #dee2e6;
+
+        border-radius: 0.75rem;
+
+        background-color: #f1f3f5;
+
+        transition:
+            background-color 0.2s ease,
+            border-color 0.2s ease;
+    }
+
+
+    /* Angka utama */
+    .dashboard-number {
+
+        font-size: 1.75rem;
+
+        font-weight: 700;
+
+        line-height: 1.2;
+    }
+
+
+    /* =========================================================
+    DASHBOARD MINI CARD - LIGHT MODE
+    ========================================================= */
+
+    html:not([data-bs-theme="dark"])
+    .dashboard-mini-card {
+
+        background-color: #f1f3f5 !important;
+
+        border-color: #dee2e6 !important;
+    }
+
+
+    /* =========================================================
+    DASHBOARD MINI CARD - DARK MODE
+    ========================================================= */
+
+    [data-bs-theme="dark"]
+    .dashboard-mini-card {
+
+        background-color: #292d32 !important;
+
+        border-color: #3a3f44 !important;
+    }
+
+
+
+    /* =========================================================
+       DARK MODE
+       UTILITIES
+    ========================================================= */
+
+    [data-bs-theme="dark"]
+    .bg-body-tertiary {
+
+        background-color:
+            var(
+                --bs-tertiary-bg
+            ) !important;
+    }
+
+
+    [data-bs-theme="dark"]
+    .text-muted {
+
+        color:
+            var(
+                --bs-secondary-color
+            ) !important;
+    }
+
+
+    [data-bs-theme="dark"]
+    .border {
+
+        border-color:
+            var(
+                --bs-border-color
+            ) !important;
+    }
+
+
+
+    /* =========================================================
+       DARK MODE
+       ALERT SECONDARY
+    ========================================================= */
+
+    [data-bs-theme="dark"]
+    .alert-secondary {
+
+        color:
+            var(
+                --bs-body-color
+            ) !important;
+
+        background-color:
+            var(
+                --bs-secondary-bg
+            ) !important;
+
+        border-color:
+            var(
+                --bs-border-color
+            ) !important;
+    }
+
+
+
+    /* =========================================================
+       DARK MODE
+       TABLE
+    ========================================================= */
+
+    [data-bs-theme="dark"] .table {
+
+        --bs-table-bg:
+            transparent;
+
+        --bs-table-color:
+            var(
+                --bs-body-color
+            );
+
+        --bs-table-border-color:
+            var(
+                --bs-border-color
+            );
+    }
+
+
+    [data-bs-theme="dark"]
+    .table > :not(caption) > * > * {
+
+        background-color:
+            transparent;
+
+        color:
+            var(
+                --bs-body-color
+            );
+
+        border-color:
+            var(
+                --bs-border-color
+            );
+    }
+
+
+
+    /* =========================================================
+       DARK MODE
+       TABLE STRIPED
+    ========================================================= */
+
+    [data-bs-theme="dark"]
+    .table-striped
+    > tbody
+    > tr:nth-of-type(odd)
+    > * {
+
+        background-color:
+            rgba(
+                255,
+                255,
+                255,
+                0.025
+            );
+    }
+
+
+
+    /* =========================================================
+       DARK MODE
+       TABLE HOVER
+    ========================================================= */
+
+    [data-bs-theme="dark"]
+    .table-hover
+    > tbody
+    > tr:hover
+    > * {
+
+        background-color:
+            rgba(
+                255,
+                255,
+                255,
+                0.05
+            );
+    }
+
+
+
+    /* =========================================================
+       DARK MODE
+       DATATABLE INPUT
+    ========================================================= */
+
+    [data-bs-theme="dark"]
+    .dataTables_wrapper
+    .dataTables_filter
+    input,
+
+    [data-bs-theme="dark"]
+    .dataTables_wrapper
+    .dataTables_length
+    select {
+
+        background-color:
+            var(
+                --bs-body-bg
+            ) !important;
+
+        color:
+            var(
+                --bs-body-color
+            ) !important;
+
+        border-color:
+            var(
+                --bs-border-color
+            ) !important;
+    }
+
+
+
+    /* =========================================================
+       DARK MODE
+       DATATABLE TEXT
+    ========================================================= */
+
+    [data-bs-theme="dark"]
+    .dataTables_wrapper
+    .dataTables_info,
+
+    [data-bs-theme="dark"]
+    .dataTables_wrapper
+    .dataTables_length,
+
+    [data-bs-theme="dark"]
+    .dataTables_wrapper
+    .dataTables_filter {
+
+        color:
+            var(
+                --bs-secondary-color
+            ) !important;
+    }
+
+</style>
 
     {% block css %}{% endblock %}
 </head>
@@ -144,26 +1017,23 @@
 
             <ul class="navbar-nav">
 
-                <li class="nav-item">
+                <li class="nav-item me-2">
 
                     <a
-                        class="nav-link"
+                        class="nav-link navbar-btn-primary-hover d-flex align-items-center justify-content-center"
                         data-lte-toggle="sidebar"
                         href="#"
                         role="button"
+                        style="
+                            width:30px;
+                            height:30px;
+                            border-radius:6px;
+                        "
+                        title="Buka/Tutup Sidebar"
                     >
-                        <i class="bi bi-layout-wtf"></i>
-                    </a>
 
-                </li>
+                        <i class="bi bi-menu-button-wide"></i>
 
-                <li class="nav-item d-none d-md-block">
-
-                    <a
-                        href="/dashboard/"
-                        class="nav-link"
-                    >
-                        Beranda
                     </a>
 
                 </li>
@@ -179,12 +1049,12 @@
 
                         <button
                             type="button"
-                            class="btn btn-outline-secondary btn-sm d-flex align-items-center justify-content-center"
+                            class="btn btn-sm d-flex align-items-center justify-content-center navbar-btn-primary-hover"
                             id="toggleTheme"
                             style="
-                                width:42px;
-                                height:42px;
-                                border-radius:12px;
+                                width:30px;
+                                height:30px;
+                                border-radius:6px;
                             "
                         >
                             <i class="bi bi-moon-stars"></i>
@@ -198,13 +1068,13 @@
                     <li class="nav-item">
 
                         <span
-                            class="btn btn-outline-secondary btn-sm d-flex align-items-center"
+                            class="btn btn-sm d-flex align-items-center navbar-btn-primary-hover"
                             style="
-                                height:42px;
-                                border-radius:12px;
+                                height:30px;
+                                border-radius:6px;
                             "
                         >
-                            <i class="bi bi-person-circle me-2"></i>
+                            <i class="bi bi-person me-1"></i>
                             {{ request.user.username }}
                         </span>
 
@@ -217,11 +1087,11 @@
                             href="/logout/"
                             class="btn btn-outline-danger btn-sm d-flex align-items-center"
                             style="
-                                height:42px;
-                                border-radius:12px;
+                                height:30px;
+                                border-radius:6px;
                             "
                         >
-                            <i class="bi bi-box-arrow-right me-2"></i>
+                            <i class="bi bi-box-arrow-right me-1"></i>
                             Logout
                         </a>
 
@@ -235,11 +1105,11 @@
                             href="/login/"
                             class="btn btn-outline-primary btn-sm d-flex align-items-center"
                             style="
-                                height:42px;
-                                border-radius:12px;
+                                height:30px;
+                                border-radius:6px;
                             "
                         >
-                            <i class="bi bi-box-arrow-in-right me-2"></i>
+                            <i class="bi bi-box-arrow-in-right me-1"></i>
                             Login
                         </a>
 
@@ -266,10 +1136,11 @@
                     src="{% static 'img/logo-sipetaku.png' %}"
                     alt="Logo SIPETAKU"
                     style="
-                        width:30px;
-                        height:30px;
-                        object-fit:contain;
-                        margin-right:10px;
+                        height: 25px;
+                        width: 25px;
+                        max-width: 42px;
+                        object-fit: contain;
+                        margin-right: 10px;
                     "
                 >
 
@@ -281,15 +1152,15 @@
 
         </div>
 
-        {% if sekolah_login %}
+        {% comment %} {% if sekolah_login %}
 
-        <div class="mx-3 mt-3 mb-2 p-3 rounded bg-dark-subtle text-white">
+        <div class="mx-3 mt-3 mb-0 p-3 rounded bg-dark-subtle text-white">
 
             <div class="fw-bold mb-2 text-center">
                 {{ sekolah_login.nama }}
             </div>
 
-            <div class="text-center mb-3">
+            <div class="text-center mb-2">
 
                 {% if sekolah_login.status == 'Negeri' %}
 
@@ -309,33 +1180,9 @@
 
             </div>
 
-            <div class="small">
-
-                <div class="d-flex justify-content-between">
-                    <span><i class="bi bi-person-badge"></i> Guru</span>
-                    <strong>{{ sidebar_total_guru }}</strong>
-                </div>
-
-                <div class="d-flex justify-content-between">
-                    <span><i class="bi bi-people"></i> Murid</span>
-                    <strong>{{ sidebar_total_murid }}</strong>
-                </div>
-
-                <div class="d-flex justify-content-between">
-                    <span><i class="bi bi-trophy"></i> Prestasi</span>
-                    <strong>{{ sidebar_total_prestasi }}</strong>
-                </div>
-
-                <div class="d-flex justify-content-between">
-                    <span><i class="bi bi-box-seam"></i> Aset</span>
-                    <strong>{{ sidebar_total_aset }}</strong>
-                </div>
-
-            </div>
-
         </div>
 
-        {% endif %}
+        {% endif %} {% endcomment %}
 
         <div class="sidebar-wrapper">
 
@@ -347,163 +1194,1176 @@
                     role="menu"
                 >
 
-                    {% if request.user.is_superuser or request.user.profil.role == 'admin_kabupaten' or request.user.profil.role == 'admin_kecamatan' %}
-
-                    <li class="nav-item">
-
-                        <a
-                            href="/dashboard/"
-                            class="nav-link {% if request.path == '/dashboard/' %}active{% endif %}"
-                        >
-                            <i class="nav-icon bi bi-speedometer2"></i>
-                            <p>Dashboard</p>
-                        </a>
-
-                    </li>
-
-                    {% endif %}
-
-                    <li class="nav-item">
-
-                        <a
-                            href="/"
-                            class="nav-link {% if request.path == '/' %}active{% endif %}"
-                        >
-                            <i class="nav-icon bi bi-geo-alt-fill"></i>
-                            <p>Peta Sekolah</p>
-                        </a>
-
-                    </li>
-
-                    {% if request.user.is_superuser or request.user.profil.role == 'admin_kabupaten' %}
-
-                    <li class="nav-item">
-
-                        <a
-                            href="/data-sekolah/"
-                            class="nav-link {% if '/data-sekolah/' in request.path %}active{% endif %}"
-                        >
-                            <i class="nav-icon bi bi-building"></i>
-                            <p>Data Sekolah</p>
-                        </a>
-
-                    </li>
-
-                    <li class="nav-item">
-
-                        <a
-                            href="/data-operator/"
-                            class="nav-link {% if '/data-operator/' in request.path %}active{% endif %}"
-                        >
-                            <i class="nav-icon bi bi-people-fill"></i>
-                            <p>Operator Sekolah</p>
-                        </a>
-
-                    </li>
-
-                    <li class="nav-item">
-
-                        <a
-                            href="/data-admin-kecamatan/"
-                            class="nav-link {% if '/data-admin-kecamatan/' in request.path %}active{% endif %}"
-                        >
-                            <i class="nav-icon bi bi-person-lines-fill"></i>
-                            <p>Admin Kecamatan</p>
-                        </a>
-
-                    </li>
-
-                    {% endif %}
-
                     {% if request.user.is_superuser %}
 
-                    <li class="nav-item">
+                        <!-- =====================================================
+                            DASHBOARD SUPERADMIN
+                        ====================================================== -->
 
-                        <a
-                            href="/data-admin-kabupaten/"
-                            class="nav-link {% if '/data-admin-kabupaten/' in request.path %}active{% endif %}"
+                        <li class="nav-item">
+
+                            <a
+                                href="{% url 'dashboard' %}"
+                                class="nav-link {% if request.path == '/dashboard/' %}active{% endif %}"
+                            >
+
+                                <i class="nav-icon bi bi-speedometer2"></i>
+
+                                <p>
+                                    Dashboard
+                                </p>
+
+                            </a>
+
+                        </li>
+
+
+                        <!-- =====================================================
+                            MONITORING DAN ANALISIS
+                        ====================================================== -->
+
+                        <li
+                            class="
+                                nav-item
+                                {% if '/prioritas-bantuan/' in request.path or '/monitoring-kesiapan-tahun-ajaran/' in request.path %}
+                                    menu-open
+                                {% endif %}
+                            "
                         >
-                            <i class="nav-icon bi bi-person-vcard"></i>
-                            <p>Admin Kabupaten</p>
-                        </a>
 
-                    </li>
+                            <a
+                                href="#"
+                                class="
+                                    nav-link
+                                    {% if '/prioritas-bantuan/' in request.path or '/monitoring-kesiapan-tahun-ajaran/' in request.path %}
+                                        active
+                                    {% endif %}
+                                "
+                            >
 
-                    <li class="nav-item">
+                                <i class="nav-icon bi bi-bar-chart-line"></i>
 
-                        <a
-                            href="/admin-sipetaku-rahasia-2026/"
-                            class="nav-link"
+                                <p>
+
+                                    Monitoring
+
+                                    <i class="sidebar-arrow bi bi-chevron-down"></i>
+
+                                </p>
+
+                            </a>
+
+
+                            <ul class="nav nav-treeview">
+
+                                <li class="nav-item">
+
+                                    <a
+                                        href="{% url 'prioritas_bantuan_sekolah' %}"
+                                        class="
+                                            nav-link
+                                            {% if '/prioritas-bantuan/' in request.path %}
+                                                active
+                                            {% endif %}
+                                        "
+                                    >
+
+                                        <i class="nav-icon bi bi-clipboard-data"></i>
+
+                                        <p>
+                                            Prioritas Bantuan
+                                        </p>
+
+                                    </a>
+
+                                </li>
+
+
+                                <li class="nav-item">
+
+                                    <a
+                                        href="{% url 'monitoring_kesiapan_tahun_ajaran' %}"
+                                        class="
+                                            nav-link
+                                            {% if '/monitoring-kesiapan-tahun-ajaran/' in request.path %}
+                                                active
+                                            {% endif %}
+                                        "
+                                    >
+
+                                        <i class="nav-icon bi bi-clipboard2-check"></i>
+
+                                        <p>
+                                            Monitoring Kesiapan
+                                        </p>
+
+                                    </a>
+
+                                </li>
+
+                            </ul>
+
+                        </li>
+
+
+                        <!-- =====================================================
+                            SEKOLAH DAN PEMETAAN
+                        ====================================================== -->
+
+                        <li
+                            class="
+                                nav-item
+                                {% if request.path == '/' or '/data-sekolah/' in request.path or '/tambah-sekolah/' in request.path or '/edit-sekolah/' in request.path or '/import-sekolah-geojson/' in request.path %}
+                                    menu-open
+                                {% endif %}
+                            "
                         >
-                            <i class="nav-icon bi bi-person-lock"></i>
-                            <p>Django Admin</p>
-                        </a>
 
-                    </li>
+                            <a
+                                href="#"
+                                class="
+                                    nav-link
+                                    {% if request.path == '/' or '/data-sekolah/' in request.path or '/tambah-sekolah/' in request.path or '/edit-sekolah/' in request.path or '/import-sekolah-geojson/' in request.path %}
+                                        active
+                                    {% endif %}
+                                "
+                            >
+
+                                <i class="nav-icon bi bi-building"></i>
+
+                                <p>
+
+                                    Sekolah
+
+                                    <i class="sidebar-arrow bi bi-chevron-down"></i>
+
+                                </p>
+
+                            </a>
+
+
+                            <ul class="nav nav-treeview">
+
+                                <li class="nav-item">
+
+                                    <a
+                                        href="{% url 'index' %}"
+                                        class="nav-link {% if request.path == '/' %}active{% endif %}"
+                                    >
+
+                                        <i class="nav-icon bi bi-geo-alt-fill"></i>
+
+                                        <p>
+                                            Peta Sekolah
+                                        </p>
+
+                                    </a>
+
+                                </li>
+
+
+                                <li class="nav-item">
+
+                                    <a
+                                        href="{% url 'data_sekolah' %}"
+                                        class="
+                                            nav-link
+                                            {% if '/data-sekolah/' in request.path or '/tambah-sekolah/' in request.path or '/edit-sekolah/' in request.path %}
+                                                active
+                                            {% endif %}
+                                        "
+                                    >
+
+                                        <i class="nav-icon bi bi-buildings"></i>
+
+                                        <p>
+                                            Data Sekolah
+                                        </p>
+
+                                    </a>
+
+                                </li>
+
+
+                                <li class="nav-item">
+
+                                    <a
+                                        href="{% url 'import_sekolah_geojson' %}"
+                                        class="
+                                            nav-link
+                                            {% if '/import-sekolah-geojson/' in request.path %}
+                                                active
+                                            {% endif %}
+                                        "
+                                    >
+
+                                        <i class="nav-icon bi bi-cloud-arrow-up-fill"></i>
+
+                                        <p>
+                                            Import Data Sekolah
+                                        </p>
+
+                                    </a>
+
+                                </li>
+
+                            </ul>
+
+                        </li>
+
+
+                        <!-- =====================================================
+                            MANAJEMEN PENGGUNA
+                        ====================================================== -->
+
+                        <li
+                            class="
+                                nav-item
+                                {% if '/data-operator/' in request.path or '/tambah-user-operator/' in request.path or '/edit-operator/' in request.path or '/data-admin-kecamatan/' in request.path or '/tambah-user-admin-kecamatan/' in request.path or '/edit-admin-kecamatan/' in request.path or '/data-admin-kabupaten/' in request.path or '/tambah-user-admin-kabupaten/' in request.path or '/edit-admin-kabupaten/' in request.path %}
+                                    menu-open
+                                {% endif %}
+                            "
+                        >
+
+                            <a
+                                href="#"
+                                class="
+                                    nav-link
+                                    {% if '/data-operator/' in request.path or '/tambah-user-operator/' in request.path or '/edit-operator/' in request.path or '/data-admin-kecamatan/' in request.path or '/tambah-user-admin-kecamatan/' in request.path or '/edit-admin-kecamatan/' in request.path or '/data-admin-kabupaten/' in request.path or '/tambah-user-admin-kabupaten/' in request.path or '/edit-admin-kabupaten/' in request.path %}
+                                        active
+                                    {% endif %}
+                                "
+                            >
+
+                                <i class="nav-icon bi bi-people-fill"></i>
+
+                                <p>
+
+                                    Pengguna
+
+                                    <i class="sidebar-arrow bi bi-chevron-down"></i>
+
+                                </p>
+
+                            </a>
+
+
+                            <ul class="nav nav-treeview">
+
+                                <li class="nav-item">
+
+                                    <a
+                                        href="{% url 'data_operator' %}"
+                                        class="
+                                            nav-link
+                                            {% if '/data-operator/' in request.path or '/tambah-user-operator/' in request.path or '/edit-operator/' in request.path %}
+                                                active
+                                            {% endif %}
+                                        "
+                                    >
+
+                                        <i class="nav-icon bi bi-person-workspace"></i>
+
+                                        <p>
+                                            Operator Sekolah
+                                        </p>
+
+                                    </a>
+
+                                </li>
+
+
+                                <li class="nav-item">
+
+                                    <a
+                                        href="{% url 'data_admin_kecamatan' %}"
+                                        class="
+                                            nav-link
+                                            {% if '/data-admin-kecamatan/' in request.path or '/tambah-user-admin-kecamatan/' in request.path or '/edit-admin-kecamatan/' in request.path %}
+                                                active
+                                            {% endif %}
+                                        "
+                                    >
+
+                                        <i class="nav-icon bi bi-person-lines-fill"></i>
+
+                                        <p>
+                                            Admin Kecamatan
+                                        </p>
+
+                                    </a>
+
+                                </li>
+
+
+                                <li class="nav-item">
+
+                                    <a
+                                        href="{% url 'data_admin_kabupaten' %}"
+                                        class="
+                                            nav-link
+                                            {% if '/data-admin-kabupaten/' in request.path or '/tambah-user-admin-kabupaten/' in request.path or '/edit-admin-kabupaten/' in request.path %}
+                                                active
+                                            {% endif %}
+                                        "
+                                    >
+
+                                        <i class="nav-icon bi bi-person-vcard"></i>
+
+                                        <p>
+                                            Admin Kabupaten
+                                        </p>
+
+                                    </a>
+
+                                </li>
+
+                            </ul>
+
+                        </li>
+
+
+                        <!-- =====================================================
+                            PENGATURAN SISTEM
+                        ====================================================== -->
+
+                        <li
+                            class="
+                                nav-item
+                                {% if '/kelola-tahun-ajaran/' in request.path or '/aktifkan-tahun-ajaran/' in request.path or '/ubah-password/' in request.path or '/admin-sipetaku-rahasia-2026/' in request.path %}
+                                    menu-open
+                                {% endif %}
+                            "
+                        >
+
+                            <a
+                                href="#"
+                                class="
+                                    nav-link
+                                    {% if '/kelola-tahun-ajaran/' in request.path or '/aktifkan-tahun-ajaran/' in request.path or '/ubah-password/' in request.path or '/admin-sipetaku-rahasia-2026/' in request.path %}
+                                        active
+                                    {% endif %}
+                                "
+                            >
+
+                                <i class="nav-icon bi bi-gear"></i>
+
+                                <p>
+
+                                    Pengaturan
+
+                                    <i class="sidebar-arrow bi bi-chevron-down"></i>
+
+                                </p>
+
+                            </a>
+
+
+                            <ul class="nav nav-treeview">
+
+                                <li class="nav-item">
+
+                                    <a
+                                        href="{% url 'kelola_tahun_ajaran' %}"
+                                        class="
+                                            nav-link
+                                            {% if '/kelola-tahun-ajaran/' in request.path or '/aktifkan-tahun-ajaran/' in request.path %}
+                                                active
+                                            {% endif %}
+                                        "
+                                    >
+
+                                        <i class="nav-icon bi bi-calendar3"></i>
+
+                                        <p>
+                                            Kelola Tahun Ajaran
+                                        </p>
+
+                                    </a>
+
+                                </li>
+
+
+                                <li class="nav-item">
+
+                                    <a
+                                        href="{% url 'ubah_password' %}"
+                                        class="
+                                            nav-link
+                                            {% if '/ubah-password/' in request.path %}
+                                                active
+                                            {% endif %}
+                                        "
+                                    >
+
+                                        <i class="nav-icon bi bi-shield-lock"></i>
+
+                                        <p>
+                                            Ubah Password
+                                        </p>
+
+                                    </a>
+
+                                </li>
+
+
+                                <li class="nav-item">
+
+                                    <a
+                                        href="/admin-sipetaku-rahasia-2026/"
+                                        class="nav-link"
+                                    >
+
+                                        <i class="nav-icon bi bi-sliders"></i>
+
+                                        <p>
+                                            Django Admin
+                                        </p>
+
+                                    </a>
+
+                                </li>
+
+                            </ul>
+
+                        </li>
+
+
+                    {% else %}
+
+
+                        <!-- =====================================================
+                            ADMIN KABUPATEN DAN ADMIN KECAMATAN
+                        ====================================================== -->
+
+                        {% if request.user.profil.role == 'admin_kabupaten' or request.user.profil.role == 'admin_kecamatan' %}
+
+                            <li class="nav-item">
+
+                                <a
+                                    href="{% url 'dashboard' %}"
+                                    class="nav-link {% if request.path == '/dashboard/' %}active{% endif %}"
+                                >
+
+                                    <i class="nav-icon bi bi-speedometer2"></i>
+
+                                    <p>
+                                        Dashboard
+                                    </p>
+
+                                </a>
+
+                            </li>
+
+
+                            <li class="nav-item">
+
+                                <a
+                                    href="{% url 'prioritas_bantuan_sekolah' %}"
+                                    class="
+                                        nav-link
+                                        {% if '/prioritas-bantuan/' in request.path %}
+                                            active
+                                        {% endif %}
+                                    "
+                                >
+
+                                    <i class="nav-icon bi bi-bar-chart-line"></i>
+
+                                    <p>
+                                        Prioritas Bantuan
+                                    </p>
+
+                                </a>
+
+                            </li>
+
+
+                            <li class="nav-item">
+
+                                <a
+                                    href="{% url 'monitoring_kesiapan_tahun_ajaran' %}"
+                                    class="
+                                        nav-link
+                                        {% if '/monitoring-kesiapan-tahun-ajaran/' in request.path %}
+                                            active
+                                        {% endif %}
+                                    "
+                                >
+
+                                    <i class="nav-icon bi bi-clipboard2-check"></i>
+
+                                    <p>
+                                        Monitoring Kesiapan
+                                    </p>
+
+                                </a>
+
+                            </li>
+
+                        {% endif %}
+
+
+                        <!-- PETA UNTUK SELURUH PENGGUNA -->
+
+                        <li class="nav-item">
+
+                            <a
+                                href="{% url 'index' %}"
+                                class="nav-link {% if request.path == '/' %}active{% endif %}"
+                            >
+
+                                <i class="nav-icon bi bi-geo-alt-fill"></i>
+
+                                <p>
+                                    Peta Sekolah
+                                </p>
+
+                            </a>
+
+                        </li>
+
+
+                        <!-- MENU ADMIN KABUPATEN -->
+
+                        {% if request.user.profil.role == 'admin_kabupaten' %}
+
+                            <li class="nav-item">
+
+                                <a
+                                    href="{% url 'data_sekolah' %}"
+                                    class="
+                                        nav-link
+                                        {% if '/data-sekolah/' in request.path %}
+                                            active
+                                        {% endif %}
+                                    "
+                                >
+
+                                    <i class="nav-icon bi bi-building"></i>
+
+                                    <p>
+                                        Data Sekolah
+                                    </p>
+
+                                </a>
+
+                            </li>
+
+
+                            <li class="nav-item">
+
+                                <a
+                                    href="{% url 'data_operator' %}"
+                                    class="
+                                        nav-link
+                                        {% if '/data-operator/' in request.path %}
+                                            active
+                                        {% endif %}
+                                    "
+                                >
+
+                                    <i class="nav-icon bi bi-people-fill"></i>
+
+                                    <p>
+                                        Operator Sekolah
+                                    </p>
+
+                                </a>
+
+                            </li>
+
+
+                            <li class="nav-item">
+
+                                <a
+                                    href="{% url 'data_admin_kecamatan' %}"
+                                    class="
+                                        nav-link
+                                        {% if '/data-admin-kecamatan/' in request.path %}
+                                            active
+                                        {% endif %}
+                                    "
+                                >
+
+                                    <i class="nav-icon bi bi-person-lines-fill"></i>
+
+                                    <p>
+                                        Admin Kecamatan
+                                    </p>
+
+                                </a>
+
+                            </li>
+
+                        {% endif %}
 
                     {% endif %}
 
                     {% if request.user.is_authenticated and request.user.profil.role == 'operator_sekolah' %}
 
-                    <li class="nav-item">
 
-                        <a
-                            href="/profil-sekolah/"
-                            class="nav-link {% if '/profil-sekolah/' in request.path %}active{% endif %}"
+                        <!-- =====================================================
+                            DASHBOARD
+                        ====================================================== -->
+
+                        <li class="nav-item">
+
+                            <a
+                                href="{% url 'dashboard_operator' %}"
+                                class="
+                                    nav-link
+                                    {% if '/dashboard-sekolah/' in request.path or '/profil-sekolah/' in request.path %}
+                                        active
+                                    {% endif %}
+                                "
+                            >
+
+                                <i class="nav-icon bi bi-speedometer2"></i>
+
+                                <p>
+                                    Dashboard
+                                </p>
+
+                            </a>
+
+                        </li>
+
+
+
+                        <!-- =====================================================
+                            DATA AKADEMIK
+                        ====================================================== -->
+
+                        <li
+                            class="
+                                nav-item
+                                {% if '/data-murid/' in request.path or '/tambah-murid/' in request.path or '/edit-murid/' in request.path or '/ubah-status-murid/' in request.path or '/pulihkan-status-murid/' in request.path or '/import-murid/' in request.path or '/riwayat-murid/' in request.path or '/arsip-lulusan/' in request.path or '/arsip-siswa-keluar/' in request.path %}
+                                    menu-open
+                                {% endif %}
+                            "
                         >
-                            <i class="nav-icon bi bi-pencil-square"></i>
-                            <p>Profil Sekolah</p>
-                        </a>
 
-                    </li>
+                            <a
+                                href="#"
+                                class="
+                                    nav-link
+                                    {% if '/data-murid/' in request.path or '/tambah-murid/' in request.path or '/edit-murid/' in request.path or '/ubah-status-murid/' in request.path or '/pulihkan-status-murid/' in request.path or '/import-murid/' in request.path or '/riwayat-murid/' in request.path or '/arsip-lulusan/' in request.path or '/arsip-siswa-keluar/' in request.path %}
+                                        active
+                                    {% endif %}
+                                "
+                            >
 
-                    <li class="nav-item">
+                                <i class="nav-icon bi bi-mortarboard"></i>
 
-                        <a
-                            href="/data-guru/"
-                            class="nav-link {% if '/data-guru/' in request.path %}active{% endif %}"
+                                <p>
+
+                                    Data Akademik
+
+                                    <i class="sidebar-arrow bi bi-chevron-down"></i>
+
+                                </p>
+
+                            </a>
+
+
+                            <ul class="nav nav-treeview">
+
+
+                                <!-- DATA MURID -->
+
+                                <li class="nav-item">
+
+                                    <a
+                                        href="{% url 'data_murid' %}"
+                                        class="
+                                            nav-link
+                                            {% if '/data-murid/' in request.path or '/tambah-murid/' in request.path or '/edit-murid/' in request.path or '/ubah-status-murid/' in request.path or '/pulihkan-status-murid/' in request.path or '/import-murid/' in request.path or '/riwayat-murid/' in request.path %}
+                                                active
+                                            {% endif %}
+                                        "
+                                    >
+
+                                        <i class="bi bi-people nav-icon"></i>
+
+                                        <p>
+                                            Data Murid
+                                        </p>
+
+                                    </a>
+
+                                </li>
+
+
+
+                                <!-- ARSIP LULUSAN -->
+
+                                <li class="nav-item">
+
+                                    <a
+                                        href="{% url 'arsip_lulusan' %}"
+                                        class="
+                                            nav-link
+                                            {% if '/arsip-lulusan/' in request.path %}
+                                                active
+                                            {% endif %}
+                                        "
+                                    >
+
+                                        <i class="bi bi-mortarboard-fill nav-icon"></i>
+
+                                        <p>
+                                            Arsip Lulusan
+                                        </p>
+
+                                    </a>
+
+                                </li>
+
+
+
+                                <!-- ARSIP SISWA KELUAR -->
+
+                                <li class="nav-item">
+
+                                    <a
+                                        href="{% url 'arsip_siswa_keluar' %}"
+                                        class="
+                                            nav-link
+                                            {% if '/arsip-siswa-keluar/' in request.path %}
+                                                active
+                                            {% endif %}
+                                        "
+                                    >
+
+                                        <i class="bi bi-box-arrow-right nav-icon"></i>
+
+                                        <p>
+                                            Arsip Siswa Keluar
+                                        </p>
+
+                                    </a>
+
+                                </li>
+
+
+                            </ul>
+
+                        </li>
+
+
+
+                        <!-- =====================================================
+                            DATA PEGAWAI
+                        ====================================================== -->
+
+                        <li
+                            class="
+                                nav-item
+                                {% if '/data-pegawai/' in request.path or '/tambah-pegawai/' in request.path or '/edit-pegawai/' in request.path or '/riwayat-pegawai/' in request.path or '/mutasi-pegawai/' in request.path or '/akhiri-pegawai/' in request.path or '/import-pegawai/' in request.path or '/arsip-pegawai/' in request.path %}
+                                    menu-open
+                                {% endif %}
+                            "
                         >
-                            <i class="nav-icon bi bi-person-badge"></i>
-                            <p>Data Guru</p>
-                        </a>
 
-                    </li>
+                            <a
+                                href="#"
+                                class="
+                                    nav-link
+                                    {% if '/data-pegawai/' in request.path or '/tambah-pegawai/' in request.path or '/edit-pegawai/' in request.path or '/riwayat-pegawai/' in request.path or '/mutasi-pegawai/' in request.path or '/akhiri-pegawai/' in request.path or '/import-pegawai/' in request.path or '/arsip-pegawai/' in request.path %}
+                                        active
+                                    {% endif %}
+                                "
+                            >
 
-                    <li class="nav-item">
+                                <i class="nav-icon bi bi-person-badge"></i>
 
-                        <a
-                            href="/data-murid/"
-                            class="nav-link {% if '/data-murid/' in request.path %}active{% endif %}"
+                                <p>
+
+                                    Data Pegawai
+
+                                    <i class="sidebar-arrow bi bi-chevron-down"></i>
+
+                                </p>
+
+                            </a>
+
+
+                            <ul class="nav nav-treeview">
+
+
+
+                                <!-- PEGAWAI AKTIF -->
+
+                                <li class="nav-item">
+
+                                    <a
+                                        href="{% url 'data_pegawai' %}"
+                                        class="
+                                            nav-link
+                                            {% if '/data-pegawai/' in request.path or '/tambah-pegawai/' in request.path or '/edit-pegawai/' in request.path or '/riwayat-pegawai/' in request.path or '/mutasi-pegawai/' in request.path or '/akhiri-pegawai/' in request.path or '/import-pegawai/' in request.path %}
+                                                active
+                                            {% endif %}
+                                        "
+                                    >
+
+                                        <i class="bi bi-person-badge nav-icon"></i>
+
+                                        <p>
+                                            Pegawai Aktif
+                                        </p>
+
+                                    </a>
+
+                                </li>
+
+
+
+                                <!-- ARSIP PEGAWAI -->
+
+                                <li class="nav-item">
+
+                                    <a
+                                        href="{% url 'arsip_pegawai' %}"
+                                        class="
+                                            nav-link
+                                            {% if '/arsip-pegawai/' in request.path %}
+                                                active
+                                            {% endif %}
+                                        "
+                                    >
+
+                                        <i class="bi bi-archive nav-icon"></i>
+
+                                        <p>
+                                            Arsip Pegawai
+                                        </p>
+
+                                    </a>
+
+                                </li>
+
+
+                            </ul>
+
+                        </li>
+
+
+
+                        <!-- =====================================================
+                            DATA SEKOLAH
+                        ====================================================== -->
+
+                        <li
+                            class="
+                                nav-item
+                                {% if '/data-rombel/' in request.path or '/data-aset/' in request.path or '/tanah-legalitas/' in request.path or '/data-prestasi/' in request.path or '/tambah-prestasi/' in request.path or '/edit-prestasi/' in request.path %}
+                                    menu-open
+                                {% endif %}
+                            "
                         >
-                            <i class="nav-icon bi bi-people"></i>
-                            <p>Data Murid</p>
-                        </a>
 
-                    </li>
+                            <a
+                                href="#"
+                                class="
+                                    nav-link
+                                    {% if '/data-rombel/' in request.path or '/data-aset/' in request.path or '/tanah-legalitas/' in request.path or '/data-prestasi/' in request.path or '/tambah-prestasi/' in request.path or '/edit-prestasi/' in request.path %}
+                                        active
+                                    {% endif %}
+                                "
+                            >
 
-                    <li class="nav-item">
+                                <i class="nav-icon bi bi-building"></i>
 
-                        <a
-                            href="/data-prestasi/"
-                            class="nav-link {% if '/data-prestasi/' in request.path %}active{% endif %}"
+                                <p>
+
+                                    Data Sekolah
+
+                                    <i class="sidebar-arrow bi bi-chevron-down"></i>
+
+                                </p>
+
+                            </a>
+
+
+                            <ul class="nav nav-treeview">
+
+
+                                <!-- ROMBEL / KELAS -->
+
+                                <li class="nav-item">
+
+                                    <a
+                                        href="{% url 'data_rombel_sekolah' %}"
+                                        class="
+                                            nav-link
+                                            {% if '/data-rombel/' in request.path or '/tambah-rombel/' in request.path or '/edit-rombel/' in request.path %}
+                                                active
+                                            {% endif %}
+                                        "
+                                    >
+
+                                        <i class="bi bi-door-open nav-icon"></i>
+
+                                        <p>
+                                            Rombel / Kelas
+                                        </p>
+
+                                    </a>
+
+                                </li>
+
+
+
+                                <!-- DATA ASET -->
+
+                                <li class="nav-item">
+
+                                    <a
+                                        href="{% url 'data_aset' %}"
+                                        class="
+                                            nav-link
+                                            {% if '/data-aset/' in request.path or '/tambah-aset/' in request.path or '/edit-aset/' in request.path %}
+                                                active
+                                            {% endif %}
+                                        "
+                                    >
+
+                                        <i class="bi bi-box-seam nav-icon"></i>
+
+                                        <p>
+                                            Aset Sekolah
+                                        </p>
+
+                                    </a>
+
+                                </li>
+
+
+
+                                <!-- LEGALITAS TANAH -->
+
+                                <li class="nav-item">
+
+                                    <a
+                                        href="/tanah-legalitas/"
+                                        class="
+                                            nav-link
+                                            {% if '/tanah-legalitas/' in request.path %}
+                                                active
+                                            {% endif %}
+                                        "
+                                    >
+
+                                        <i class="bi bi-file-earmark-check nav-icon"></i>
+
+                                        <p>
+                                            Legalitas Tanah
+                                        </p>
+
+                                    </a>
+
+                                </li>
+
+
+
+                                <!-- PRESTASI -->
+
+                                <li class="nav-item">
+
+                                    <a
+                                        href="{% url 'data_prestasi' %}"
+                                        class="
+                                            nav-link
+                                            {% if '/data-prestasi/' in request.path or '/tambah-prestasi/' in request.path or '/edit-prestasi/' in request.path %}
+                                                active
+                                            {% endif %}
+                                        "
+                                    >
+
+                                        <i class="bi bi-trophy nav-icon"></i>
+
+                                        <p>
+                                            Prestasi
+                                        </p>
+
+                                    </a>
+
+                                </li>
+
+
+                            </ul>
+
+                        </li>
+
+
+
+                        <!-- =====================================================
+                            TAHUN AJARAN
+                        ====================================================== -->
+
+                        <li
+                            class="
+                                nav-item
+                                {% if '/persiapan-tahun-ajaran/' in request.path or '/proses-akhir-tahun/' in request.path or '/tambah-rombel-tahun-berikutnya/' in request.path or '/rombel-tahun-berikutnya/' in request.path %}
+                                    menu-open
+                                {% endif %}
+                            "
                         >
-                            <i class="nav-icon bi bi-trophy"></i>
-                            <p>Data Prestasi</p>
-                        </a>
 
-                    </li>
+                            <a
+                                href="#"
+                                class="
+                                    nav-link
+                                    {% if '/persiapan-tahun-ajaran/' in request.path or '/proses-akhir-tahun/' in request.path or '/tambah-rombel-tahun-berikutnya/' in request.path or '/rombel-tahun-berikutnya/' in request.path %}
+                                        active
+                                    {% endif %}
+                                "
+                            >
 
-                    <li class="nav-item">
+                                <i class="nav-icon bi bi-calendar3"></i>
 
-                        <a
-                            href="/data-aset/"
-                            class="nav-link {% if '/data-aset/' in request.path %}active{% endif %}"
+                                <p>
+
+                                    Tahun Ajaran
+
+                                    <i class="sidebar-arrow bi bi-chevron-down"></i>
+
+                                </p>
+
+                            </a>
+
+
+                            <ul class="nav nav-treeview">
+
+
+
+                                <!-- PERSIAPAN TAHUN -->
+
+                                <li class="nav-item">
+
+                                    <a
+                                        href="{% url 'persiapan_tahun_ajaran' %}"
+                                        class="
+                                            nav-link
+                                            {% if '/persiapan-tahun-ajaran/' in request.path or '/tambah-rombel-tahun-berikutnya/' in request.path or '/rombel-tahun-berikutnya/' in request.path %}
+                                                active
+                                            {% endif %}
+                                        "
+                                    >
+
+                                        <i class="bi bi-calendar-plus nav-icon"></i>
+
+                                        <p>
+                                            Persiapan Tahun
+                                        </p>
+
+                                    </a>
+
+                                </li>
+
+
+
+                                <!-- PROSES AKHIR TAHUN -->
+
+                                <li class="nav-item">
+
+                                    <a
+                                        href="{% url 'proses_akhir_tahun' %}"
+                                        class="
+                                            nav-link
+                                            {% if '/proses-akhir-tahun/' in request.path %}
+                                                active
+                                            {% endif %}
+                                        "
+                                    >
+
+                                        <i class="bi bi-arrow-up-circle nav-icon"></i>
+
+                                        <p>
+                                            Proses Akhir Tahun
+                                        </p>
+
+                                    </a>
+
+                                </li>
+
+
+                            </ul>
+
+                        </li>
+
+
+
+                        <!-- =====================================================
+                            AKUN
+                        ====================================================== -->
+
+                        <li
+                            class="
+                                nav-item
+                                {% if '/ubah-password/' in request.path %}
+                                    menu-open
+                                {% endif %}
+                            "
                         >
-                            <i class="nav-icon bi bi-box-seam"></i>
-                            <p>Data Aset</p>
-                        </a>
 
-                    </li>
+                            <a
+                                href="#"
+                                class="
+                                    nav-link
+                                    {% if '/ubah-password/' in request.path %}
+                                        active
+                                    {% endif %}
+                                "
+                            >
+
+                                <i class="nav-icon bi bi-gear"></i>
+
+                                <p>
+
+                                    Akun
+
+                                    <i class="sidebar-arrow bi bi-chevron-down"></i>
+
+                                </p>
+
+                            </a>
+
+
+                            <ul class="nav nav-treeview">
+
+
+
+                                <!-- UBAH PASSWORD -->
+
+                                <li class="nav-item">
+
+                                    <a
+                                        href="{% url 'ubah_password' %}"
+                                        class="
+                                            nav-link
+                                            {% if request.resolver_match.url_name == 'ubah_password' %}
+                                                active
+                                            {% endif %}
+                                        "
+                                    >
+
+                                        <i class="bi bi-shield-lock nav-icon"></i>
+
+                                        <p>
+                                            Ubah Password
+                                        </p>
+
+                                    </a>
+
+                                </li>
+
+
+                            </ul>
+
+                        </li>
+
 
                     {% endif %}
 
@@ -583,36 +2443,74 @@
 
 <script>
 
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener(
+        'DOMContentLoaded',
+        function () {
 
-        const forms = document.querySelectorAll('form');
+            const forms =
+                document.querySelectorAll(
+                    'form'
+                );
 
-        forms.forEach(function(form) {
 
-            form.addEventListener('submit', function() {
+            forms.forEach(
+                function (form) {
 
-                const tombolSubmit = form.querySelector('button[type="submit"]');
+                    form.addEventListener(
+                        'submit',
+                        function () {
 
-                if (tombolSubmit) {
 
-                    tombolSubmit.disabled = true;
+                            // =========================================
+                            // FORM YANG LOADING-NYA
+                            // DIATUR MANUAL
+                            // =========================================
 
-                    tombolSubmit.innerHTML = `
-                        <span
-                            class="spinner-border spinner-border-sm me-2"
-                            role="status"
-                            aria-hidden="true">
-                        </span>
-                        Menyimpan...
-                    `;
+                            if (
+                                form.dataset.manualLoading
+                                === 'true'
+                            ) {
+
+                                return;
+
+                            }
+
+
+                            // =========================================
+                            // TOMBOL SUBMIT
+                            // =========================================
+
+                            const tombolSubmit =
+                                form.querySelector(
+                                    'button[type="submit"]'
+                                );
+
+
+                            if (tombolSubmit) {
+
+                                tombolSubmit.disabled =
+                                    true;
+
+
+                                tombolSubmit.innerHTML = `
+                                    <span
+                                        class="spinner-border spinner-border-sm me-2"
+                                        role="status"
+                                        aria-hidden="true">
+                                    </span>
+                                    Menyimpan...
+                                `;
+
+                            }
+
+                        }
+                    );
 
                 }
+            );
 
-            });
-
-        });
-
-    });
+        }
+    );
 
 </script>
 

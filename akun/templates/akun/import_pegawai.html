@@ -1,0 +1,1173 @@
+{% extends 'base.html' %}
+
+{% block title %}{% endblock %}
+
+
+{% block content %}
+
+<div class="container-fluid">
+
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <div class="card shadow-sm border-0 mb-4">
+
+        <div class="card-header bg-body border-0">
+
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+                <div>
+
+                    <h5 class="mb-1">
+
+                        <i class="bi bi-file-earmark-excel text-success me-2"></i>
+
+                        Import Data Pegawai
+
+                        {% if tahun_ajaran %}
+
+                            <span class="badge bg-success ms-2">
+
+                                {{ tahun_ajaran.nama }}
+
+                            </span>
+
+                        {% endif %}
+
+                    </h5>
+
+
+                    <small class="text-muted">
+
+                        {{ sekolah.nama }}
+
+                        · Import data pegawai menggunakan
+                        template resmi SIPETAKU
+
+                    </small>
+
+                </div>
+
+
+                <a
+                    href="{% url 'data_pegawai' %}"
+                    class="btn btn-outline-secondary btn-sm"
+                >
+
+                    <i class="bi bi-arrow-left me-1"></i>
+
+                    Kembali ke Data Pegawai
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         HASIL IMPORT
+    ====================================================== -->
+
+    {% if import_selesai %}
+
+
+        <!-- =================================================
+             RINGKASAN HASIL IMPORT
+        ================================================== -->
+
+        <div class="row g-3 mb-4">
+
+
+            <!-- DATA BARU -->
+
+            <div class="col-6 col-xl">
+
+                <div class="card border-0 shadow-sm h-100">
+
+                    <div class="card-body">
+
+                        <div class="text-muted small">
+
+                            Data Baru
+
+                        </div>
+
+                        <div class="fs-3 fw-bold text-success">
+
+                            {{ total_baru }}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- DATA DIPERBARUI -->
+
+            <div class="col-6 col-xl">
+
+                <div class="card border-0 shadow-sm h-100">
+
+                    <div class="card-body">
+
+                        <div class="text-muted small">
+
+                            Data Diperbarui
+
+                        </div>
+
+                        <div class="fs-3 fw-bold text-primary">
+
+                            {{ total_update }}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- DATA GAGAL -->
+
+            <div class="col-6 col-xl">
+
+                <div class="card border-0 shadow-sm h-100">
+
+                    <div class="card-body">
+
+                        <div class="text-muted small">
+
+                            Data Gagal
+
+                        </div>
+
+                        <div class="fs-3 fw-bold text-danger">
+
+                            {{ total_gagal }}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =================================================
+             STATUS HASIL IMPORT
+        ================================================== -->
+
+        {% if total_gagal == 0 %}
+
+            <div class="alert alert-success shadow-sm mb-4">
+
+                <div class="d-flex gap-3">
+
+                    <div>
+
+                        <i class="bi bi-check-circle-fill fs-4"></i>
+
+                    </div>
+
+
+                    <div>
+
+                        <div class="fw-bold mb-1">
+
+                            Import Berhasil
+
+                        </div>
+
+
+                        <div>
+
+                            Seluruh data berhasil diproses
+                            untuk Tahun Ajaran
+
+                            <strong>
+                                {{ tahun_ajaran.nama }}
+                            </strong>.
+
+                        </div>
+
+
+                        {% if total_update > 0 %}
+
+                            <div class="mt-1">
+
+                                Terdapat
+
+                                <strong>
+                                    {{ total_update }}
+                                </strong>
+
+                                data yang diperbarui karena
+                                pegawai telah terdaftar.
+
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        {% elif total_baru == 0 and total_update == 0 %}
+
+            <div class="alert alert-danger shadow-sm mb-4">
+
+                <div class="d-flex gap-3">
+
+                    <div>
+
+                        <i class="bi bi-x-circle-fill fs-4"></i>
+
+                    </div>
+
+
+                    <div>
+
+                        <div class="fw-bold mb-1">
+
+                            Import Gagal
+
+                        </div>
+
+
+                        <div>
+
+                            Tidak ada data yang berhasil
+                            diproses.
+
+                            Terdapat
+
+                            <strong>
+                                {{ total_gagal }}
+                            </strong>
+
+                            data yang gagal karena tidak
+                            memenuhi validasi SIPETAKU.
+
+                        </div>
+
+
+                        <div class="mt-1">
+
+                            Periksa bagian
+
+                            <strong>
+                                Detail Data Gagal
+                            </strong>
+
+                            di bawah untuk mengetahui
+                            penyebabnya.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        {% else %}
+
+            <div class="alert alert-warning shadow-sm mb-4">
+
+                <div class="d-flex gap-3">
+
+                    <div>
+
+                        <i class="bi bi-exclamation-triangle-fill fs-4"></i>
+
+                    </div>
+
+
+                    <div>
+
+                        <div class="fw-bold mb-1">
+
+                            Import Selesai dengan Peringatan
+
+                        </div>
+
+
+                        <div>
+
+                            Proses import telah selesai.
+
+                            Terdapat
+
+                            <strong>
+                                {{ total_baru|add:total_update }}
+                            </strong>
+
+                            data yang berhasil diproses dan
+
+                            <strong>
+                                {{ total_gagal }}
+                            </strong>
+
+                            data yang gagal.
+
+                        </div>
+
+
+                        <div class="mt-1">
+
+                            Periksa bagian
+
+                            <strong>
+                                Detail Data Gagal
+                            </strong>
+
+                            untuk mengetahui data yang
+                            perlu diperbaiki.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        {% endif %}
+
+
+
+        <!-- =================================================
+             DETAIL DATA GAGAL
+        ================================================== -->
+
+        {% if daftar_gagal %}
+
+            <div class="card shadow-sm border-0 mb-4">
+
+                <div class="card-header bg-body">
+
+                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+                        <div>
+
+                            <h5 class="mb-1">
+
+                                <i class="bi bi-exclamation-octagon text-danger me-2"></i>
+
+                                Detail Data Gagal
+
+                            </h5>
+
+
+                            <small class="text-muted">
+
+                                Perbaiki data berikut pada file Excel
+                                sebelum melakukan import kembali
+
+                            </small>
+
+                        </div>
+
+
+                        <span class="badge bg-danger px-3 py-2">
+
+                            {{ total_gagal }} Data Gagal
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card-body">
+
+                    <div class="table-responsive">
+
+                        <table
+                            id="tableGagalImport"
+                            class="table table-bordered table-striped table-hover align-middle w-100"
+                        >
+
+                            <thead>
+
+                                <tr>
+
+                                    <th
+                                        class="text-center"
+                                        style="width: 110px;"
+                                    >
+
+                                        Baris Excel
+
+                                    </th>
+
+                                    <th style="width: 260px;">
+
+                                        Nama Pegawai
+
+                                    </th>
+
+                                    <th>
+
+                                        Penyebab
+
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody>
+
+                                {% for gagal in daftar_gagal %}
+
+                                    <tr>
+
+                                        <td class="text-center">
+
+                                            <span class="badge bg-danger">
+
+                                                {{ gagal.baris }}
+
+                                            </span>
+
+                                        </td>
+
+
+                                        <td>
+
+                                            <div class="fw-bold">
+
+                                                {{ gagal.nama|default:"-" }}
+
+                                            </div>
+
+                                        </td>
+
+
+                                        <td>
+
+                                            <div class="d-flex align-items-start gap-2">
+
+                                                <i class="bi bi-exclamation-circle text-danger mt-1"></i>
+
+                                                <span>
+
+                                                    {{ gagal.pesan }}
+
+                                                </span>
+
+                                            </div>
+
+                                        </td>
+
+                                    </tr>
+
+                                {% endfor %}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        {% endif %}
+
+
+    {% endif %}
+
+
+
+    <!-- =====================================================
+         FORM IMPORT
+    ====================================================== -->
+
+    <div class="row g-4">
+
+
+        <!-- =================================================
+             UPLOAD FILE
+        ================================================== -->
+
+        <div class="col-lg-8">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-header bg-body">
+
+                    <div>
+
+                        <h5 class="mb-1">
+
+                            <i class="bi bi-cloud-arrow-up text-primary me-2"></i>
+
+                            Upload File Excel
+
+                        </h5>
+
+
+                        <small class="text-muted">
+
+                            Pilih file Excel yang telah diisi
+                            sesuai template SIPETAKU
+
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card-body">
+
+                    <form
+                        method="POST"
+                        enctype="multipart/form-data"
+                        id="formImportPegawai"
+                    >
+
+                        {% csrf_token %}
+
+
+
+                        <!-- =================================
+                             FILE EXCEL
+                        ================================== -->
+
+                        <div class="mb-4">
+
+                            <label
+                                for="file_excel"
+                                class="form-label fw-semibold"
+                            >
+
+                                File Excel
+
+                                <span class="text-danger">
+                                    *
+                                </span>
+
+                            </label>
+
+
+                            <input
+                                type="file"
+                                name="file_excel"
+                                id="file_excel"
+                                class="form-control"
+                                accept=".xlsx"
+                                required
+                            >
+
+
+                            <div class="form-text">
+
+                                Gunakan file berformat
+
+                                <strong>
+                                    .xlsx
+                                </strong>
+
+                                sesuai template resmi SIPETAKU.
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- =================================
+                             TARGET IMPORT
+                        ================================== -->
+
+                        <div class="card bg-body-tertiary border mb-4">
+
+                            <div class="card-body">
+
+                                <div class="row g-3">
+
+
+                                    <!-- SEKOLAH -->
+
+                                    <div class="col-md-6">
+
+                                        <div class="text-muted small">
+
+                                            Sekolah Tujuan
+
+                                        </div>
+
+
+                                        <div class="fw-semibold">
+
+                                            <i class="bi bi-building me-1 text-primary"></i>
+
+                                            {{ sekolah.nama }}
+
+                                        </div>
+
+                                    </div>
+
+
+
+                                    <!-- TAHUN AJARAN -->
+
+                                    <div class="col-md-6">
+
+                                        <div class="text-muted small">
+
+                                            Tahun Ajaran
+
+                                        </div>
+
+
+                                        <div class="fw-semibold">
+
+                                            <i class="bi bi-calendar-check me-1 text-success"></i>
+
+                                            {{ tahun_ajaran.nama }}
+
+                                        </div>
+
+                                    </div>
+
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- =================================
+                             PERINGATAN
+                        ================================== -->
+
+                        <div class="alert alert-light border">
+
+                            <div class="d-flex gap-2">
+
+                                <i class="bi bi-info-circle text-primary"></i>
+
+
+                                <div class="small">
+
+                                    Pastikan data pada file Excel
+                                    sudah diperiksa sebelum melakukan
+                                    import. Pegawai yang sedang aktif
+                                    di sekolah lain tidak dapat
+                                    dipindahkan melalui proses ini.
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- =================================
+                             TOMBOL
+                        ================================== -->
+
+                        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+                            <a
+                                href="{% url 'download_template_pegawai' %}"
+                                class="btn btn-outline-success"
+                            >
+
+                                <i class="bi bi-file-earmark-arrow-down me-1"></i>
+
+                                Download Template
+
+                            </a>
+
+
+                            <button
+                                type="submit"
+                                class="btn btn-primary"
+                                id="btnImportPegawai"
+                            >
+
+                                <i class="bi bi-cloud-arrow-up me-1"></i>
+
+                                Import Data Pegawai
+
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             PETUNJUK IMPORT
+        ================================================== -->
+
+        <div class="col-lg-4">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-header bg-body">
+
+                    <div>
+
+                        <h5 class="mb-1">
+
+                            <i class="bi bi-info-circle text-primary me-2"></i>
+
+                            Petunjuk Import
+
+                        </h5>
+
+
+                        <small class="text-muted">
+
+                            Ikuti ketentuan berikut agar
+                            proses import berhasil
+
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card-body">
+
+
+                    <!-- =====================================
+                         LANGKAH 1
+                    ====================================== -->
+
+                    <div class="d-flex gap-3 mb-4">
+
+                        <div>
+
+                            <span class="badge bg-primary rounded-pill">
+
+                                1
+
+                            </span>
+
+                        </div>
+
+
+                        <div>
+
+                            <div class="fw-semibold mb-1">
+
+                                Gunakan Template
+
+                            </div>
+
+
+                            <div class="small text-muted">
+
+                                Download template Excel yang
+                                telah disediakan dan jangan
+                                mengubah nama atau urutan kolom.
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- =====================================
+                         LANGKAH 2
+                    ====================================== -->
+
+                    <div class="d-flex gap-3 mb-4">
+
+                        <div>
+
+                            <span class="badge bg-primary rounded-pill">
+
+                                2
+
+                            </span>
+
+                        </div>
+
+
+                        <div>
+
+                            <div class="fw-semibold mb-1">
+
+                                Hapus Data Contoh
+
+                            </div>
+
+
+                            <div class="small text-muted">
+
+                                Hapus atau ganti tiga baris
+                                contoh pada template sebelum
+                                melakukan import.
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- =====================================
+                         LANGKAH 3
+                    ====================================== -->
+
+                    <div class="d-flex gap-3 mb-4">
+
+                        <div>
+
+                            <span class="badge bg-primary rounded-pill">
+
+                                3
+
+                            </span>
+
+                        </div>
+
+
+                        <div>
+
+                            <div class="fw-semibold mb-1">
+
+                                Periksa Identitas Pegawai
+
+                            </div>
+
+
+                            <div class="small text-muted">
+
+                                Pastikan NIK, NIP, dan NUPTK
+                                ditulis dengan benar karena
+                                digunakan untuk mengenali
+                                pegawai yang sudah terdaftar.
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- =====================================
+                         LANGKAH 4
+                    ====================================== -->
+
+                    <div class="d-flex gap-3 mb-4">
+
+                        <div>
+
+                            <span class="badge bg-primary rounded-pill">
+
+                                4
+
+                            </span>
+
+                        </div>
+
+
+                        <div>
+
+                            <div class="fw-semibold mb-1">
+
+                                Sekolah Tujuan Otomatis
+
+                            </div>
+
+
+                            <div class="small text-muted">
+
+                                Data otomatis dimasukkan ke
+
+                                <strong>
+
+                                    {{ sekolah.nama }}
+
+                                </strong>.
+
+                                Nama sekolah tidak perlu
+                                ditulis dalam Excel.
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- =====================================
+                         LANGKAH 5
+                    ====================================== -->
+
+                    <div class="d-flex gap-3 mb-4">
+
+                        <div>
+
+                            <span class="badge bg-primary rounded-pill">
+
+                                5
+
+                            </span>
+
+                        </div>
+
+
+                        <div>
+
+                            <div class="fw-semibold mb-1">
+
+                                Tahun Ajaran Otomatis
+
+                            </div>
+
+
+                            <div class="small text-muted">
+
+                                Import menggunakan Tahun Ajaran
+                                aktif
+
+                                <strong>
+
+                                    {{ tahun_ajaran.nama }}
+
+                                </strong>.
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- =====================================
+                         LANGKAH 6
+                    ====================================== -->
+
+                    <div class="d-flex gap-3">
+
+                        <div>
+
+                            <span class="badge bg-warning text-dark rounded-pill">
+
+                                6
+
+                            </span>
+
+                        </div>
+
+
+                        <div>
+
+                            <div class="fw-semibold mb-1">
+
+                                Perpindahan Pegawai
+
+                            </div>
+
+
+                            <div class="small text-muted">
+
+                                Pegawai yang sedang aktif di
+                                sekolah lain tidak dapat
+                                dipindahkan melalui import.
+
+                                Perpindahan harus dilakukan
+                                melalui fitur
+
+                                <strong>
+                                    Mutasi Pegawai
+                                </strong>.
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+{% endblock %}
+
+
+
+{% block js %}
+
+<script>
+
+$(document).ready(function () {
+
+
+    // =====================================================
+    // DATATABLE DETAIL GAGAL
+    // =====================================================
+
+    if (
+        $('#tableGagalImport').length
+    ) {
+
+        $('#tableGagalImport').DataTable({
+
+            responsive: true,
+
+            autoWidth: false,
+
+            pageLength: 10,
+
+            lengthMenu: [
+                10,
+                25,
+                50,
+                100
+            ],
+
+            columnDefs: [
+
+                {
+                    targets: [
+                        0
+                    ],
+                    orderable: false
+                }
+
+            ],
+
+            language: {
+
+                emptyTable:
+                    'Tidak ada data gagal',
+
+                search:
+                    'Cari:',
+
+                lengthMenu:
+                    'Tampilkan _MENU_ data',
+
+                info:
+                    'Menampilkan _START_–_END_ dari _TOTAL_ data',
+
+                infoEmpty:
+                    'Belum ada data',
+
+                zeroRecords:
+                    'Data tidak ditemukan',
+
+                paginate: {
+
+                    previous:
+                        'Sebelumnya',
+
+                    next:
+                        'Berikutnya'
+
+                }
+
+            }
+
+        });
+
+    }
+
+
+
+    // =====================================================
+    // PROSES SUBMIT IMPORT
+    // =====================================================
+
+    const form = document.getElementById(
+        'formImportPegawai'
+    );
+
+    const tombol = document.getElementById(
+        'btnImportPegawai'
+    );
+
+
+    if (
+        form
+        &&
+        tombol
+    ) {
+
+        form.addEventListener(
+            'submit',
+            function () {
+
+                tombol.disabled = true;
+
+                tombol.innerHTML = (
+                    '<span '
+                    + 'class="spinner-border '
+                    + 'spinner-border-sm me-2" '
+                    + 'role="status">'
+                    + '</span>'
+                    + 'Memproses...'
+                );
+
+            }
+        );
+
+    }
+
+});
+
+</script>
+
+{% endblock %}

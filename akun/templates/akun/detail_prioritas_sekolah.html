@@ -1,0 +1,585 @@
+{% extends 'base.html' %}
+{% load l10n %}
+
+{% block title %}
+Detail Prioritas
+{% endblock %}
+
+{% block content %}
+
+<div class="mb-4">
+
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+        <div>
+
+            <h4 class="mb-1">
+                <i class="bi bi-clipboard-data text-primary me-2"></i>
+                Detail Penilaian Sekolah
+            </h4>
+
+            <div class="text-muted">
+                {{ sekolah.nama }} · NPSN {{ sekolah.npsn }}
+            </div>
+
+        </div>
+
+        <a
+            href="{% url 'prioritas_bantuan_sekolah' %}"
+            class="btn btn-secondary"
+        >
+            <i class="bi bi-arrow-left me-1"></i>
+            Kembali
+        </a>
+
+    </div>
+
+</div>
+
+
+<div class="card border-0 shadow-sm mb-4">
+
+    <div class="card-header bg-body">
+
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+            <h5 class="mb-0">
+                <i class="bi bi-speedometer2 text-primary me-2"></i>
+                Hasil Penilaian
+            </h5>
+
+            <span class="badge bg-{{ penilaian.status.warna }} fs-6">
+
+                <i class="bi {{ penilaian.status.ikon }} me-1"></i>
+
+                {{ penilaian.status.nama }}
+
+            </span>
+
+        </div>
+
+    </div>
+
+    <div class="card-body">
+
+        {% if not penilaian.penilaian_final %}
+
+            <div class="alert alert-warning">
+
+                Penilaian belum final karena data aset atau rombel belum lengkap.
+
+            </div>
+
+        {% endif %}
+
+        <div class="row g-3">
+
+            <div class="col-lg-3 col-md-6">
+
+                <div class="border rounded p-3 h-100">
+
+                    <div class="text-muted small">
+                        Skor Sarana
+                    </div>
+
+                    <div class="fs-3 fw-bold text-primary">
+
+                        {% if penilaian.skor_aset != None %}
+                            {{ penilaian.skor_aset }}
+                        {% else %}
+                            —
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+
+                <div class="border rounded p-3 h-100">
+
+                    <div class="text-muted small">
+                        Skor Kapasitas
+                    </div>
+
+                    <div class="fs-3 fw-bold text-info">
+
+                        {% if penilaian.skor_kapasitas != None %}
+                            {{ penilaian.skor_kapasitas }}
+                        {% else %}
+                            —
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+
+                <div class="border rounded p-3 h-100">
+
+                    <div class="text-muted small">
+                        Skor Kelayakan
+                    </div>
+
+                    <div class="fs-3 fw-bold text-success">
+
+                        {% if penilaian.skor_kelayakan != None %}
+                            {{ penilaian.skor_kelayakan }}
+                        {% else %}
+                            —
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+
+                <div class="border rounded p-3 h-100">
+
+                    <div class="text-muted small">
+                        Skor Prioritas
+                    </div>
+
+                    <div class="fs-3 fw-bold text-danger">
+
+                        {% if penilaian.skor_prioritas != None %}
+                            {{ penilaian.skor_prioritas }}
+                        {% else %}
+                            —
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="row g-3 mt-1">
+
+            <div class="col-lg-8">
+
+                <div class="border rounded p-3 h-100">
+
+                    <h6 class="fw-bold">
+                        Dasar Penilaian
+                    </h6>
+
+                    <ul class="mb-0">
+
+                        {% for alasan in penilaian.alasan %}
+
+                            <li class="mb-1">
+                                {{ alasan }}
+                            </li>
+
+                        {% endfor %}
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+            <div class="col-lg-4">
+
+                <div class="border rounded p-3 h-100">
+
+                    <div class="d-flex justify-content-between mb-2">
+
+                        <span>Progres pendataan</span>
+
+                        <strong>
+                            {{ penilaian.progres }}%
+                        </strong>
+
+                    </div>
+
+                    <div class="progress mb-3" style="height: 8px;">
+
+                        <div
+                            class="progress-bar"
+                            style="width: {{ penilaian.progres }}%;"
+                        ></div>
+
+                    </div>
+
+                    {% if penilaian.legalitas_aman %}
+
+                        <span class="badge bg-success">
+                            {{ penilaian.status_legalitas }}
+                        </span>
+
+                    {% else %}
+
+                        <span class="badge bg-warning text-dark">
+                            {{ penilaian.status_legalitas }}
+                        </span>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="card border-0 shadow-sm mb-4">
+
+    <div class="card-header bg-body">
+
+        <h5 class="mb-0">
+            <i class="bi bi-building text-primary me-2"></i>
+            Identitas dan Lokasi
+        </h5>
+
+    </div>
+
+    <div class="card-body">
+
+        <div class="row g-3">
+
+            <div class="col-md-4">
+                <strong>Nama Sekolah</strong>
+                <div>{{ sekolah.nama }}</div>
+            </div>
+
+            <div class="col-md-2">
+                <strong>NPSN</strong>
+                <div>{{ sekolah.npsn }}</div>
+            </div>
+
+            <div class="col-md-2">
+                <strong>Jenjang</strong>
+                <div>{{ sekolah.kategori.nama }}</div>
+            </div>
+
+            <div class="col-md-2">
+                <strong>Status</strong>
+                <div>{{ sekolah.status }}</div>
+            </div>
+
+            <div class="col-md-2">
+                <strong>Kecamatan</strong>
+                <div>{{ sekolah.kecamatan }}</div>
+            </div>
+
+            <div class="col-md-6">
+                <strong>Alamat</strong>
+                <div>{{ sekolah.alamat }}</div>
+            </div>
+
+            <div class="col-md-3">
+                <strong>Latitude</strong>
+                <div>
+                    {% if sekolah.latitude != None %}
+                        {{ sekolah.latitude|unlocalize }}
+                    {% else %}
+                        —
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <strong>Longitude</strong>
+                <div>
+                    {% if sekolah.longitude != None %}
+                        {{ sekolah.longitude|unlocalize }}
+                    {% else %}
+                        —
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+
+        {% if sekolah.latitude != None and sekolah.longitude != None %}
+
+            <a
+                href="https://www.google.com/maps?q={{ sekolah.latitude|unlocalize }},{{ sekolah.longitude|unlocalize }}"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="btn btn-outline-success btn-sm mt-3"
+            >
+                <i class="bi bi-map me-1"></i>
+                Lihat Lokasi
+            </a>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+
+<div class="card border-0 shadow-sm mb-4">
+
+    <div class="card-header bg-body">
+
+        <ul class="nav nav-tabs border-0" role="tablist">
+
+            <li class="nav-item">
+
+                <button
+                    class="nav-link active"
+                    data-bs-toggle="tab"
+                    data-bs-target="#detailBangunan"
+                    type="button"
+                >
+                    Bangunan
+                </button>
+
+            </li>
+
+            <li class="nav-item">
+
+                <button
+                    class="nav-link"
+                    data-bs-toggle="tab"
+                    data-bs-target="#detailSanitasi"
+                    type="button"
+                >
+                    Sanitasi
+                </button>
+
+            </li>
+
+            <li class="nav-item">
+
+                <button
+                    class="nav-link"
+                    data-bs-toggle="tab"
+                    data-bs-target="#detailPerlengkapan"
+                    type="button"
+                >
+                    Perlengkapan
+                </button>
+
+            </li>
+
+            <li class="nav-item">
+
+                <button
+                    class="nav-link"
+                    data-bs-toggle="tab"
+                    data-bs-target="#detailRombel"
+                    type="button"
+                >
+                    Rombel
+                </button>
+
+            </li>
+
+            <li class="nav-item">
+
+                <button
+                    class="nav-link"
+                    data-bs-toggle="tab"
+                    data-bs-target="#detailTanah"
+                    type="button"
+                >
+                    Tanah & Legalitas
+                </button>
+
+            </li>
+
+        </ul>
+
+    </div>
+
+    <div class="card-body">
+
+        <div class="tab-content">
+
+            <div
+                class="tab-pane fade show active"
+                id="detailBangunan"
+            >
+
+                {% include 'akun/partials/detail_kelompok_aset.html' with daftar=bangunan %}
+
+            </div>
+
+            <div
+                class="tab-pane fade"
+                id="detailSanitasi"
+            >
+
+                {% include 'akun/partials/detail_kelompok_aset.html' with daftar=sanitasi %}
+
+            </div>
+
+            <div
+                class="tab-pane fade"
+                id="detailPerlengkapan"
+            >
+
+                {% include 'akun/partials/detail_kelompok_aset.html' with daftar=perlengkapan %}
+
+            </div>
+
+            <div
+                class="tab-pane fade"
+                id="detailRombel"
+            >
+
+                <div class="table-responsive">
+
+                    <table class="table table-bordered align-middle">
+
+                        <thead>
+
+                            <tr>
+                                <th>Kelas</th>
+                                <th>Rombel</th>
+                                <th>Siswa</th>
+                                <th>Kapasitas</th>
+                                <th>Status</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            {% for data in daftar_rombel %}
+
+                                <tr>
+
+                                    <td>{{ data.nama_kelas }}</td>
+                                    <td>{{ data.jumlah_rombel }}</td>
+                                    <td>{{ data.jumlah_siswa }}</td>
+                                    <td>{{ data.kapasitas_total }}</td>
+
+                                    <td>
+
+                                        {% if data.melebihi_kapasitas %}
+
+                                            <span class="badge bg-danger">
+                                                Lebih {{ data.kekurangan_kapasitas }}
+                                            </span>
+
+                                        {% else %}
+
+                                            <span class="badge bg-success">
+                                                Sesuai
+                                            </span>
+
+                                        {% endif %}
+
+                                    </td>
+
+                                </tr>
+
+                            {% empty %}
+
+                                <tr>
+                                    <td colspan="5" class="text-center text-muted">
+                                        Belum ada data rombel
+                                    </td>
+                                </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+            <div
+                class="tab-pane fade"
+                id="detailTanah"
+            >
+
+                {% if data_tanah %}
+
+                    <div class="row g-3">
+
+                        <div class="col-md-4">
+                            <strong>Luas Tanah</strong>
+                            <div>{{ total_luas_tanah|floatformat:0 }} m²</div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <strong>Kepemilikan</strong>
+                            <div>{{ data_tanah.get_status_kepemilikan_display }}</div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <strong>Legalitas</strong>
+                            <div>{{ data_tanah.get_legalitas_display }}</div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <strong>Jenis Dokumen</strong>
+                            <div>{{ data_tanah.jenis_dokumen|default:"—" }}</div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <strong>Nomor Dokumen</strong>
+                            <div>{{ data_tanah.nomor_dokumen|default:"—" }}</div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <strong>Atas Nama</strong>
+                            <div>{{ data_tanah.atas_nama|default:"—" }}</div>
+                        </div>
+
+                    </div>
+
+                    <div class="mt-3">
+
+                        {% for dokumen in data_tanah.dokumen.all %}
+
+                            <a
+                                href="{{ dokumen.file.url }}"
+                                target="_blank"
+                                class="btn btn-outline-primary btn-sm me-1"
+                            >
+                                <i class="bi bi-file-earmark me-1"></i>
+                                Dokumen {{ dokumen.urutan }}
+                            </a>
+
+                        {% empty %}
+
+                            <span class="text-muted">
+                                Belum ada dokumen yang diunggah.
+                            </span>
+
+                        {% endfor %}
+
+                    </div>
+
+                {% else %}
+
+                    <div class="alert alert-warning mb-0">
+                        Data tanah dan legalitas belum diisi.
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

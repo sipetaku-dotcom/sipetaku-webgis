@@ -1,0 +1,363 @@
+<div class="row g-3">
+
+    {% for data in daftar %}
+
+        <div class="col-xl-4 col-md-6">
+
+            <div class="card border shadow-sm h-100">
+
+                <div class="card-body d-flex flex-column">
+
+
+                    <!-- =================================================
+                         HEADER
+                    ================================================== -->
+
+                    <div class="d-flex justify-content-between align-items-start gap-2 mb-3">
+
+                        <div>
+
+                            <h6 class="fw-bold mb-1">
+
+                                {{ data.jenis_aset.nama }}
+
+                            </h6>
+
+
+                            <small class="text-muted">
+
+                                Satuan:
+                                {{ data.jenis_aset.satuan }}
+
+                            </small>
+
+                        </div>
+
+
+                        {% if data.jenis_aset.aset_kritis %}
+
+                            <span class="badge bg-danger">
+
+                                <i class="bi bi-exclamation-triangle me-1"></i>
+
+                                Prioritas
+
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+
+
+                    <!-- =================================================
+                         TERSEDIA
+                    ================================================== -->
+
+                    {% if data.ketersediaan == 'ADA' %}
+
+
+                        <!-- STATUS -->
+
+                        <div class="d-flex align-items-center gap-2 flex-wrap mb-3">
+
+                            <span class="badge bg-success">
+
+                                <i class="bi bi-check-circle me-1"></i>
+
+                                Tersedia
+
+                            </span>
+
+
+                            <span class="badge bg-primary">
+
+                                Total:
+                                {{ data.jumlah_total }}
+
+                            </span>
+
+                        </div>
+
+
+
+                        <!-- =================================================
+                             KONDISI
+                        ================================================== -->
+
+                        <div class="row g-2 text-center mb-3">
+
+
+                            <!-- BAIK -->
+
+                            <div class="col-4">
+
+                                <div class="rounded border bg-success-subtle p-2">
+
+                                    <div class="fw-bold text-success">
+
+                                        {{ data.jumlah_baik }}
+
+                                    </div>
+
+
+                                    <small class="text-muted">
+
+                                        Baik
+
+                                    </small>
+
+                                </div>
+
+                            </div>
+
+
+
+                            <!-- RUSAK RINGAN -->
+
+                            <div class="col-4">
+
+                                <div class="rounded border bg-warning-subtle p-2">
+
+                                    <div class="fw-bold text-warning">
+
+                                        {{ data.jumlah_rusak_ringan }}
+
+                                    </div>
+
+
+                                    <small class="text-muted">
+
+                                        Ringan
+
+                                    </small>
+
+                                </div>
+
+                            </div>
+
+
+
+                            <!-- RUSAK BERAT -->
+
+                            <div class="col-4">
+
+                                <div class="rounded border bg-danger-subtle p-2">
+
+                                    <div class="fw-bold text-danger">
+
+                                        {{ data.jumlah_rusak_berat }}
+
+                                    </div>
+
+
+                                    <small class="text-muted">
+
+                                        Berat
+
+                                    </small>
+
+                                </div>
+
+                            </div>
+
+
+                        </div>
+
+
+
+                    <!-- =================================================
+                         TIDAK TERSEDIA
+                    ================================================== -->
+
+                    {% else %}
+
+                        <div class="mb-3">
+
+                            <span class="badge bg-secondary">
+
+                                <i class="bi bi-x-circle me-1"></i>
+
+                                Tidak Tersedia
+
+                            </span>
+
+                        </div>
+
+
+                        <div class="border rounded p-3 text-center mb-3">
+
+                            <i class="bi bi-dash-circle text-secondary fs-4"></i>
+
+
+                            <div class="small text-muted mt-1">
+
+                                Aset ini tidak tersedia
+                                di sekolah
+
+                            </div>
+
+                        </div>
+
+                    {% endif %}
+
+
+
+                    <!-- =================================================
+                         KETERANGAN
+                    ================================================== -->
+
+                    {% if data.keterangan %}
+
+                        <div class="border-top pt-3 mb-3">
+
+                            <div class="small text-muted mb-1">
+
+                                <i class="bi bi-chat-left-text me-1"></i>
+
+                                Keterangan
+
+                            </div>
+
+
+                            <div class="small">
+
+                                {{ data.keterangan }}
+
+                            </div>
+
+                        </div>
+
+                    {% endif %}
+
+
+
+                    <!-- =================================================
+                         DOKUMENTASI
+                    ================================================== -->
+
+                    <div class="mt-auto">
+
+                        <div class="border-top pt-3">
+
+
+                            <!-- =========================================
+                                 JUDUL DOKUMENTASI
+                            ========================================== -->
+
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+
+                                <small class="fw-semibold">
+
+                                    <i class="bi bi-camera text-primary me-1"></i>
+
+                                    Dokumentasi
+
+                                </small>
+
+
+                                {% if data.foto_dokumentasi.all %}
+
+                                    <small class="text-muted">
+
+                                        {{ data.foto_dokumentasi.count }}
+                                        Foto
+
+                                    </small>
+
+                                {% endif %}
+
+                            </div>
+
+
+
+                            <!-- =========================================
+                                 FOTO
+                            ========================================== -->
+
+                            {% if data.foto_dokumentasi.all %}
+
+                                <div class="row g-2">
+
+                                    {% for foto in data.foto_dokumentasi.all %}
+
+                                        <div class="col-4">
+
+                                            <a
+                                                href="{{ foto.foto.url }}"
+                                                target="_blank"
+                                                title="Lihat Foto"
+                                            >
+
+                                                <img
+                                                    src="{{ foto.foto.url }}"
+                                                    class="img-fluid rounded border w-100"
+                                                    style="
+                                                        height: 85px;
+                                                        object-fit: cover;
+                                                    "
+                                                    alt="Foto {{ data.jenis_aset.nama }}"
+                                                >
+
+                                            </a>
+
+                                        </div>
+
+                                    {% endfor %}
+
+                                </div>
+
+
+                            {% else %}
+
+                                <div class="small text-muted">
+
+                                    Belum ada foto dokumentasi.
+
+                                </div>
+
+                            {% endif %}
+
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    {% empty %}
+
+        <div class="col-12">
+
+            <div class="text-center py-5">
+
+                <i class="bi bi-inbox fs-1 text-muted"></i>
+
+
+                <div class="fw-semibold mt-2">
+
+                    Belum Ada Data
+
+                </div>
+
+
+                <div class="small text-muted">
+
+                    Belum terdapat data aset
+                    pada kelompok ini.
+
+                </div>
+
+            </div>
+
+        </div>
+
+    {% endfor %}
+
+</div>

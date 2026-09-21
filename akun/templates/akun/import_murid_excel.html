@@ -1,0 +1,1316 @@
+{% extends 'base.html' %}
+
+{% block title %}{% endblock %}
+
+
+{% block content %}
+
+<div class="container-fluid">
+
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <div class="card shadow-sm border-0 mb-4">
+
+        <div class="card-header bg-body border-0">
+
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+                <div>
+
+                    <h5 class="mb-1">
+
+                        <i class="bi bi-file-earmark-spreadsheet text-success me-2"></i>
+
+                        Import Data Murid
+
+                        {% if tahun_ajaran %}
+
+                            <span class="badge bg-success ms-2">
+
+                                {{ tahun_ajaran.nama }}
+
+                            </span>
+
+                        {% endif %}
+
+                    </h5>
+
+
+                    <small class="text-muted">
+
+                        {{ sekolah.nama }}
+                        · Import data murid menggunakan file Excel
+
+                    </small>
+
+                </div>
+
+
+                <a
+                    href="{% url 'data_murid' %}"
+                    class="btn btn-outline-secondary btn-sm"
+                >
+
+                    <i class="bi bi-arrow-left me-1"></i>
+
+                    Kembali ke Data Murid
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         HASIL IMPORT
+    ====================================================== -->
+
+    {% if hasil_import %}
+
+        <div class="mb-4">
+
+
+            <!-- =================================================
+                 NOTIFIKASI BERHASIL
+            ================================================== -->
+
+            {% if hasil_import.gagal == 0 %}
+
+                <div
+                    class="alert alert-success border-0 shadow-sm"
+                    role="alert"
+                >
+
+                    <div class="d-flex align-items-start gap-3">
+
+
+                        <div>
+
+                            <i class="bi bi-check-circle-fill fs-3"></i>
+
+                        </div>
+
+
+                        <div>
+
+                            <h5 class="alert-heading mb-1">
+
+                                Import Berhasil
+
+                            </h5>
+
+
+                            <div>
+
+                                Seluruh data berhasil diproses
+                                untuk Tahun Ajaran
+
+                                <strong>
+
+                                    {{ tahun_ajaran.nama }}
+
+                                </strong>.
+
+                            </div>
+
+
+                            {% if hasil_import.update > 0 %}
+
+                                <div class="small mt-2">
+
+                                    <i class="bi bi-info-circle me-1"></i>
+
+                                    Terdapat
+
+                                    <strong>
+
+                                        {{ hasil_import.update }}
+
+                                    </strong>
+
+                                    data yang diperbarui karena
+                                    NISN atau NIK sudah terdaftar.
+
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+            <!-- =================================================
+                 NOTIFIKASI PERINGATAN
+            ================================================== -->
+
+            {% else %}
+
+                <div
+                    class="alert alert-warning border-0 shadow-sm"
+                    role="alert"
+                >
+
+                    <div class="d-flex align-items-start gap-3">
+
+
+                        <div>
+
+                            <i class="bi bi-exclamation-triangle-fill fs-3"></i>
+
+                        </div>
+
+
+                        <div>
+
+                            <h5 class="alert-heading mb-1">
+
+                                Import Selesai dengan Peringatan
+
+                            </h5>
+
+
+                            <div>
+
+                                Proses import telah selesai,
+                                tetapi terdapat
+
+                                <strong>
+
+                                    {{ hasil_import.gagal }}
+
+                                </strong>
+
+                                data yang gagal diproses.
+
+                            </div>
+
+
+                            <div class="small mt-2">
+
+                                Silakan periksa bagian
+
+                                <strong>
+                                    Detail Data Gagal
+                                </strong>
+
+                                di bawah untuk mengetahui
+                                penyebabnya.
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            {% endif %}
+
+
+
+            <!-- =================================================
+                 RINGKASAN HASIL IMPORT
+            ================================================== -->
+
+            <div class="card border-0 shadow-sm">
+
+                <div class="card-header bg-body">
+
+                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+                        <div>
+
+                            <h5 class="mb-1">
+
+                                <i class="bi bi-clipboard-check text-primary me-2"></i>
+
+                                Hasil Import
+
+                            </h5>
+
+
+                            <small class="text-muted">
+
+                                Ringkasan hasil pemrosesan
+                                file Excel
+
+                            </small>
+
+                        </div>
+
+
+                        <span class="badge bg-secondary px-3 py-2">
+
+                            <i class="bi bi-file-earmark-check me-1"></i>
+
+                            {{ hasil_import.baru|add:hasil_import.update|add:hasil_import.gagal }}
+                            Baris Diproses
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card-body">
+
+                    <div class="row g-3">
+
+
+                        <!-- =====================================
+                             DATA BARU
+                        ====================================== -->
+
+                        <div class="col-md-4">
+
+                            <div class="border rounded-3 p-3 h-100">
+
+                                <div class="d-flex justify-content-between align-items-start">
+
+                                    <div>
+
+                                        <div class="text-muted small">
+
+                                            Data Baru
+
+                                        </div>
+
+
+                                        <div class="fs-3 fw-bold text-success">
+
+                                            {{ hasil_import.baru }}
+
+                                        </div>
+
+
+                                        <div class="small text-muted">
+
+                                            Murid baru ditambahkan
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <i class="bi bi-person-plus-fill fs-2 text-success"></i>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- =====================================
+                             DATA DIPERBARUI
+                        ====================================== -->
+
+                        <div class="col-md-4">
+
+                            <div class="border rounded-3 p-3 h-100">
+
+                                <div class="d-flex justify-content-between align-items-start">
+
+                                    <div>
+
+                                        <div class="text-muted small">
+
+                                            Data Diperbarui
+
+                                        </div>
+
+
+                                        <div class="fs-3 fw-bold text-primary">
+
+                                            {{ hasil_import.update }}
+
+                                        </div>
+
+
+                                        <div class="small text-muted">
+
+                                            Data murid lama diperbarui
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <i class="bi bi-arrow-repeat fs-2 text-primary"></i>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- =====================================
+                             DATA GAGAL
+                        ====================================== -->
+
+                        <div class="col-md-4">
+
+                            <div class="border rounded-3 p-3 h-100">
+
+                                <div class="d-flex justify-content-between align-items-start">
+
+                                    <div>
+
+                                        <div class="text-muted small">
+
+                                            Data Gagal
+
+                                        </div>
+
+
+                                        <div class="fs-3 fw-bold text-danger">
+
+                                            {{ hasil_import.gagal }}
+
+                                        </div>
+
+
+                                        <div class="small text-muted">
+
+                                            Data tidak dapat diproses
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <i class="bi bi-x-circle-fill fs-2 text-danger"></i>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    {% endif %}
+
+
+
+    <!-- =====================================================
+         DETAIL DATA GAGAL
+    ====================================================== -->
+
+    {% if detail_gagal %}
+
+        <div class="card border-0 shadow-sm mb-4">
+
+            <div class="card-header bg-body">
+
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+                    <div>
+
+                        <h5 class="mb-1 text-danger">
+
+                            <i class="bi bi-exclamation-octagon-fill me-2"></i>
+
+                            Detail Data Gagal
+
+                        </h5>
+
+
+                        <small class="text-muted">
+
+                            Data yang tidak dapat disimpan
+                            atau diperbarui
+
+                        </small>
+
+                    </div>
+
+
+                    <span class="badge bg-danger px-3 py-2">
+
+                        {{ detail_gagal|length }} Data
+
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="card-body">
+
+
+                <!-- =========================================
+                     INFORMASI
+                ========================================== -->
+
+                <div class="alert alert-light border">
+
+                    <div class="small">
+
+                        <i class="bi bi-info-circle text-primary me-1"></i>
+
+                        Data pada tabel berikut tidak disimpan
+                        atau diperbarui karena tidak memenuhi
+                        validasi SIPETAKU. Periksa keterangan
+                        pada masing-masing baris, perbaiki file
+                        Excel, kemudian lakukan import kembali.
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =========================================
+                     TABEL DATA GAGAL
+                ========================================== -->
+
+                <div class="table-responsive">
+
+                    <table
+                        class="table table-bordered table-striped table-hover align-middle mb-0"
+                    >
+
+                        <thead>
+
+                            <tr>
+
+                                <th
+                                    class="text-center"
+                                    style="width: 80px;"
+                                >
+
+                                    Baris
+
+                                </th>
+
+
+                                <th style="min-width: 200px;">
+
+                                    Nama Murid
+
+                                </th>
+
+
+                                <th style="min-width: 350px;">
+
+                                    Keterangan
+
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            {% for data in detail_gagal %}
+
+                                <tr>
+
+                                    <td class="text-center">
+
+                                        <span class="badge bg-secondary">
+
+                                            {{ data.baris }}
+
+                                        </span>
+
+                                    </td>
+
+
+                                    <td class="fw-semibold">
+
+                                        {{ data.nama }}
+
+                                    </td>
+
+
+                                    <td class="text-danger">
+
+                                        <i class="bi bi-exclamation-circle me-1"></i>
+
+                                        {{ data.error }}
+
+                                    </td>
+
+                                </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    {% endif %}
+
+
+
+    <!-- =====================================================
+         INFORMASI TAHUN AJARAN
+    ====================================================== -->
+
+    <div class="card border-0 shadow-sm mb-4">
+
+        <div class="card-body">
+
+            <div class="d-flex align-items-start gap-3">
+
+
+                <div>
+
+                    <div
+                        class="rounded-circle bg-primary-subtle d-flex align-items-center justify-content-center"
+                        style="
+                            width: 46px;
+                            height: 46px;
+                        "
+                    >
+
+                        <i class="bi bi-calendar-check text-primary fs-5"></i>
+
+                    </div>
+
+                </div>
+
+
+                <div>
+
+                    <div class="fw-bold mb-1">
+
+                        Import ke Tahun Ajaran Aktif
+
+                    </div>
+
+
+                    <div class="small text-muted">
+
+                        Seluruh murid pada file Excel akan
+                        diproses ke Tahun Ajaran
+
+                        <strong class="text-body">
+
+                            {{ tahun_ajaran.nama }}
+
+                        </strong>
+
+                        dan ditempatkan ke rombel berdasarkan
+                        nilai pada kolom
+
+                        <strong class="text-body">
+                            Kelas
+                        </strong>
+
+                        di dalam file Excel.
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         UPLOAD + FORMAT EXCEL
+    ====================================================== -->
+
+    <div class="row g-4">
+
+
+        <!-- =================================================
+             UPLOAD FILE
+        ================================================== -->
+
+        <div class="col-lg-7">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-header bg-body">
+
+                    <div>
+
+                        <h5 class="mb-1">
+
+                            <i class="bi bi-upload text-success me-2"></i>
+
+                            Upload File Excel
+
+                        </h5>
+
+
+                        <small class="text-muted">
+
+                            Pilih file yang berisi data murid
+                            untuk diimport ke SIPETAKU
+
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card-body">
+
+                    <form
+                        method="POST"
+                        enctype="multipart/form-data"
+                        id="formImportMurid"
+                    >
+
+                        {% csrf_token %}
+
+
+
+                        <!-- =====================================
+                             FILE EXCEL
+                        ====================================== -->
+
+                        <div class="mb-4">
+
+                            <label class="form-label fw-semibold">
+
+                                File Excel
+
+                                <span class="text-danger">
+                                    *
+                                </span>
+
+                            </label>
+
+
+                            <input
+                                type="file"
+                                name="file_excel"
+                                class="form-control"
+                                accept=".xlsx,.xlsm"
+                                required
+                            >
+
+
+                            <div class="form-text">
+
+                                Format file yang didukung:
+                                XLSX atau XLSM.
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- =====================================
+                             INFORMASI PENTING
+                        ====================================== -->
+
+                        <div class="border rounded-3 p-3 mb-4">
+
+                            <div class="fw-semibold mb-3">
+
+                                <i class="bi bi-lightbulb text-warning me-1"></i>
+
+                                Sebelum melakukan import
+
+                            </div>
+
+
+
+                            <!-- ROMBEL -->
+
+                            <div class="d-flex align-items-start gap-2 mb-3">
+
+                                <i class="bi bi-check-circle-fill text-success mt-1"></i>
+
+                                <div class="small text-muted">
+
+                                    Pastikan rombel yang ditulis
+                                    pada kolom
+
+                                    <strong class="text-body">
+                                        Kelas
+                                    </strong>
+
+                                    sudah tersedia pada Tahun Ajaran
+
+                                    <strong class="text-body">
+
+                                        {{ tahun_ajaran.nama }}
+
+                                    </strong>.
+
+                                </div>
+
+                            </div>
+
+
+
+                            <!-- NISN / NIK -->
+
+                            <div class="d-flex align-items-start gap-2 mb-3">
+
+                                <i class="bi bi-check-circle-fill text-success mt-1"></i>
+
+                                <div class="small text-muted">
+
+                                    Jika NISN atau NIK sudah
+                                    terdaftar, SIPETAKU akan
+                                    memperbarui data murid yang
+                                    sudah ada.
+
+                                </div>
+
+                            </div>
+
+
+
+                            <!-- RIWAYAT TIDAK AKTIF -->
+
+                            <div class="d-flex align-items-start gap-2">
+
+                                <i class="bi bi-check-circle-fill text-success mt-1"></i>
+
+                                <div class="small text-muted">
+
+                                    Murid yang sudah memiliki
+                                    riwayat tidak aktif pada Tahun
+                                    Ajaran ini tidak akan diaktifkan
+                                    kembali melalui proses import.
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- =====================================
+                             TOMBOL
+                        ====================================== -->
+
+                        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+
+                            <!-- TEMPLATE -->
+
+                            <a
+                                href="{% url 'download_template_murid' %}"
+                                class="btn btn-outline-success"
+                            >
+
+                                <i class="bi bi-file-earmark-arrow-down me-1"></i>
+
+                                Download Template Excel
+
+                            </a>
+
+
+
+                            <!-- AKSI -->
+
+                            <div class="d-flex gap-2 flex-wrap">
+
+                                <a
+                                    href="{% url 'data_murid' %}"
+                                    class="btn btn-outline-secondary"
+                                >
+
+                                    <i class="bi bi-x-circle me-1"></i>
+
+                                    Batal
+
+                                </a>
+
+
+                                <button
+                                    type="submit"
+                                    class="btn btn-success"
+                                    id="btnImportMurid"
+                                >
+
+                                    <i
+                                        class="bi bi-upload me-1"
+                                        id="iconImportMurid"
+                                    ></i>
+
+                                    <span id="textImportMurid">
+
+                                        Import Data Murid
+
+                                    </span>
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             FORMAT EXCEL
+        ================================================== -->
+
+        <div class="col-lg-5">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-header bg-body">
+
+                    <div>
+
+                        <h5 class="mb-1">
+
+                            <i class="bi bi-table text-primary me-2"></i>
+
+                            Format Excel
+
+                        </h5>
+
+
+                        <small class="text-muted">
+
+                            Struktur dan ketentuan pengisian
+                            file import
+
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card-body">
+
+
+                    <!-- =====================================
+                         URUTAN KOLOM
+                    ====================================== -->
+
+                    <div class="fw-semibold mb-2">
+
+                        Urutan Kolom
+
+                    </div>
+
+
+                    <div class="small text-muted mb-3">
+
+                        Kolom pada file Excel harus mengikuti
+                        urutan berikut:
+
+                    </div>
+
+
+                    <div class="table-responsive mb-4">
+
+                        <table class="table table-sm table-bordered align-middle mb-0">
+
+                            <tbody>
+
+                                <tr>
+                                    <td class="text-center" style="width: 50px;">
+                                        1
+                                    </td>
+                                    <td>
+                                        Nama
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="text-center">
+                                        2
+                                    </td>
+                                    <td>
+                                        NISN
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="text-center">
+                                        3
+                                    </td>
+                                    <td>
+                                        NIK
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="text-center">
+                                        4
+                                    </td>
+                                    <td>
+                                        Jenis Kelamin
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="text-center">
+                                        5
+                                    </td>
+                                    <td>
+                                        Tempat Lahir
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="text-center">
+                                        6
+                                    </td>
+                                    <td>
+                                        Tanggal Lahir
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="text-center">
+                                        7
+                                    </td>
+                                    <td>
+                                        Alamat
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="text-center">
+                                        8
+                                    </td>
+                                    <td>
+                                        Kelas
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="text-center">
+                                        9
+                                    </td>
+                                    <td>
+                                        Status Masuk
+                                    </td>
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+
+
+                    <!-- =====================================
+                         JENIS KELAMIN
+                    ====================================== -->
+
+                    <div class="border-top pt-3 mb-3">
+
+                        <div class="fw-semibold mb-1">
+
+                            Jenis Kelamin
+
+                        </div>
+
+
+                        <div class="small text-muted">
+
+                            Gunakan
+
+                            <span class="badge bg-primary">
+                                L
+                            </span>
+
+                            atau
+
+                            <span class="badge bg-danger">
+                                P
+                            </span>.
+
+                            Sistem juga menerima
+                            <strong class="text-body">
+                                Laki-laki
+                            </strong>
+
+                            dan
+
+                            <strong class="text-body">
+                                Perempuan
+                            </strong>.
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- =====================================
+                         STATUS MASUK
+                    ====================================== -->
+
+                    <div class="border-top pt-3 mb-3">
+
+                        <div class="fw-semibold mb-2">
+
+                            Status Masuk
+
+                        </div>
+
+
+                        <div class="mb-2">
+
+                            <span class="badge bg-primary me-1">
+
+                                Siswa Baru
+
+                            </span>
+
+                            <span class="badge bg-warning text-dark me-1">
+
+                                Pindahan
+
+                            </span>
+
+                            <span class="badge bg-info text-dark">
+
+                                Lanjutan
+
+                            </span>
+
+                        </div>
+
+
+                        <div class="small text-muted">
+
+                            Sistem juga menerima:
+
+                            <code>SISWA_BARU</code>,
+
+                            <code>SISWA-BARU</code>,
+
+                            <code>BARU</code>,
+
+                            <code>PINDAHAN</code>,
+
+                            <code>SISWA PINDAHAN</code>,
+
+                            <code>LANJUT</code>,
+
+                            dan
+
+                            <code>LANJUTAN</code>.
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- =====================================
+                         PENENTUAN ROMBEL
+                    ====================================== -->
+
+                    <div class="border-top pt-3">
+
+                        <div class="fw-semibold mb-1">
+
+                            Penentuan Rombel
+
+                        </div>
+
+
+                        <div class="small text-muted">
+
+                            Nilai pada kolom
+
+                            <strong class="text-body">
+                                Kelas
+                            </strong>
+
+                            harus sesuai dengan nama rombel
+                            yang telah tersedia pada sekolah
+                            untuk Tahun Ajaran
+
+                            <strong class="text-body">
+
+                                {{ tahun_ajaran.nama }}
+
+                            </strong>.
+
+
+                            <div class="mt-2">
+
+                                Contoh:
+
+                                <code>Kelas 7A</code>,
+
+                                <code>Kelas 8A</code>,
+
+                                <code>Kelas 9A</code>.
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+{% endblock %}
+
+
+
+{% block js %}
+
+<script>
+
+document.addEventListener(
+    'DOMContentLoaded',
+    function () {
+
+
+        // =====================================================
+        // FORM IMPORT
+        // =====================================================
+
+        const form = (
+            document.getElementById(
+                'formImportMurid'
+            )
+        );
+
+
+        // =====================================================
+        // TOMBOL IMPORT
+        // =====================================================
+
+        const button = (
+            document.getElementById(
+                'btnImportMurid'
+            )
+        );
+
+
+        // =====================================================
+        // ICON IMPORT
+        // =====================================================
+
+        const icon = (
+            document.getElementById(
+                'iconImportMurid'
+            )
+        );
+
+
+        // =====================================================
+        // TEXT IMPORT
+        // =====================================================
+
+        const text = (
+            document.getElementById(
+                'textImportMurid'
+            )
+        );
+
+
+        // =====================================================
+        // PENGAMAN
+        // =====================================================
+
+        if (
+            !form
+            ||
+            !button
+            ||
+            !icon
+            ||
+            !text
+        ) {
+
+            return;
+
+        }
+
+
+
+        // =====================================================
+        // CEGAH DOUBLE SUBMIT
+        // =====================================================
+
+        form.addEventListener(
+            'submit',
+            function () {
+
+                button.disabled = true;
+
+
+                icon.className = (
+                    'spinner-border '
+                    + 'spinner-border-sm me-2'
+                );
+
+
+                text.textContent = (
+                    'Memproses Import...'
+                );
+
+            }
+        );
+
+
+    }
+);
+
+</script>
+
+{% endblock %}

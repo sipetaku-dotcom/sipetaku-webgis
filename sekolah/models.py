@@ -33,7 +33,7 @@ class Sekolah(models.Model):
     )
 
     nama = models.CharField(max_length=255)
-    npsn = models.CharField(max_length=50, unique=True)
+    npsn = models.CharField(max_length=50, unique=True, blank=True, null=True)
 
     user = models.OneToOneField(
         User,
