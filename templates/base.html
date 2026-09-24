@@ -4,12 +4,12 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>SIPETAKU</title>
+    <title>SIPANDU</title>
 
     <link
         rel="icon"
         type="image/png"
-        href="{% static 'img/logo-sipetaku.png' %}"
+        href="{% static 'img/logo-sipandu.png' %}"
     >
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -41,7 +41,7 @@
 <style>
 
     /* =========================================================
-       SIPETAKU - GLOBAL THEME
+       SIPANDU - GLOBAL THEME
     ========================================================= */
 
 
@@ -1133,8 +1133,8 @@
             <a href="/" class="brand-link d-flex align-items-center">
 
                 <img
-                    src="{% static 'img/logo-sipetaku.png' %}"
-                    alt="Logo SIPETAKU"
+                    src="{% static 'img/logo-sipandu.png' %}"
+                    alt="Logo SIPANDU"
                     style="
                         height: 25px;
                         width: 25px;
@@ -1145,7 +1145,7 @@
                 >
 
                 <span class="fw-bold">
-                    SIPETAKU
+                    SIPANDU
                 </span>
 
             </a>
@@ -1530,7 +1530,7 @@
                         <li
                             class="
                                 nav-item
-                                {% if '/kelola-tahun-ajaran/' in request.path or '/aktifkan-tahun-ajaran/' in request.path or '/ubah-password/' in request.path or '/admin-sipetaku-rahasia-2026/' in request.path %}
+                                {% if '/kelola-tahun-ajaran/' in request.path or '/aktifkan-tahun-ajaran/' in request.path or '/ubah-password/' in request.path or '/admin-sipandu-rahasia-2026/' in request.path %}
                                     menu-open
                                 {% endif %}
                             "
@@ -1540,7 +1540,7 @@
                                 href="#"
                                 class="
                                     nav-link
-                                    {% if '/kelola-tahun-ajaran/' in request.path or '/aktifkan-tahun-ajaran/' in request.path or '/ubah-password/' in request.path or '/admin-sipetaku-rahasia-2026/' in request.path %}
+                                    {% if '/kelola-tahun-ajaran/' in request.path or '/aktifkan-tahun-ajaran/' in request.path or '/ubah-password/' in request.path or '/admin-sipandu-rahasia-2026/' in request.path %}
                                         active
                                     {% endif %}
                                 "
@@ -1610,7 +1610,7 @@
                                 <li class="nav-item">
 
                                     <a
-                                        href="/admin-sipetaku-rahasia-2026/"
+                                        href="/admin-sipandu-rahasia-2026/"
                                         class="nav-link"
                                     >
 
@@ -2383,7 +2383,7 @@
             <div class="container-fluid">
 
                 <h3 class="mb-0">
-                    {% block title %}SIPETAKU{% endblock %}
+                    {% block title %}SIPANDU{% endblock %}
                 </h3>
 
             </div>
@@ -2522,7 +2522,7 @@
 
         document.documentElement.setAttribute('data-bs-theme', theme);
 
-        localStorage.setItem('sipetaku-theme', theme);
+        localStorage.setItem('sipandu-theme', theme);
 
         if (themeButton) {
 
@@ -2535,7 +2535,7 @@
 
     }
 
-    const savedTheme = localStorage.getItem('sipetaku-theme') || 'light';
+    const savedTheme = localStorage.getItem('sipandu-theme') || 'light';
 
     setTheme(savedTheme);
 

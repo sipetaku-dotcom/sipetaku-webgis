@@ -6405,7 +6405,7 @@ def import_murid_excel(request):
                 request,
                 (
                     'Format Excel tidak sesuai '
-                    'template SIPETAKU.'
+                    'template SIPANDU.'
                 )
             )
 
@@ -11395,7 +11395,7 @@ def import_pegawai_excel(request):
             request,
             (
                 'Format kolom Excel tidak sesuai '
-                'dengan template resmi SIPETAKU.'
+                'dengan template resmi SIPANDU.'
             )
         )
 
